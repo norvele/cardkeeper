@@ -1,21 +1,14 @@
 .button {
+  border: none;
   border-radius: 8px;
+  display: flex;
+  align-items: center;
+  font-family: inherit;
+  font-weight: 500;
 
   &:hover {
     cursor: pointer;
   }
-}
-
-.default {
-  background: linear-gradient(135deg, #e5e5e9 0%, #fcfcff 100%);
-  box-shadow:
-    5px 5px 13px 0px #d5d5dd99,
-    -5px -5px 10px 0px #ffffff99,
-    5px -5px 10px 0px #d5d5dd1a,
-    -5px 5px 10px 0px #d5d5dd1a,
-    -1px -1px 2px 0px #e5e5e9 inset,
-    1px 1px 2px 0px #fcfcff80 inset;
-  padding: 9px 12px;
 }
 
 .primary {
@@ -26,10 +19,15 @@
     -1px -1px 2px 0px #dd8a6280 inset,
     -5px -5px 10px 0px #ffffffbf;
   color: var(--font-color-white);
-  padding: 12px 32px;
+
+  svg {
+    path {
+      fill: var(--font-color-white);
+    }
+  }
 }
 
-.secondary {
+.default {
   background: #f0f0f3;
   box-shadow:
     5px 5px 13px 0px #d5d5dd99,
@@ -38,7 +36,19 @@
     -5px 5px 10px 0px #d5d5dd1a,
     -1px -1px 2px 0px #e5e5e9 inset,
     1px 1px 2px 0px #fcfcff80 inset;
-
   color: var(--font-color-normal);
+
+  svg {
+    path {
+      fill: var(--font-color-normal);
+    }
+  }
+}
+
+.small {
+  padding: 6px 13px;
+}
+
+.regular {
   padding: 12px 32px;
 }
