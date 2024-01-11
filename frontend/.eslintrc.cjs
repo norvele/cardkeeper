@@ -1,31 +1,72 @@
 module.exports = {
-  root: true,
-  env: { browser: true, es2020: true },
+  env: {
+    browser: true,
+    es2021: true,
+  },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
+    'plugin:react/recommended',
+    'plugin:prettier/recommended',
+    // 'plugin:import/recommended',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  overrides: [
+    {
+      env: {
+        node: true,
+      },
+      files: ['.eslintrc.{js,cjs}'],
+      parserOptions: {
+        sourceType: 'script',
+      },
+    },
+  ],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
-  rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
-    "react-hooks/exhaustive-deps": [
-      "warn", {
-        "additionalHooks": "(useRecoilCallback|useRecoilTransaction_UNSTABLE)"
-      }
-    ],
-    "@typescript-eslint/quotes": [
-      "error",
-      "single",
-      {
-        "avoidEscape": true,
-        "allowTemplateLiterals": true
-      }
-    ]
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
   },
-}
+  plugins: ['@typescript-eslint', 'react', 'import'],
+  rules: {
+    'react/react-in-jsx-scope': 'off',
+    'no-var': 'warn',
+    'prefer-const': 'warn',
+    'prettier/prettier': ['warn', { endOfLine: 'auto' }],
+    'no-restricted-imports': [
+      'warn',
+      {
+        patterns: ['../', './'],
+      },
+    ],
+    'react/self-closing-comp': [
+      'error',
+      {
+        component: true,
+        html: true,
+      },
+    ],
+    'no-unused-vars': 'warn',
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'builtin',
+          'external',
+          'parent',
+          'sibling',
+          'index',
+          'object',
+          'type',
+        ],
+        pathGroups: [
+          {
+            pattern: '@/**/**',
+            group: 'parent',
+            position: 'before',
+          },
+        ],
+        alphabetize: { order: 'asc' },
+      },
+    ],
+  },
+};

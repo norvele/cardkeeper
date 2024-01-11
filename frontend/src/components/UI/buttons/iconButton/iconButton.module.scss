@@ -1,0 +1,18 @@
+.button {
+  border: none;
+  background: linear-gradient(135deg, #e5e5e9 0%, #fcfcff 100%);
+  box-shadow:
+    5px 5px 13px 0px #d5d5dd99,
+    -5px -5px 10px 0px #ffffff99,
+    5px -5px 10px 0px #d5d5dd1a,
+    -5px 5px 10px 0px #d5d5dd1a,
+    -1px -1px 2px 0px #e5e5e9 inset,
+    1px 1px 2px 0px #fcfcff80 inset;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
