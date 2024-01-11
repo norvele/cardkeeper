@@ -1,0 +1,40 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 135px;
+  color: var(--font-color-light);
+}
+
+.title {
+  margin: 0 0 30px 0;
+  font-weight: 500;
+}
+
+.p {
+  margin: 12px 0;
+}
+
+#greenclip {
+  position: absolute;
+  z-index: -1;
+  top: 88px;
+  right: 85px;
+  rotate: 35deg;
+}
+
+#blueclip {
+  position: absolute;
+  z-index: -1;
+  top: 147px;
+  left: 30px;
+  rotate: -5deg;
+}
+
+#pinkclip {
+  position: absolute;
+  z-index: -1;
+  right: 68px;
+  bottom: 95px;
+  rotate: 45deg;
+}
