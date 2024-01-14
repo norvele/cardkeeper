@@ -9,11 +9,11 @@ interface ITopBarProps {
 
 const TopBar: FC<ITopBarProps> = ({ leftSlot, title, rightSlot }) => {
   return (
-    <div className={styles.topbar}>
+    <header className={styles.topbar}>
       {leftSlot}
       {title}
       {rightSlot}
-    </div>
+    </header>
   );
 };
 

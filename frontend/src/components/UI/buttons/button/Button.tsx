@@ -2,7 +2,7 @@ import { FC, ReactNode } from 'react';
 import styles from '@/components/UI/buttons/button/button.module.scss';
 
 interface IButtonProps {
-  variant: 'primary' | 'secondary' | 'default';
+  variant: 'primary' | 'default';
   size: 'small' | 'regular';
   children: ReactNode;
 }

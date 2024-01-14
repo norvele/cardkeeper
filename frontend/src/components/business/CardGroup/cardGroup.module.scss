@@ -1,0 +1,106 @@
+.note {
+  position: relative;
+  width: 137px;
+  height: 133px;
+  display: flex;
+  justify-content: center;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+  margin-top: 26px;
+  rotate: 3deg;
+  max-width: 110px;
+}
+
+.counter {
+  font-weight: 500;
+  font-size: 32px;
+  &.blue {
+    color: #7bc5e5;
+  }
+
+  &.orange {
+    color: #ff9b6d;
+  }
+
+  &.pink {
+    color: #f49497;
+  }
+}
+
+.title {
+  font-weight: 500;
+  text-align: center;
+  color: var(--font-color-normal);
+}
+
+.clip {
+  position: absolute;
+  width: 40px;
+  height: 42px;
+  background-size: cover;
+  left: 75px;
+  top: -22px;
+  rotate: -3deg;
+  z-index: 5;
+
+  &.blue {
+    background-image: url(../../../assets/images/blue_clip.svg);
+  }
+
+  &.orange {
+    background-image: url(../../../assets/images/orange_clip.svg);
+  }
+
+  &.pink {
+    background-image: url(../../../assets/images/pink_clip.svg);
+  }
+}
+
+.sheet {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  border-radius: 18px;
+  background: linear-gradient(
+      135.99deg,
+      rgba(79, 115, 149, 0.036) 1.69%,
+      rgba(0, 0, 0, 0) 50.74%
+    ),
+    linear-gradient(0deg, #f7f7f7, #f7f7f7),
+    linear-gradient(319.56deg, #fafafa 2.67%, rgba(255, 255, 255, 0) 13.36%);
+  box-shadow:
+    13px 17px 44px 0px #aeaec047,
+    0px 2px 2px 0px #aeaec08c,
+    -1px 1px 4px 0px #aeaec030;
+  rotate: -3deg;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.shadow {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  border-radius: 18px;
+  background: #d1e4ed;
+  left: 6px;
+  top: 5px;
+
+  &.blue {
+    background: #d1e4ed;
+  }
+
+  &.orange {
+    background: #f5cbb7;
+  }
+
+  &.pink {
+    background: #fcc7cc;
+  }
+}

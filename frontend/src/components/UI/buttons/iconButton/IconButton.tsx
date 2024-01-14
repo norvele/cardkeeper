@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import styles from './iconButton.module.scss';
+import styles from '@/components/UI/buttons/iconButton/iconButton.module.scss';
 
 interface IIconButton {
   children: ReactNode;
