@@ -1,0 +1,22 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cards {
+  display: flex;
+  justify-content: space-around;
+  align-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 30px;
+  max-width: 400px;
+}
+
+.more {
+  text-align: center;
+  color: var(--font-color-light);
+  margin-top: 48px;
+  max-width: 118px;
+  font-size: 12px;
+}
