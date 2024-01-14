@@ -5,6 +5,7 @@ import IconButton from '@/components/UI/buttons/iconButton/IconButton';
 import Layout from '@/components/business/Layout/Layout';
 import NoCards from '@/components/business/NoCards/NoCards';
 import TopBar from '@/components/business/TopBar/TopBar';
+import styles from '@/pages/HomePage/homePage.module.scss';
 
 const HomePage: FC = () => {
   return (
@@ -22,7 +23,9 @@ const HomePage: FC = () => {
           </IconButton>
         }
       />
-      <NoCards />
+      <main className={styles.nocards}>
+        <NoCards />
+      </main>
     </Layout>
   );
 };

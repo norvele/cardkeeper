@@ -6,7 +6,7 @@ import styles from '@/components/business/NoCards/noCards.module.scss';
 
 const NoCards = () => {
   return (
-    <main className={styles.content}>
+    <div className={styles.content}>
       <h3 className={styles.title}>No cards yet</h3>
       <Button variant="primary" size="regular">
         Add card
@@ -20,7 +20,7 @@ const NoCards = () => {
         <BlueClip width={30} height={32} id={styles.blueclip} />
         <PinkClip width={30} height={32} id={styles.pinkclip} />
       </div>
-    </main>
+    </div>
   );
 };
 
