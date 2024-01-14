@@ -1,7 +1,7 @@
 import AddIcon from '@/assets/icons/add.svg?react';
 import MenuIcon from '@/assets/icons/menu.svg?react';
 import IconButton from '@/components/UI/buttons/iconButton/IconButton';
-import CardGroupList from '@/components/business/CardGroupList/CardGroupList';
+import DeckList from '@/components/business/DeckList/DeckList';
 import Layout from '@/components/business/Layout/Layout';
 import NoCards from '@/components/business/NoCards/NoCards';
 import TopBar from '@/components/business/TopBar/TopBar';
@@ -30,8 +30,8 @@ const HomePage = () => {
           <NoCards />
         </main>
       ) : (
-        <main className={styles.cardgrouplist}>
-          <CardGroupList cardsLength={cardsLength} />
+        <main className={styles.decklist}>
+          <DeckList cardsLength={cardsLength} />
         </main>
       )}
     </Layout>
