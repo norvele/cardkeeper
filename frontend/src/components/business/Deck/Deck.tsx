@@ -1,13 +1,13 @@
 import { FC } from 'react';
-import styles from '@/components/business/CardGroup/cardGroup.module.scss';
+import styles from '@/components/business/Deck/deck.module.scss';
 
-interface ICardGroupProps {
+interface IDeckProps {
   color: 'blue' | 'orange' | 'pink';
   text: string;
   count: number;
 }
 
-const CardGroup: FC<ICardGroupProps> = ({ color, count, text }) => {
+const Deck: FC<IDeckProps> = ({ color, count, text }) => {
   return (
     <div className={styles.note}>
       <div className={`${styles.clip} ${styles[color]}`} />
@@ -22,4 +22,4 @@ const CardGroup: FC<ICardGroupProps> = ({ color, count, text }) => {
   );
 };
 
-export default CardGroup;
+export default Deck;
