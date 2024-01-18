@@ -1,0 +1,45 @@
+.note {
+  width: 256px;
+  height: 256px;
+  border-radius: 18px;
+  rotate: -3deg;
+  box-shadow:
+    13px 17px 32px 0px rgba(174, 174, 192, 0.08),
+    0px 2px 2px 0px rgba(174, 174, 192, 0.15),
+    -1px 1px 4px 0px rgba(174, 174, 192, 0.09);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.secondary {
+  background: linear-gradient(
+      320deg,
+      #fafafa 2.67%,
+      rgba(255, 255, 255, 0) 13.36%
+    ),
+    linear-gradient(
+      136deg,
+      rgba(79, 115, 149, 0.04) 1.69%,
+      rgba(0, 0, 0, 0) 50.74%
+    ),
+    #f7f7f7;
+}
+
+.textarea {
+  padding: 0;
+  border: none;
+  rotate: 3deg;
+  width: 213px;
+  text-align: center;
+  resize: none;
+  font-size: 18px;
+  font-family: inherit;
+  background-color: transparent;
+  color: var(--font-color-normal);
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--font-color-lighter);
+}

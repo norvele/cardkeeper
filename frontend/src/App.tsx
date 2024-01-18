@@ -1,10 +1,12 @@
-import HomePage from '@/pages/HomePage/HomePage';
+import { RouterProvider } from 'react-router-dom';
+import Layout from '@/components/business/Layout/Layout';
+import { router } from '@/router/Router';
 
 function App() {
   return (
-    <>
-      <HomePage />
-    </>
+    <Layout>
+      <RouterProvider router={router} />
+    </Layout>
   );
 }
 

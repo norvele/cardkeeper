@@ -1,0 +1,65 @@
+.side {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.switcher {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 36px;
+}
+
+.input {
+  display: none;
+
+  &:checked + .slider::after {
+    transform: translateX(22px);
+  }
+}
+
+.text {
+  color: var(--font-color-light);
+  font-weight: 500;
+}
+
+.active {
+  color: var(--font-color-orange);
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 999px;
+  border: 1px solid #f0f0f3;
+  background: #ebebed;
+  box-shadow:
+    3px 3px 8px 0px rgba(213, 213, 221, 0.9) inset,
+    -3px -3px 6px 0px rgba(255, 255, 255, 0.9) inset,
+    3px 3px 6px 0px rgba(213, 213, 221, 0.4),
+    -3px -3px 6px 0px rgba(255, 255, 255, 0.9);
+}
+
+.slider::after {
+  position: absolute;
+  content: '';
+  height: 26px;
+  width: 26px;
+  top: 5px;
+  left: 5px;
+  background: linear-gradient(135deg, #ffc6a9 0%, #ff844e 100%);
+  box-shadow:
+    5px 5px 10px 0px rgba(255, 255, 255, 0.25) inset,
+    -1px -1px 2px 0px rgba(221, 138, 98, 0.5) inset,
+    1px 1px 5px 0px #ffbe9f,
+    3px 3px 5px 0px rgba(153, 153, 171, 0.16),
+    -1px -1px 2px 0px rgba(255, 182, 147, 0.25),
+    1px 1px 2px 0px rgba(255, 255, 255, 0.25) inset;
+  transition: 0.4s;
+  border-radius: 50%;
+}
