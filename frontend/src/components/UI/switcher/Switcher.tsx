@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { FC } from 'react';
 import styles from '@/components/UI/switcher/switcher.module.scss';
 
@@ -21,12 +22,18 @@ const Switcher: FC<ISwitcherProps> = ({ side, onChange }) => {
 
   return (
     <div className={styles.side}>
-      <span className={rootFrontClasses.join(' ')}>Front</span>
+      <span
+        className={clsx(styles.text, { [styles.active]: side === 'front' })}
+      >
+        Front
+      </span>
       <label className={styles.switcher}>
         <input type="checkbox" className={styles.input} onChange={onChange} />
         <span className={styles.slider} />
       </label>
-      <span className={rootBackClasses.join(' ')}>Back</span>
+      <span className={clsx(styles.text, { [styles.active]: side === 'back' })}>
+        Back
+      </span>
     </div>
   );
 };

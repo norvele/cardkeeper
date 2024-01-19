@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { FC, ReactNode } from 'react';
 import styles from '@/components/UI/modal/modal.module.scss';
 
@@ -16,13 +17,13 @@ const Modal: FC<IModalProps> = ({
   hideModal,
   children,
 }) => {
-  const rootClasses = [styles.modal, styles[type]];
-  if (isVisible) {
-    rootClasses.push(styles.active);
-  }
-
   return (
-    <div className={rootClasses.join(' ')} onClick={hideModal}>
+    <div
+      className={clsx(styles.modal, styles[type], {
+        [styles.active]: isVisible,
+      })}
+      onClick={hideModal}
+    >
       <div
         className={styles.modalContent}
         onClick={(event) => event.stopPropagation()}
