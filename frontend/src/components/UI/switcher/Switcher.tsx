@@ -28,7 +28,12 @@ const Switcher: FC<ISwitcherProps> = ({ side, onChange }) => {
         Front
       </span>
       <label className={styles.switcher}>
-        <input type="checkbox" className={styles.input} onChange={onChange} />
+        <input
+          type="checkbox"
+          className={styles.input}
+          onChange={onChange}
+          checked={side === 'back'}
+        />
         <span className={styles.slider} />
       </label>
       <span className={clsx(styles.text, { [styles.active]: side === 'back' })}>

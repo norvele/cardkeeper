@@ -16,6 +16,8 @@ import { ICard } from '@/types/Card';
 interface IFormProps {
   type: 'Edit' | 'Create';
   card: ICard;
+  emptySide: 'back' | 'front' | null;
+  setEmptySide: React.Dispatch<React.SetStateAction<'back' | 'front' | null>>;
   saveHandler: () => void;
   onChangeInputHandler: (
     _event: React.ChangeEvent<HTMLTextAreaElement>,
@@ -27,6 +29,8 @@ interface IFormProps {
 const Form: FC<IFormProps> = ({
   type,
   card,
+  emptySide,
+  setEmptySide,
   saveHandler,
   onChangeInputHandler,
   onChangeCheckboxHandler,
@@ -52,7 +56,7 @@ const Form: FC<IFormProps> = ({
   }
 
   return (
-    <form className={styles.form} onSubmit={saveHandler}>
+    <form className={styles.form}>
       <TopBar
         leftSlot={
           <Link to="/home">
@@ -63,14 +67,20 @@ const Form: FC<IFormProps> = ({
         }
         title={`${type} card`}
         rightSlot={
-          <Button size="small" variant="primary">
+          <Button size="small" variant="primary" onClick={saveHandler}>
             <CheckIcon />
             Save
           </Button>
         }
       />
       <div className={styles.card}>
-        <Card variant="secondary" card={card} onChange={onChangeInputHandler} />
+        <Card
+          variant="secondary"
+          card={card}
+          onChange={onChangeInputHandler}
+          emptySide={emptySide}
+          setEmptySide={setEmptySide}
+        />
       </div>
       <Divider />
       <div className={styles.checkbox}>

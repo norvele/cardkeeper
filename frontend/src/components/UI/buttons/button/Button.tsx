@@ -16,10 +16,17 @@ const Button: FC<IButtonProps> = ({
   onClick,
   fontColor = 'black',
 }) => {
+  function onClickHandler(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) {
+    event.preventDefault();
+    onClick && onClick();
+  }
+
   return (
     <button
       className={`${styles.button} ${styles[variant]} ${styles[size]} ${styles[fontColor]}`}
-      onClick={onClick}
+      onClick={(event) => onClickHandler(event)}
     >
       {children}
     </button>

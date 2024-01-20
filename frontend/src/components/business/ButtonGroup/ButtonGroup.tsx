@@ -9,14 +9,16 @@ interface IButtonGroupProps {
 const ButtonGroup: FC<IButtonGroupProps> = ({ position, children }) => {
   const dividerClasses =
     position === 'vertical' ? styles.horizontalDivider : styles.verticalDivider;
-  const divider = <hr className={dividerClasses} />;
-  const buttons = children.map((button, index, array) =>
-    index === array.length - 1 ? (
-      <div key={index}>{[button]}</div>
-    ) : (
-      <div key={index}>{[button, divider]}</div>
-    ),
-  );
+
+  const buttons = children.reduce((acc: ReactNode[], button, index, array) => {
+    acc.push(button);
+
+    if (index !== array.length - 1) {
+      acc.push(<hr key={index} className={dividerClasses} />);
+    }
+
+    return acc;
+  }, []);
 
   return (
     <>

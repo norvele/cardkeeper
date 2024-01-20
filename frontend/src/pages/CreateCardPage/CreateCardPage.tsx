@@ -10,11 +10,9 @@ const CreateCardPage = () => {
     backText: '',
     canBeInFocused: false,
   });
-
-  console.log();
+  const [emptySide, setEmptySide] = useState<'back' | 'front' | null>(null);
 
   const navigate = useNavigate();
-  console.log(newCard);
 
   function onChangeInputHandler(
     event: React.ChangeEvent<HTMLTextAreaElement>,
@@ -30,20 +28,27 @@ const CreateCardPage = () => {
   }
 
   function saveHandler() {
-    const card = { ...newCard, id: `${Date.now()}` };
-    // post card to backend
+    if (!newCard.frontText) {
+      setEmptySide('front');
+    } else if (!newCard.backText) {
+      setEmptySide('back');
+    } else {
+      const card = { ...newCard, id: `${Date.now()}` };
+      // post card to backend
 
-    const response = true;
-    if (response) {
-      // why redirect() not working?
-      navigate('/home');
+      const response = true;
+      if (response) {
+        // why redirect() not working?
+        navigate('/home');
+      }
+      setNewCard({
+        id: '',
+        frontText: '',
+        backText: '',
+        canBeInFocused: false,
+      });
+      setEmptySide(null);
     }
-    setNewCard({
-      id: '',
-      frontText: '',
-      backText: '',
-      canBeInFocused: false,
-    });
   }
 
   return (
@@ -53,6 +58,8 @@ const CreateCardPage = () => {
       onChangeInputHandler={onChangeInputHandler}
       onChangeCheckboxHandler={onChangeCheckboxHandler}
       saveHandler={saveHandler}
+      emptySide={emptySide}
+      setEmptySide={setEmptySide}
     />
   );
 };
