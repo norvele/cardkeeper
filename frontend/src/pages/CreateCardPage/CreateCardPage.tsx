@@ -1,44 +1,53 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Form from '@/components/business/Form/Form';
-import { ICard } from '@/types/Card';
+import { useRecoilState } from 'recoil';
+import CardForm from '@/components/business/CardForm/CardForm';
+import CardPageLayout from '@/components/business/CardPageLayout/CardPageLayout';
+import {
+  cardErrorState,
+  cardSideState,
+  newCardState,
+} from '@/store/cardFormStore';
 
 const CreateCardPage = () => {
-  const [newCard, setNewCard] = useState<ICard>({
-    id: '',
-    frontText: '',
-    backText: '',
-    canBeInFocused: false,
-  });
-  const [emptySide, setEmptySide] = useState<'back' | 'front' | null>(null);
-
   const navigate = useNavigate();
+  const [newCard, setNewCard] = useRecoilState(newCardState);
+  const [side, setSide] = useRecoilState(cardSideState);
+  const [hasError, setHasError] = useRecoilState(cardErrorState);
 
-  function onChangeInputHandler(
-    event: React.ChangeEvent<HTMLTextAreaElement>,
-    side: 'frontText' | 'backText',
-  ) {
-    const card = { ...newCard, [side]: event.target.value };
+  function setTextCard(value: string, side: 'front' | 'back') {
+    const card = { ...newCard, [`${side}Text`]: value };
     setNewCard(card);
   }
 
-  function onChangeCheckboxHandler() {
+  function onChangeCanBeInFocusedCheckboxHandler() {
     const card = { ...newCard, canBeInFocused: !newCard.canBeInFocused };
     setNewCard(card);
   }
 
+  function goBackHandler() {
+    setSide('front');
+    setHasError(false);
+    setNewCard({
+      id: '',
+      frontText: '',
+      backText: '',
+      canBeInFocused: false,
+    });
+  }
+
   function saveHandler() {
     if (!newCard.frontText) {
-      setEmptySide('front');
+      setSide('front');
+      setHasError(true);
     } else if (!newCard.backText) {
-      setEmptySide('back');
+      setSide('back');
+      setHasError(true);
     } else {
       const card = { ...newCard, id: `${Date.now()}` };
       // post card to backend
 
       const response = true;
       if (response) {
-        // why redirect() not working?
         navigate('/home');
       }
       setNewCard({
@@ -47,20 +56,30 @@ const CreateCardPage = () => {
         backText: '',
         canBeInFocused: false,
       });
-      setEmptySide(null);
+      setSide('front');
     }
   }
 
   return (
-    <Form
+    <CardPageLayout
       type="Create"
-      card={newCard}
-      onChangeInputHandler={onChangeInputHandler}
-      onChangeCheckboxHandler={onChangeCheckboxHandler}
       saveHandler={saveHandler}
-      emptySide={emptySide}
-      setEmptySide={setEmptySide}
-    />
+      goBackHandler={goBackHandler}
+    >
+      <CardForm
+        type="Create"
+        card={newCard}
+        setTextCard={setTextCard}
+        side={side}
+        setSide={setSide}
+        hasError={hasError}
+        setHasError={setHasError}
+        onChangeCanBeInFocusedCheckboxHandler={
+          onChangeCanBeInFocusedCheckboxHandler
+        }
+        saveHandler={saveHandler}
+      />
+    </CardPageLayout>
   );
 };
 

@@ -11,12 +11,14 @@
   }
 
   &:checked + .checkbox::after {
-    background-image: url(../../../assets/icons/check.svg);
+    background-color: white;
+    mask-image: url(../../../assets/icons/check.svg);
     opacity: 1;
   }
 
   &:indeterminate + .checkbox::after {
-    background-image: url(../../../assets/icons/remove.svg);
+    background-color: white;
+    mask-image: url(../../../assets/icons/check.svg);
     opacity: 1;
   }
 }

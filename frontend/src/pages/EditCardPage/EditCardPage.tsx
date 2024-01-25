@@ -1,7 +1,7 @@
-import Form from '@/components/business/Form/Form';
+import CardForm from '@/components/business/CardForm/CardForm';
 
 const EditCardPage = () => {
-  // return <Form type="Edit" />;
+  // return <CardForm type="Edit" />;
 };
 
 export default EditCardPage;

@@ -3,18 +3,20 @@ import styles from '@/components/UI/buttons/button/button.module.scss';
 
 interface IButtonProps {
   variant: 'primary' | 'default' | 'transparent';
-  fontColor?: 'red' | 'black';
   size: 'small' | 'regular';
+  fontColor?: 'red' | 'black';
   children: ReactNode;
+  icon?: ReactNode;
   onClick?: () => void; // пока не сделаны все обработчики - необязательно
 }
 
 const Button: FC<IButtonProps> = ({
   variant,
   size,
+  fontColor = 'black',
+  icon,
   children,
   onClick,
-  fontColor = 'black',
 }) => {
   function onClickHandler(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -28,6 +30,7 @@ const Button: FC<IButtonProps> = ({
       className={`${styles.button} ${styles[variant]} ${styles[size]} ${styles[fontColor]}`}
       onClick={(event) => onClickHandler(event)}
     >
+      {icon && icon}
       {children}
     </button>
   );
