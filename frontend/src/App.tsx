@@ -8,6 +8,7 @@ import { modalState } from '@/store/modalStore';
 
 function App() {
   const typeModal = useRecoilValue(modalState);
+
   let modal: ReactNode | null;
 
   switch (typeModal) {

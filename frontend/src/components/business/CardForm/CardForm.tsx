@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { SetterOrUpdater, useSetRecoilState } from 'recoil';
 import Button from '@/components/UI/buttons/button/Button';
 import LabeledCheckbox from '@/components/UI/labeledCheckbox/LabeledCheckbox';
-import Card from '@/components/business/CardEditor/CardEditor';
+import CardEditor from '@/components/business/CardEditor/CardEditor';
 import styles from '@/components/business/CardForm/cardForm.module.scss';
 import Divider from '@/components/business/Divider/Divider';
 import { modalState } from '@/store/modalStore';
@@ -39,7 +39,7 @@ const CardForm: FC<ICardFormProps> = ({
   return (
     <form className={styles.form}>
       <div className={styles.card}>
-        <Card
+        <CardEditor
           card={card}
           setTextCard={setTextCard}
           side={side}

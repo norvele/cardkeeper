@@ -484,6 +484,13 @@
   "resolved" "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   "version" "0.0.29"
 
+"@types/node@^18.0.0 || >=20.0.0", "@types/node@^20.11.6":
+  "integrity" "sha512-+EOokTnksGVgip2PbYbr3xnR7kZigh4LbybAfBAw5BpnQ+FqBYUsvCEjYd70IXKlbohQ64mzEYmMtlWUY8q//Q=="
+  "resolved" "https://registry.npmjs.org/@types/node/-/node-20.11.6.tgz"
+  "version" "20.11.6"
+  dependencies:
+    "undici-types" "~5.26.4"
+
 "@types/prop-types@*":
   "integrity" "sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng=="
   "resolved" "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.11.tgz"
@@ -986,6 +993,11 @@
   dependencies:
     "no-case" "^3.0.4"
     "tslib" "^2.0.3"
+
+"dotenv@^16.4.1":
+  "integrity" "sha512-CjA3y+Dr3FyFDOAMnxZEGtnW9KBR2M0JvvUtXNW+dYJL5ROWxP9DUHCwgFqpMk0OXCc0ljhaNTr2w/kutYIcHQ=="
+  "resolved" "https://registry.npmjs.org/dotenv/-/dotenv-16.4.1.tgz"
+  "version" "16.4.1"
 
 "electron-to-chromium@^1.4.601":
   "integrity" "sha512-a2fcSHOHrqBJsPNXtf6ZCEZpXrFCcbK1FBxfX3txoqWzNgtEDG1f3M59M98iwxhRW4iMKESnSjbJ310/rkrp0g=="
@@ -2689,6 +2701,11 @@
     "has-bigints" "^1.0.2"
     "has-symbols" "^1.0.3"
     "which-boxed-primitive" "^1.0.2"
+
+"undici-types@~5.26.4":
+  "integrity" "sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA=="
+  "resolved" "https://registry.npmjs.org/undici-types/-/undici-types-5.26.5.tgz"
+  "version" "5.26.5"
 
 "update-browserslist-db@^1.0.13":
   "integrity" "sha512-xebP81SNcPuNpPP3uzeW1NYXxI3rxyJzF3pD6sH4jE7o/IX+WtSpwnVU+qIsDPyk0d3hmFQ7mjqc6AtV604hbg=="
