@@ -1,42 +1,30 @@
-import { useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
 import Button from '@/components/UI/buttons/button/Button';
 import Modal from '@/components/UI/modal/Modal';
 import ButtonGroup from '@/components/business/ButtonGroup/ButtonGroup';
 import styles from '@/components/business/ConfirmModal/confirmModal.module.scss';
-import { modalState } from '@/store/modalStore';
+import { useModal } from '@/hooks/useModal';
 
 const ConfirmModal = () => {
-  const setModal = useSetRecoilState(modalState);
-  const navigate = useNavigate();
-  const text: string = 'Are you sure you want to delete this card?';
-
-  function hideModal() {
-    setModal({ type: '' });
-  }
-
-  function deleteHandler() {
-    setModal({ type: '' });
-    const response = true;
-    if (response) {
-      navigate('/home');
-    }
-  }
+  const { hideModal, modalParams, modalName } = useModal();
 
   return (
-    <Modal hideModal={hideModal}>
-      <div className={styles.text}>{text}</div>
+    <Modal hideModal={() => hideModal(modalName)}>
+      <div className={styles.text}>{modalParams.notification}</div>
       <ButtonGroup position="horizontal">
-        <Button size="regular" variant="transparent" onClick={hideModal}>
+        <Button
+          size="regular"
+          variant="transparent"
+          onClick={() => hideModal(modalName)}
+        >
           Cancel
         </Button>
         <Button
           size="regular"
           variant="transparent"
           fontColor="red"
-          onClick={deleteHandler}
+          onClick={modalParams.callback}
         >
-          Delete
+          {modalParams.textButton}
         </Button>
       </ButtonGroup>
     </Modal>

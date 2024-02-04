@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { BrowserRouter, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import ConfirmModal from '@/components/business/ConfirmModal/ConfirmModal';
 import Layout from '@/components/business/Layout/Layout';
@@ -7,11 +7,11 @@ import { router } from '@/router/Router';
 import { modalState } from '@/store/modalStore';
 
 function App() {
-  const typeModal = useRecoilValue(modalState);
+  const { name: nameModal } = useRecoilValue(modalState);
 
   let modal: ReactNode | null;
 
-  switch (typeModal) {
+  switch (nameModal) {
     case 'confirm':
       modal = <ConfirmModal />;
       break;
@@ -23,7 +23,7 @@ function App() {
   return (
     <Layout>
       <RouterProvider router={router} />
-      <BrowserRouter>{modal}</BrowserRouter>
+      {modal}
     </Layout>
   );
 }

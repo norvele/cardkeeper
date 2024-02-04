@@ -1,22 +1,21 @@
 import { FC } from 'react';
-import { SetterOrUpdater, useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 import Button from '@/components/UI/buttons/button/Button';
 import LabeledCheckbox from '@/components/UI/labeledCheckbox/LabeledCheckbox';
 import CardEditor from '@/components/business/CardEditor/CardEditor';
 import styles from '@/components/business/CardForm/cardForm.module.scss';
 import Divider from '@/components/business/Divider/Divider';
-import { modalState } from '@/store/modalStore';
+import useCards from '@/hooks/useCards';
+import { useModal } from '@/hooks/useModal';
 import { ICard } from '@/types/Card';
 
 interface ICardFormProps {
   type: 'Edit' | 'Create';
   card: ICard;
   side: 'back' | 'front';
-  setSide: SetterOrUpdater<'back' | 'front'>;
-  hasError: boolean;
-  setHasError: SetterOrUpdater<boolean>;
-  saveHandler: () => void;
-  setTextCard: (_value: string, _side: 'front' | 'back') => void;
+  errorIsVisible: boolean;
+  onChangeInputHandler: (_value: string, _side: 'front' | 'back') => void;
+  onChangeSwitchSideHandler: () => void;
   onChangeCanBeInFocusedCheckboxHandler: () => void;
 }
 
@@ -24,16 +23,28 @@ const CardForm: FC<ICardFormProps> = ({
   type,
   card,
   side,
-  setSide,
-  hasError,
-  setHasError,
-  setTextCard,
+  errorIsVisible,
+  onChangeInputHandler,
+  onChangeSwitchSideHandler,
   onChangeCanBeInFocusedCheckboxHandler,
 }) => {
-  const setModal = useSetRecoilState(modalState);
+  const { showModal } = useModal();
+  const { deleteCard } = useCards();
+  const navigate = useNavigate();
 
-  function showModal() {
-    setModal('confirm');
+  function deleteHandler(id: string) {
+    const sucessfully = deleteCard(id);
+    if (sucessfully) {
+      navigate('/home');
+    }
+  }
+
+  function onClickDelete() {
+    showModal('confirm', {
+      notification: 'Are you sure you want to delete this card?',
+      textButton: 'Delete',
+      callback: () => deleteHandler(card.id),
+    });
   }
 
   return (
@@ -41,11 +52,10 @@ const CardForm: FC<ICardFormProps> = ({
       <div className={styles.card}>
         <CardEditor
           card={card}
-          setTextCard={setTextCard}
           side={side}
-          setSide={setSide}
-          hasError={hasError}
-          setHasError={setHasError}
+          errorIsVisible={errorIsVisible}
+          onChangeInputHandler={onChangeInputHandler}
+          onChangeSwitchSideHandler={onChangeSwitchSideHandler}
         />
       </div>
       <Divider />
@@ -62,7 +72,7 @@ const CardForm: FC<ICardFormProps> = ({
               size="regular"
               variant="default"
               fontColor="red"
-              onClick={showModal}
+              onClick={onClickDelete}
             >
               Delete card
             </Button>

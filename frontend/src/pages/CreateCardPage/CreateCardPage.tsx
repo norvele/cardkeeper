@@ -1,63 +1,42 @@
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
 import CardForm from '@/components/business/CardForm/CardForm';
 import CardPageLayout from '@/components/business/CardPageLayout/CardPageLayout';
-import {
-  cardErrorState,
-  cardSideState,
-  newCardState,
-} from '@/store/cardFormStore';
+import useCardForm from '@/hooks/useCardForm';
 
 const CreateCardPage = () => {
+  const {
+    cardForm,
+    cardSide,
+    cardError,
+    resetCard,
+    toggleSideSwitch,
+    toggleCanBeInFocusedCheckbox,
+    updateInput,
+    saveCard,
+  } = useCardForm();
   const navigate = useNavigate();
-  const [newCard, setNewCard] = useRecoilState(newCardState);
-  const [side, setSide] = useRecoilState(cardSideState);
-  const [hasError, setHasError] = useRecoilState(cardErrorState);
 
-  function setTextCard(value: string, side: 'front' | 'back') {
-    const card = { ...newCard, [`${side}Text`]: value };
-    setNewCard(card);
+  function onChangeInputHandler(value: string, side: 'front' | 'back') {
+    updateInput(value, side);
   }
 
   function onChangeCanBeInFocusedCheckboxHandler() {
-    const card = { ...newCard, canBeInFocused: !newCard.canBeInFocused };
-    setNewCard(card);
+    toggleCanBeInFocusedCheckbox();
   }
 
   function goBackHandler() {
-    setSide('front');
-    setHasError(false);
-    setNewCard({
-      id: '',
-      frontText: '',
-      backText: '',
-      canBeInFocused: false,
-    });
+    resetCard();
   }
 
   function saveHandler() {
-    if (!newCard.frontText) {
-      setSide('front');
-      setHasError(true);
-    } else if (!newCard.backText) {
-      setSide('back');
-      setHasError(true);
-    } else {
-      const card = { ...newCard, id: `${Date.now()}` };
-      // post card to backend
-
-      const response = true;
-      if (response) {
-        navigate('/home');
-      }
-      setNewCard({
-        id: '',
-        frontText: '',
-        backText: '',
-        canBeInFocused: false,
-      });
-      setSide('front');
+    const isSuccessfully = saveCard();
+    if (isSuccessfully) {
+      navigate('/home');
     }
+  }
+
+  function onChangeSwitchSideHandler() {
+    toggleSideSwitch();
   }
 
   return (
@@ -68,16 +47,14 @@ const CreateCardPage = () => {
     >
       <CardForm
         type="Create"
-        card={newCard}
-        setTextCard={setTextCard}
-        side={side}
-        setSide={setSide}
-        hasError={hasError}
-        setHasError={setHasError}
+        card={cardForm}
+        side={cardSide}
+        onChangeSwitchSideHandler={onChangeSwitchSideHandler}
+        errorIsVisible={cardError.errorIsVisible}
+        onChangeInputHandler={onChangeInputHandler}
         onChangeCanBeInFocusedCheckboxHandler={
           onChangeCanBeInFocusedCheckboxHandler
         }
-        saveHandler={saveHandler}
       />
     </CardPageLayout>
   );

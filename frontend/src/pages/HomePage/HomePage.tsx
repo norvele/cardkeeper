@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import AddIcon from '@/assets/icons/add.svg?react';
 import MenuIcon from '@/assets/icons/menu.svg?react';
@@ -25,9 +24,7 @@ const HomePage = () => {
           </Link>
         }
       />
-      <Suspense fallback={<div>Loading...</div>}>
-        <DynamicDeckDisplay />
-      </Suspense>
+      <DynamicDeckDisplay />
     </>
   );
 };

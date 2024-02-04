@@ -7,7 +7,7 @@ interface IButtonProps {
   fontColor?: 'red' | 'black';
   children: ReactNode;
   icon?: ReactNode;
-  onClick?: () => void; // пока не сделаны все обработчики - необязательно
+  onClick: null | (() => void);
 }
 
 const Button: FC<IButtonProps> = ({

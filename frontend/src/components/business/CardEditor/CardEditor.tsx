@@ -1,59 +1,40 @@
 import clsx from 'clsx';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import { SetterOrUpdater } from 'recoil';
 import styles from '@/components/business/CardEditor/cardEditor.module.scss';
 import SidePanel from '@/components/business/SidePanel/SidePanel';
 import { ICard } from '@/types/Card';
 
-interface ICardProps {
+interface ICardEditorProps {
   card: ICard;
   side: 'back' | 'front';
-  setSide: SetterOrUpdater<'back' | 'front'>;
-  hasError: boolean;
-  setHasError: SetterOrUpdater<boolean>;
-  setTextCard: (_value: string, _side: 'front' | 'back') => void;
+  errorIsVisible: boolean;
+  onChangeInputHandler: (_value: string, _side: 'front' | 'back') => void;
+  onChangeSwitchSideHandler: () => void;
 }
 
-const Card: FC<ICardProps> = ({
-  setTextCard,
+const CardEditor: FC<ICardEditorProps> = ({
+  card,
   side,
-  setSide,
-  hasError,
-  setHasError,
+  errorIsVisible,
+  onChangeInputHandler,
+  onChangeSwitchSideHandler,
 }) => {
-  const [inputValue, setInputValue] = useState({ front: '', back: '' });
-
-  function toggleSwitch() {
-    side === 'front' ? setSide('back') : setSide('front');
-    setHasError(false);
-  }
-
-  function onFocusHandler() {
-    setHasError(false);
-  }
-
-  function onChangeHandler(event: React.ChangeEvent<HTMLTextAreaElement>) {
-    setInputValue({ ...inputValue, [side]: event.target.value });
-    setTextCard(inputValue[side], side);
-  }
-
   return (
     <div
       className={clsx(styles.note, {
-        [styles.invalid]: hasError,
+        [styles.invalid]: errorIsVisible,
       })}
     >
       <TextareaAutosize
         className={styles.textarea}
         placeholder={`Type on the ${side} side...`}
-        value={inputValue[side]}
-        onChange={(event) => onChangeHandler(event)}
-        onFocus={onFocusHandler}
+        value={card[`${side}Text`]}
+        onChange={(event) => onChangeInputHandler(event.target.value, side)}
       />
-      <SidePanel onSwitchChange={toggleSwitch} side={side} />
+      <SidePanel onSwitchChange={onChangeSwitchSideHandler} side={side} />
     </div>
   );
 };
 
-export default Card;
+export default CardEditor;

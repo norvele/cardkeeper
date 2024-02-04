@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 import { ICard } from '@/types/Card';
 
-export const newCardState = atom({
+export const cardFormState = atom({
   key: 'NewCard',
   default: {
     id: '',
@@ -18,5 +18,8 @@ export const cardSideState = atom({
 
 export const cardErrorState = atom({
   key: 'CardError',
-  default: false as boolean,
+  default: {
+    hasError: true as boolean,
+    errorIsVisible: false as boolean,
+  },
 });
