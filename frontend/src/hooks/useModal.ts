@@ -1,28 +1,56 @@
 import { useRecoilState } from 'recoil';
-import { modalState } from '@/store/modalStore';
-import { IModalParams, TModalName } from '@/types/Modal';
+import {
+  confirmationModalState,
+  listContextModalState,
+} from '@/store/modalStore';
+import { TModal, TModalName } from '@/types/index';
 
 export function useModal() {
-  const [modal, setModal] = useRecoilState(modalState);
+  const [confirmationModal, setConfirmationModal] = useRecoilState(
+    confirmationModalState,
+  );
+  const [listContextModal, setlistContextModal] = useRecoilState(
+    listContextModalState,
+  );
 
-  function showModal(name: TModalName, params: IModalParams) {
-    setModal({ name, params });
+  function showModal(modal: TModal) {
+    switch (modal.name) {
+      case 'confirmation':
+        setConfirmationModal({ ...modal });
+        break;
+      case 'listContext': {
+        setlistContextModal({ ...modal });
+        break;
+      }
+    }
   }
 
   function hideModal(name: TModalName) {
-    setModal({
-      name: '',
-      params: {
-        notification: '',
-        textButton: '',
-        callback: null,
-      },
-    });
+    switch (name) {
+      case 'confirmation':
+        setConfirmationModal({
+          name: '',
+          params: {
+            notification: '',
+            textButton: '',
+            callback: null,
+          },
+        });
+        break;
+      case 'listContext':
+        setlistContextModal({
+          name: '',
+          params: {},
+        });
+    }
   }
 
+  const currentModal = confirmationModal.name || listContextModal.name;
+
   return {
-    modalName: modal.name,
-    modalParams: modal.params,
+    currentModal,
+    confirmationModalParams: confirmationModal.params,
+    listContextModallParams: listContextModal.params,
     showModal,
     hideModal,
   };

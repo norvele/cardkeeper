@@ -1,25 +1,12 @@
-import { ICard } from '@/types/Card';
+import { ICard, IApiService } from '@/types/index';
+
 const BASE_URL = 'https://api.example.com/api';
 
-interface IOptions {
-  headers: {
-    'Content-Type': string;
-  };
-  body: string;
-}
-
-interface IApiService {
-  get: (_url: string) => Promise<Response>;
-  post: (_url: string, _options: IOptions) => Promise<Response>;
-  delete: (_url: string) => Promise<Response>;
-  patch: (_url: string, _options: IOptions) => Promise<Response>;
-}
-
 export default class CardApiService {
-  protected ApiService: IApiService;
+  protected apiService: IApiService;
 
-  constructor(ApiService: IApiService) {
-    this.ApiService = ApiService;
+  constructor(apiService: IApiService) {
+    this.apiService = apiService;
   }
 
   public async getCards() {
@@ -50,7 +37,7 @@ export default class CardApiService {
   }
 
   public async postCard(card: ICard) {
-    await this.ApiService.post(`${BASE_URL}/cards`, {
+    await this.apiService.post(`${BASE_URL}/cards`, {
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
       },
@@ -59,11 +46,11 @@ export default class CardApiService {
   }
 
   public async deleteCard(id: string) {
-    await this.ApiService.delete(`${BASE_URL}/cards/${id}`);
+    await this.apiService.delete(`${BASE_URL}/cards/${id}`);
   }
 
   public async patchCard(card: ICard, id: string) {
-    await this.ApiService.patch(`${BASE_URL}/cards/${id}`, {
+    await this.apiService.patch(`${BASE_URL}/cards/${id}`, {
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
       },

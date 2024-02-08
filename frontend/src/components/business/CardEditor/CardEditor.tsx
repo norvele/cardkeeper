@@ -3,7 +3,7 @@ import { FC } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import styles from '@/components/business/CardEditor/cardEditor.module.scss';
 import SidePanel from '@/components/business/SidePanel/SidePanel';
-import { ICard } from '@/types/Card';
+import { ICard } from '@/types/index';
 
 interface ICardEditorProps {
   card: ICard;

@@ -1,18 +1,17 @@
 import { ReactNode } from 'react';
 import { RouterProvider } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 import ConfirmModal from '@/components/business/ConfirmModal/ConfirmModal';
 import Layout from '@/components/business/Layout/Layout';
+import { useModal } from '@/hooks/useModal';
 import { router } from '@/router/Router';
-import { modalState } from '@/store/modalStore';
 
 function App() {
-  const { name: nameModal } = useRecoilValue(modalState);
+  const { currentModal } = useModal();
 
   let modal: ReactNode | null;
 
-  switch (nameModal) {
-    case 'confirm':
+  switch (currentModal) {
+    case 'confirmation':
       modal = <ConfirmModal />;
       break;
     default:

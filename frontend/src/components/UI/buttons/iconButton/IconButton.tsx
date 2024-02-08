@@ -1,11 +1,11 @@
 import { FC, ReactNode } from 'react';
 import styles from '@/components/UI/buttons/iconButton/iconButton.module.scss';
 
-interface IIconButton {
+interface IIconButtonProps {
   children: ReactNode;
 }
 
-const IconButton: FC<IIconButton> = ({ children }) => {
+const IconButton: FC<IIconButtonProps> = ({ children }) => {
   return <button className={styles.button}>{children}</button>;
 };
 

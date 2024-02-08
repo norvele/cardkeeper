@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { cardApiService } from '@/API';
+import { cardApiService } from '@/container';
 import { cardsState } from '@/store/cardsStore';
-import { ICardState } from '@/types/Card';
+import { ICardState } from '@/types/index';
 
 export default function useCards() {
   const [cards, setCards] = useRecoilState(cardsState);

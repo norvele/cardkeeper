@@ -5,16 +5,16 @@ import styles from '@/components/business/ConfirmModal/confirmModal.module.scss'
 import { useModal } from '@/hooks/useModal';
 
 const ConfirmModal = () => {
-  const { hideModal, modalParams, modalName } = useModal();
+  const { hideModal, confirmationModalParams } = useModal();
 
   return (
-    <Modal hideModal={() => hideModal(modalName)}>
-      <div className={styles.text}>{modalParams.notification}</div>
+    <Modal hideModal={() => hideModal('confirmation')}>
+      <div className={styles.text}>{confirmationModalParams.notification}</div>
       <ButtonGroup position="horizontal">
         <Button
           size="regular"
           variant="transparent"
-          onClick={() => hideModal(modalName)}
+          onClick={() => hideModal('confirmation')}
         >
           Cancel
         </Button>
@@ -22,9 +22,9 @@ const ConfirmModal = () => {
           size="regular"
           variant="transparent"
           fontColor="red"
-          onClick={modalParams.callback}
+          onClick={confirmationModalParams.callback}
         >
-          {modalParams.textButton}
+          {confirmationModalParams.textButton}
         </Button>
       </ButtonGroup>
     </Modal>

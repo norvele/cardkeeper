@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { ICard } from '@/types/Card';
+import { ICard } from '@/types/index';
 
 export const cardsState = atom({
   key: 'Cards',

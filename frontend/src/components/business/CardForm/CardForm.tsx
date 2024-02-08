@@ -7,7 +7,7 @@ import styles from '@/components/business/CardForm/cardForm.module.scss';
 import Divider from '@/components/business/Divider/Divider';
 import useCards from '@/hooks/useCards';
 import { useModal } from '@/hooks/useModal';
-import { ICard } from '@/types/Card';
+import { ICard } from '@/types/index';
 
 interface ICardFormProps {
   type: 'Edit' | 'Create';
@@ -40,10 +40,13 @@ const CardForm: FC<ICardFormProps> = ({
   }
 
   function onClickDelete() {
-    showModal('confirm', {
-      notification: 'Are you sure you want to delete this card?',
-      textButton: 'Delete',
-      callback: () => deleteHandler(card.id),
+    showModal({
+      name: 'confirmation',
+      params: {
+        notification: 'Are you sure you want to delete this card?',
+        textButton: 'Delete',
+        callback: () => deleteHandler(card.id),
+      },
     });
   }
 
