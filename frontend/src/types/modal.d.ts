@@ -1,7 +1,7 @@
-export type TModalName = '' | 'confirmation' | 'listContext';
+export type TModalName = 'confirmation' | 'listContext';
 
 export interface IConfirmationModal {
-  name: 'confirmation' | '';
+  name: 'confirmation';
   params: {
     notification: string;
     textButton: string;
@@ -10,10 +10,15 @@ export interface IConfirmationModal {
 }
 
 export interface IListContextModal {
-  name: 'listContext' | '';
+  name: 'listContext';
   params: {
     /*...*/
   };
+}
+
+interface TEmptyModal {
+  name: '';
+  params: object;
 }
 
 export type TModal = IConfirmationModal | IListContextModal;

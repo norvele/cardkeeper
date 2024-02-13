@@ -1,30 +1,30 @@
+import { FC } from 'react';
 import Button from '@/components/UI/buttons/button/Button';
 import Modal from '@/components/UI/modal/Modal';
 import ButtonGroup from '@/components/business/ButtonGroup/ButtonGroup';
 import styles from '@/components/business/ConfirmModal/confirmModal.module.scss';
-import { useModal } from '@/hooks/useModal';
+import { IConfirmationModal } from '@/types';
 
-const ConfirmModal = () => {
-  const { hideModal, confirmationModalParams } = useModal();
+interface IConfirmModalProps {
+  params: IConfirmationModal['params'];
+  onClose: () => void;
+}
 
+const ConfirmModal: FC<IConfirmModalProps> = ({ params, onClose }) => {
   return (
-    <Modal hideModal={() => hideModal('confirmation')}>
-      <div className={styles.text}>{confirmationModalParams.notification}</div>
+    <Modal hideModal={onClose}>
+      <div className={styles.text}>{params.notification}</div>
       <ButtonGroup position="horizontal">
-        <Button
-          size="regular"
-          variant="transparent"
-          onClick={() => hideModal('confirmation')}
-        >
+        <Button size="regular" variant="transparent" onClick={onClose}>
           Cancel
         </Button>
         <Button
           size="regular"
           variant="transparent"
           fontColor="red"
-          onClick={confirmationModalParams.callback}
+          onClick={params.callback}
         >
-          {confirmationModalParams.textButton}
+          {params.textButton}
         </Button>
       </ButtonGroup>
     </Modal>

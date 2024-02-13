@@ -1,22 +1,9 @@
 import { atom } from 'recoil';
-import { IConfirmationModal, IListContextModal } from '@/types/index';
-
-export const confirmationModalState = atom({
-  key: 'confirmationModal',
-  default: {
-    name: '',
-    params: {
-      notification: '',
-      textButton: '',
-      callback: null,
-    },
-  } as IConfirmationModal,
-});
-
-export const listContextModalState = atom({
-  key: 'listContextModal',
+import { TEmptyModal, TModal } from '@/types/index';
+export const modalState = atom({
+  key: 'modal',
   default: {
     name: '',
     params: {},
-  } as IListContextModal,
+  } as TModal | TEmptyModal,
 });
