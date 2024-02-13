@@ -3,12 +3,30 @@
   border-radius: 8px;
   display: flex;
   align-items: center;
+  justify-content: center;
   font-family: inherit;
   font-weight: 500;
+  font-size: 16px;
 
   &:hover {
     cursor: pointer;
   }
+}
+
+.black {
+  color: var(--font-color-normal);
+}
+
+.red {
+  color: var(--font-color-red);
+}
+
+.small {
+  padding: 6px 13px;
+}
+
+.regular {
+  padding: 12px 32px;
 }
 
 .primary {
@@ -19,36 +37,21 @@
     -1px -1px 2px 0px #dd8a6280 inset,
     -5px -5px 10px 0px #ffffffbf;
   color: var(--font-color-white);
-
-  svg {
-    path {
-      fill: var(--font-color-white);
-    }
-  }
 }
 
 .default {
   background: #f0f0f3;
   box-shadow:
-    5px 5px 13px 0px #d5d5dd99,
-    -5px -5px 10px 0px #ffffffe5,
-    5px -5px 10px 0px #d5d5dd1a,
-    -5px 5px 10px 0px #d5d5dd1a,
+    5px 5px 13px 0px rgba(213, 213, 221, 0.6),
+    -5px -5px 10px 0px rgba(255, 255, 255, 0.9),
+    5px -5px 10px 0px rgba(213, 213, 221, 0.1),
+    -5px 5px 10px 0px rgba(213, 213, 221, 0.1),
     -1px -1px 2px 0px #e5e5e9 inset,
-    1px 1px 2px 0px #fcfcff80 inset;
-  color: var(--font-color-normal);
-
-  svg {
-    path {
-      fill: var(--font-color-normal);
-    }
-  }
+    1px 1px 2px 0px rgba(252, 252, 255, 0.5) inset;
 }
 
-.small {
-  padding: 6px 13px;
-}
-
-.regular {
-  padding: 12px 32px;
+.transparent {
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
 }

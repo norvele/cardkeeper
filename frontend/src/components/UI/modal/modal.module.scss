@@ -1,0 +1,31 @@
+.modal {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  display: none;
+  background: rgba(227, 227, 229, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.modalContent {
+  min-width: 207px;
+  background-color: #f0f0f3;
+  box-shadow:
+    -1px -1px 2px 0px #e5e5e9 inset,
+    1px 1px 2px 0px #fcfcff80 inset,
+    5px 5px 13px 0px #d5d5dd99,
+    -5px -5px 10px 0px #ffffffe5,
+    5px -5px 10px 0px #d5d5dd1a,
+    -5px 5px 10px 0px #d5d5dd1a;
+  color: var(--font-color-normal);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

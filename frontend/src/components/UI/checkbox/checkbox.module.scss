@@ -1,0 +1,52 @@
+.input {
+  display: none;
+
+  &:checked + .checkbox {
+    background: #ffaf8a;
+    box-shadow:
+      3px 3px 8px 0px rgba(255, 132, 78, 0.6) inset,
+      -3px -3px 6px 0px rgba(255, 239, 232, 0.6) inset,
+      3px 3px 6px 0px rgba(213, 213, 221, 0.4),
+      -3px -3px 6px 0px rgba(255, 255, 255, 0.9);
+  }
+
+  &:checked + .checkbox::after {
+    background-color: white;
+    mask-image: url(../../../assets/icons/check.svg);
+    opacity: 1;
+  }
+
+  &:indeterminate + .checkbox::after {
+    background-color: white;
+    mask-image: url(../../../assets/icons/check.svg);
+    opacity: 1;
+  }
+}
+
+.checkbox {
+  display: block;
+  position: relative;
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(0deg, #ebebed, #ebebed),
+    linear-gradient(0deg, #f0f0f3, #f0f0f3);
+  border: 1px solid #f0f0f3;
+  box-shadow:
+    3px 3px 8px 0px #d5d5dde5 inset,
+    -3px -3px 6px 0px #ffffffe5 inset,
+    3px 3px 6px 0px #d5d5dd66,
+    -3px -3px 6px 0px #ffffffe5;
+  border-radius: 8px;
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    top: 6px;
+    left: 6px;
+    background-repeat: no-repeat;
+    opacity: 0;
+  }
+}
