@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { cardApiService } from '@/API';
 import {
   cardErrorState,
   cardSideState,

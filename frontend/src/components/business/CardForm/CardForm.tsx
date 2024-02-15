@@ -5,8 +5,8 @@ import LabeledCheckbox from '@/components/UI/labeledCheckbox/LabeledCheckbox';
 import CardEditor from '@/components/business/CardEditor/CardEditor';
 import styles from '@/components/business/CardForm/cardForm.module.scss';
 import Divider from '@/components/business/Divider/Divider';
-import useCards from '@/hooks/useCards';
-import { useModal } from '@/hooks/useModal';
+import { modalService } from '@/container';
+// import useCards from '@/hooks/useCards';
 import { ICard } from '@/types/index';
 
 interface ICardFormProps {
@@ -28,24 +28,23 @@ const CardForm: FC<ICardFormProps> = ({
   onChangeSwitchSideHandler,
   onChangeCanBeInFocusedCheckboxHandler,
 }) => {
-  const { showModal } = useModal();
-  const { deleteCard } = useCards();
+  // const { deleteCard } = useCards();
   const navigate = useNavigate();
 
-  function deleteHandler(id: string) {
-    const sucessfully = deleteCard(id);
-    if (sucessfully) {
-      navigate('/home');
-    }
-  }
+  // function deleteHandler(id: string) {
+  //   const sucessfully = deleteCard(id);
+  //   if (sucessfully) {
+  //     navigate('/home');
+  //   }
+  // }
 
   function onClickDelete() {
-    showModal({
+    modalService.showModal({
       name: 'confirmation',
       params: {
         notification: 'Are you sure you want to delete this card?',
         textButton: 'Delete',
-        callback: () => deleteHandler(card.id),
+        callback: null,
       },
     });
   }
@@ -67,7 +66,7 @@ const CardForm: FC<ICardFormProps> = ({
           Can be in the focused deck
         </LabeledCheckbox>
       </div>
-      {type === 'Edit' && (
+      {type === 'Create' && (
         <>
           <Divider />
           <div className={styles.delete}>

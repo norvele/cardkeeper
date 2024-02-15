@@ -10,7 +10,7 @@ export default class CardApiService {
   }
 
   public async getCards() {
-    // const response = await this.ApiService.get(`${BASE_URL}/cards`);
+    // const response = await this.apiService.get(`${BASE_URL}/cards`);
     // return await response.json();
 
     await new Promise((resolve) => setTimeout(resolve, 5000));

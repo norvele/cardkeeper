@@ -1,11 +1,11 @@
 import { FC, createElement } from 'react';
 import ConfirmModal from '@/components/business/ConfirmModal/ConfirmModal';
 import ListContextModal from '@/components/business/ListContextModal/ListContextModal';
-import { useModal } from '@/hooks/useModal';
+import { modalService } from '@/container';
 import { TModalName } from '@/types';
 
 const ModalManager = () => {
-  const { modal, hideModal } = useModal();
+  const modal = modalService.getModal();
 
   const modalComponentsMap = {
     confirmation: ConfirmModal,
@@ -17,7 +17,7 @@ const ModalManager = () => {
       modalComponentsMap[modal.name],
       {
         params: modal.params,
-        onClose: () => hideModal(modal.name),
+        onClose: () => modalService.hideModal(modal.name),
       },
     );
   }

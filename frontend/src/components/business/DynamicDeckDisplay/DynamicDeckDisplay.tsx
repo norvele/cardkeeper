@@ -1,14 +1,12 @@
 import DeckList from '@/components/business/DeckList/DeckList';
 import styles from '@/components/business/DynamicDeckDisplay/dynamicDeckDisplay.module.scss';
 import NoCards from '@/components/business/NoCards/NoCards';
-import useCards from '@/hooks/useCards';
-import { ICardState } from '@/types/index';
+import { cardsService } from '@/container';
 
 const DynamicDeckDisplay = () => {
-  const { getCards } = useCards();
-  const cards: ICardState = getCards();
+  const { cards, loading } = cardsService.fetchCards();
 
-  if (cards.isLoading) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
