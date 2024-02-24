@@ -37,12 +37,15 @@ export default class CardApiService {
   }
 
   public async postCard(card: ICard) {
-    await this.apiService.post(`${BASE_URL}/cards`, {
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-      },
-      body: JSON.stringify(card),
-    });
+    // await this.apiService.post(`${BASE_URL}/cards`, {
+    //   headers: {
+    //     'Content-Type': 'application/json;charset=utf-8',
+    //   },
+    //   body: JSON.stringify(card),
+    // });
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return true;
   }
 
   public async deleteCard(id: string) {

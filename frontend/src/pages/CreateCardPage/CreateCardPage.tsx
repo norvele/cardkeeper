@@ -1,49 +1,50 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CardForm from '@/components/business/CardForm/CardForm';
 import CardPageLayout from '@/components/business/CardPageLayout/CardPageLayout';
-import useCardForm from '@/hooks/useCardForm';
+import { cardFormService } from '@/container';
 
 const CreateCardPage = () => {
-  const {
-    cardForm,
-    cardSide,
-    cardError,
-    resetCard,
-    toggleSideSwitch,
-    toggleCanBeInFocusedCheckbox,
-    updateInput,
-    saveCard,
-  } = useCardForm();
   const navigate = useNavigate();
 
+  const cardSide = cardFormService.getCardSide();
+  const cardForm = cardFormService.getCardForm();
+  const cardError = cardFormService.getCardError();
+  const savingCardFormStatus = cardFormService.getSavingCardFormStatus();
+
   function onChangeInputHandler(value: string, side: 'front' | 'back') {
-    updateInput(value, side);
+    cardFormService.updateInput(value, side);
   }
 
   function onChangeCanBeInFocusedCheckboxHandler() {
-    toggleCanBeInFocusedCheckbox();
+    cardFormService.toggleCanBeInFocusedCheckbox();
   }
 
   function goBackHandler() {
-    resetCard();
+    cardFormService.resetCardForm();
   }
 
   function saveHandler() {
-    const isSuccessfully = saveCard();
-    if (isSuccessfully) {
-      navigate('/home');
-    }
+    cardFormService.saveCard();
   }
 
   function onChangeSwitchSideHandler() {
-    toggleSideSwitch();
+    cardFormService.toggleSideSwitch();
   }
+
+  useEffect(() => {
+    if (!savingCardFormStatus.error && savingCardFormStatus.isDone) {
+      navigate('/home');
+      cardFormService.resetCardForm();
+    }
+  }, [savingCardFormStatus]);
 
   return (
     <CardPageLayout
       type="Create"
       saveHandler={saveHandler}
       goBackHandler={goBackHandler}
+      saveButtonDisabled={savingCardFormStatus.isLoading}
     >
       <CardForm
         type="Create"

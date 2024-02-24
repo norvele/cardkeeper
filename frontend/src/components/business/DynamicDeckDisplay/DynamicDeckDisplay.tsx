@@ -4,9 +4,9 @@ import NoCards from '@/components/business/NoCards/NoCards';
 import { cardsService } from '@/container';
 
 const DynamicDeckDisplay = () => {
-  const { cards, loading } = cardsService.fetchCards();
+  const { cards } = cardsService.fetchCards();
 
-  if (loading) {
+  if (cards.isLoading) {
     return <div>Loading...</div>;
   }
 

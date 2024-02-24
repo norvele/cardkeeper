@@ -6,15 +6,12 @@ interface ICardsStore {
   data: ICard[];
   isLoading: boolean;
   error: string;
-  isFetched: boolean;
 }
 
 export const fetchCardsEvent = createEvent();
 export const resetCardsEvent = createEvent();
 
-export const fetchCardsFx = createEffect<any, any>(() =>
-  cardApiService.getCards(),
-);
+export const fetchCardsFx = createEffect(() => cardApiService.getCards());
 
 sample({
   clock: fetchCardsEvent,
@@ -25,10 +22,14 @@ export const $cards = createStore<ICardsStore>({
   data: [],
   isLoading: true,
   error: '',
-  isFetched: false,
 })
   .on(fetchCardsFx.doneData, (cards, data) => ({
     ...cards,
+    isLoading: false,
     data: data,
+  }))
+  .on(fetchCardsFx.failData, (cards, fetchError) => ({
+    ...cards,
+    error: fetchError.message,
   }))
   .reset(resetCardsEvent);
