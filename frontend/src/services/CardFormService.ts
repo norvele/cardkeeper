@@ -28,6 +28,10 @@ export class CardFormService {
     toggleSideSwitchEvent();
   }
 
+  public saveCard() {
+    saveCardEvent();
+  }
+
   public getCardSide() {
     return useUnit($cardSide);
   }
@@ -38,10 +42,6 @@ export class CardFormService {
 
   public getCardError() {
     return useUnit($cardError);
-  }
-
-  public saveCard() {
-    saveCardEvent();
   }
 
   public getSavingCardFormStatus() {

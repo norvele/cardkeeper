@@ -25,11 +25,14 @@ export const $cards = createStore<ICardsStore>({
 })
   .on(fetchCardsFx.doneData, (cards, data) => ({
     ...cards,
-    isLoading: false,
     data: data,
   }))
   .on(fetchCardsFx.failData, (cards, fetchError) => ({
     ...cards,
     error: fetchError.message,
+  }))
+  .on(fetchCardsFx.finally, (cards) => ({
+    ...cards,
+    isLoading: false,
   }))
   .reset(resetCardsEvent);

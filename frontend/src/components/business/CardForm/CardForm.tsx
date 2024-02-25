@@ -6,7 +6,6 @@ import CardEditor from '@/components/business/CardEditor/CardEditor';
 import styles from '@/components/business/CardForm/cardForm.module.scss';
 import Divider from '@/components/business/Divider/Divider';
 import { modalService } from '@/container';
-// import useCards from '@/hooks/useCards';
 import { ICard } from '@/types/index';
 
 interface ICardFormProps {

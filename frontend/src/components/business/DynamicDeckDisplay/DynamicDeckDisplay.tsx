@@ -10,6 +10,10 @@ const DynamicDeckDisplay = () => {
     return <div>Loading...</div>;
   }
 
+  if (cards.error) {
+    return <div>Error (x . x)</div>;
+  }
+
   return (
     <>
       {cards.data.length === 0 ? (
