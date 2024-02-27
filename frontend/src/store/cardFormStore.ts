@@ -6,15 +6,17 @@ export const updateInputEvent = createEvent<{
   side: 'front' | 'back';
   value: string;
 }>();
-export const resetCardFormEvent = createEvent();
-export const toggleCanBeInFocusedCheckboxEvent = createEvent();
-export const toggleSideSwitchEvent = createEvent();
-export const saveCardEvent = createEvent();
+export const resetCardForm = createEvent();
+export const toggleCanBeInFocusedCheckbox = createEvent();
+export const toggleSideSwitch = createEvent();
+export const saveCard = createEvent();
 
-export const setHasErrorEvent = createEvent<boolean>();
-export const setErrorIsVisibleEvent = createEvent<boolean>();
+export const resetSavingCardFormStatus = createEvent();
 
-export const setCardSideEvent = createEvent<ICardSide>();
+export const setHasError = createEvent<boolean>();
+export const setErrorIsVisible = createEvent<boolean>();
+
+export const setCardSide = createEvent<ICardSide>();
 
 export const setIsLoading = createEvent<boolean>();
 
@@ -23,15 +25,15 @@ export const saveCardFx = createEffect<
   boolean
 >(async ({ $cardForm, $cardError }) => {
   if ($cardError.hasError) {
-    setErrorIsVisibleEvent(true);
+    setErrorIsVisible(true);
 
     if (!$cardForm.frontText) {
-      setCardSideEvent('front');
+      setCardSide('front');
       return false;
     }
 
     if (!$cardForm.backText) {
-      setCardSideEvent('back');
+      setCardSide('back');
       return false;
     }
     return false;
@@ -72,7 +74,7 @@ export const $savingCardFormStatus = createStore<{
     ...savingCardFormStatus,
     isLoading,
   }))
-  .reset(resetCardFormEvent);
+  .reset(resetSavingCardFormStatus);
 
 export const $cardForm = createStore<ICard>({
   id: '',
@@ -84,53 +86,42 @@ export const $cardForm = createStore<ICard>({
     ...cardForm,
     [`${side}Text`]: value,
   }))
-  .on(toggleCanBeInFocusedCheckboxEvent, (cardForm) => ({
+  .on(toggleCanBeInFocusedCheckbox, (cardForm) => ({
     ...cardForm,
     canBeInFocused: !cardForm.canBeInFocused,
   }))
-  .on(saveCardEvent, (cardForm) => ({
+  .on(saveCard, (cardForm) => ({
     ...cardForm,
     id: `${Date.now()}`,
   }))
-  .reset(resetCardFormEvent);
+  .reset(resetCardForm);
 
 $cardForm.watch((cardForm) => {
-  setErrorIsVisibleEvent(false);
+  setErrorIsVisible(false);
 
   if (!cardForm.backText || !cardForm.frontText) {
-    setHasErrorEvent(true);
+    setHasError(true);
   } else {
-    setHasErrorEvent(false);
+    setHasError(false);
   }
 });
-
-export const $cardSide = createStore<'front' | 'back'>('front')
-  .on(toggleSideSwitchEvent, (cardSide) => {
-    if (cardSide === 'front') {
-      return 'back';
-    } else {
-      return 'front';
-    }
-  })
-  .on(setCardSideEvent, (_, cardSide) => cardSide)
-  .reset(resetCardFormEvent);
 
 export const $cardError = createStore<ICardError>({
   hasError: true,
   errorIsVisible: false,
 })
-  .on(setHasErrorEvent, (cardError, hasError) => ({
+  .on(setHasError, (cardError, hasError) => ({
     ...cardError,
     hasError,
   }))
-  .on(setErrorIsVisibleEvent, (cardError, errorIsVisible) => ({
+  .on(setErrorIsVisible, (cardError, errorIsVisible) => ({
     ...cardError,
     errorIsVisible,
   }))
-  .reset(resetCardFormEvent);
+  .reset(resetCardForm);
 
 sample({
-  clock: saveCardEvent,
+  clock: saveCard,
   source: { $cardForm, $cardError },
   target: saveCardFx,
 });

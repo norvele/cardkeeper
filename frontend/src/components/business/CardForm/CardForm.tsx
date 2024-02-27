@@ -5,7 +5,7 @@ import LabeledCheckbox from '@/components/UI/labeledCheckbox/LabeledCheckbox';
 import CardEditor from '@/components/business/CardEditor/CardEditor';
 import styles from '@/components/business/CardForm/cardForm.module.scss';
 import Divider from '@/components/business/Divider/Divider';
-import { modalService } from '@/container';
+import { showModal } from '@/store/modalStore';
 import { ICard } from '@/types/index';
 
 interface ICardFormProps {
@@ -38,7 +38,7 @@ const CardForm: FC<ICardFormProps> = ({
   // }
 
   function onClickDelete() {
-    modalService.showModal({
+    showModal({
       name: 'confirmation',
       params: {
         notification: 'Are you sure you want to delete this card?',

@@ -1,49 +1,62 @@
-import { useEffect } from 'react';
+import { useUnit } from 'effector-react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CardForm from '@/components/business/CardForm/CardForm';
 import CardPageLayout from '@/components/business/CardPageLayout/CardPageLayout';
-import { cardFormService } from '@/container';
+import {
+  $cardError,
+  $cardForm,
+  $savingCardFormStatus,
+  resetCardForm,
+  resetSavingCardFormStatus,
+  saveCard,
+  toggleCanBeInFocusedCheckbox,
+  updateInputEvent,
+} from '@/store/cardFormStore';
 
 const CreateCardPage = () => {
   const navigate = useNavigate();
 
-  const cardSide = cardFormService.getCardSide();
-  const cardForm = cardFormService.getCardForm();
-  const cardError = cardFormService.getCardError();
-  const savingCardFormStatus = cardFormService.getSavingCardFormStatus();
+  const [cardSide, setCardSide] = useState<'front' | 'back'>('front');
+  const cardForm = useUnit($cardForm);
+  const cardError = useUnit($cardError);
+  const savingCardFormStatus = useUnit($savingCardFormStatus);
 
-  function onChangeInputHandler(value: string, side: 'front' | 'back') {
-    cardFormService.updateInput(value, side);
-  }
-
-  function onChangeCanBeInFocusedCheckboxHandler() {
-    cardFormService.toggleCanBeInFocusedCheckbox();
-  }
-
-  function goBackHandler() {
-    cardFormService.resetCardForm();
-  }
-
-  function saveHandler() {
-    cardFormService.saveCard();
-  }
-
-  function onChangeSwitchSideHandler() {
-    cardFormService.toggleSideSwitch();
-  }
+  useEffect(() => {
+    resetCardForm();
+  }, []);
 
   useEffect(() => {
     if (!savingCardFormStatus.error && savingCardFormStatus.isDone) {
       navigate('/home');
-      cardFormService.resetCardForm();
+      resetSavingCardFormStatus();
     }
   }, [savingCardFormStatus]);
+
+  function onChangeInputHandler(value: string, side: 'front' | 'back') {
+    updateInputEvent({ value, side });
+  }
+
+  function onChangeCanBeInFocusedCheckboxHandler() {
+    toggleCanBeInFocusedCheckbox();
+  }
+
+  function saveHandler() {
+    saveCard();
+  }
+
+  function onChangeSwitchSideHandler() {
+    if (cardSide === 'front') {
+      setCardSide('back');
+    } else {
+      setCardSide('front');
+    }
+  }
 
   return (
     <CardPageLayout
       type="Create"
       saveHandler={saveHandler}
-      goBackHandler={goBackHandler}
       saveButtonDisabled={savingCardFormStatus.isLoading}
     >
       <CardForm

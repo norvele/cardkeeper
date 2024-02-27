@@ -8,13 +8,13 @@ interface ICardsStore {
   error: string;
 }
 
-export const fetchCardsEvent = createEvent();
-export const resetCardsEvent = createEvent();
+export const fetchCards = createEvent();
+export const resetCards = createEvent();
 
 export const fetchCardsFx = createEffect(() => cardApiService.getCards());
 
 sample({
-  clock: fetchCardsEvent,
+  clock: fetchCards,
   target: fetchCardsFx,
 });
 
@@ -35,4 +35,4 @@ export const $cards = createStore<ICardsStore>({
     ...cards,
     isLoading: false,
   }))
-  .reset(resetCardsEvent);
+  .reset(resetCards);

@@ -10,7 +10,6 @@ interface ICardPageLayoutProps {
   children: ReactNode;
   saveButtonDisabled: boolean;
   type: 'Edit' | 'Create';
-  goBackHandler: () => void;
   saveHandler: () => void;
 }
 
@@ -18,14 +17,13 @@ const CardPageLayout: FC<ICardPageLayoutProps> = ({
   children,
   saveButtonDisabled,
   type,
-  goBackHandler,
   saveHandler,
 }) => {
   return (
     <>
       <TopBar
         leftSlot={
-          <Link to="/home" onClick={goBackHandler}>
+          <Link to="/home">
             <IconButton>
               <ArrowBackIcon />
             </IconButton>

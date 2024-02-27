@@ -1,11 +1,12 @@
+import { useUnit } from 'effector-react';
 import { FC, createElement } from 'react';
 import ConfirmModal from '@/components/business/ConfirmModal/ConfirmModal';
 import ListContextModal from '@/components/business/ListContextModal/ListContextModal';
-import { modalService } from '@/container';
+import { $modal, hideModal } from '@/store/modalStore';
 import { TModalName } from '@/types';
 
 const ModalManager = () => {
-  const modal = modalService.getModal();
+  const modal = useUnit($modal);
 
   const modalComponentsMap = {
     confirmation: ConfirmModal,
@@ -17,7 +18,7 @@ const ModalManager = () => {
       modalComponentsMap[modal.name],
       {
         params: modal.params,
-        onClose: () => modalService.hideModal(modal.name),
+        onClose: () => hideModal(modal.name),
       },
     );
   }

@@ -1,10 +1,16 @@
+import { useUnit } from 'effector-react';
+import { useEffect } from 'react';
 import DeckList from '@/components/business/DeckList/DeckList';
 import styles from '@/components/business/DynamicDeckDisplay/dynamicDeckDisplay.module.scss';
 import NoCards from '@/components/business/NoCards/NoCards';
-import { cardsService } from '@/container';
+import { $cards, fetchCards } from '@/store/cardsStore';
 
 const DynamicDeckDisplay = () => {
-  const { cards } = cardsService.fetchCards();
+  const cards = useUnit($cards);
+
+  useEffect(() => {
+    fetchCards();
+  }, []);
 
   if (cards.isLoading) {
     return <div>Loading...</div>;
