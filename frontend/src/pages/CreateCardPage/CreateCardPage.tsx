@@ -14,7 +14,7 @@ import {
   saveCardFx,
   toggleCanBeInFocusedCheckbox,
   toggleSideSwitch,
-  updateInputEvent,
+  updateInput,
 } from '@/store/cardFormStore';
 
 const CreateCardPage = () => {
@@ -42,19 +42,19 @@ const CreateCardPage = () => {
     }
   }, [savingCardFormStatus]);
 
-  function onChangeInputHandler(value: string, side: 'front' | 'back') {
-    updateInputEvent({ value, side });
+  function onChangeInput(value: string, side: 'front' | 'back') {
+    updateInput({ value, side });
   }
 
-  function onChangeCanBeInFocusedCheckboxHandler() {
+  function onChangeCanBeInFocusedCheckbox() {
     toggleCanBeInFocusedCheckbox();
   }
 
-  function saveHandler() {
+  function onClickSave() {
     saveCard();
   }
 
-  function onChangeSwitchSideHandler() {
+  function onChangeSwitchSide() {
     toggleSideSwitch();
   }
 
@@ -62,19 +62,17 @@ const CreateCardPage = () => {
     return (
       <CardPageLayout
         type="Create"
-        saveHandler={saveHandler}
+        onClickSave={onClickSave}
         saveButtonDisabled={saveIsLoading}
       >
         <CardForm
           type="Create"
           card={cardForm}
           side={cardSide}
-          onChangeSwitchSideHandler={onChangeSwitchSideHandler}
+          onChangeSwitchSide={onChangeSwitchSide}
           errorIsVisible={cardError.errorIsVisible}
-          onChangeInputHandler={onChangeInputHandler}
-          onChangeCanBeInFocusedCheckboxHandler={
-            onChangeCanBeInFocusedCheckboxHandler
-          }
+          onChangeInput={onChangeInput}
+          onChangeCanBeInFocusedCheckbox={onChangeCanBeInFocusedCheckbox}
         />
       </CardPageLayout>
     );

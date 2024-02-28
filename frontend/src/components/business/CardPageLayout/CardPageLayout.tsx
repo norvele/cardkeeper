@@ -7,17 +7,17 @@ import IconButton from '@/components/UI/buttons/iconButton/IconButton';
 import TopBar from '@/components/business/TopBar/TopBar';
 
 interface ICardPageLayoutProps {
-  children: ReactNode;
-  saveButtonDisabled: boolean;
   type: 'Edit' | 'Create';
-  saveHandler: () => void;
+  saveButtonDisabled: boolean;
+  children: ReactNode;
+  onClickSave: () => void;
 }
 
 const CardPageLayout: FC<ICardPageLayoutProps> = ({
   children,
   saveButtonDisabled,
   type,
-  saveHandler,
+  onClickSave,
 }) => {
   return (
     <>
@@ -35,14 +35,14 @@ const CardPageLayout: FC<ICardPageLayoutProps> = ({
             size="small"
             variant="primary"
             disabled={saveButtonDisabled}
-            onClick={saveHandler}
+            onClick={onClickSave}
             icon={<CheckIcon />}
           >
             Save
           </Button>
         }
       />
-      {children}
+      <main>{children}</main>
     </>
   );
 };

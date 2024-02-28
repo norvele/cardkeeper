@@ -3,14 +3,14 @@ import Switcher from '@/components/UI/switcher/Switcher';
 import styles from '@/components/business/SidePanel/sidePanel.module.scss';
 
 interface ISidePanelProps {
-  onSwitchChange: () => void;
   side: 'front' | 'back';
+  onChangeSwitchSide: () => void;
 }
 
-const SidePanel: FC<ISidePanelProps> = ({ onSwitchChange, side }) => {
+const SidePanel: FC<ISidePanelProps> = ({ onChangeSwitchSide, side }) => {
   return (
     <div className={styles.sidepanel}>
-      <Switcher side={side} onChange={onSwitchChange} />
+      <Switcher side={side} onChange={onChangeSwitchSide} />
     </div>
   );
 };

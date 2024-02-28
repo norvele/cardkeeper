@@ -9,16 +9,16 @@ interface ICardEditorProps {
   card: ICard;
   side: 'back' | 'front';
   errorIsVisible: boolean;
-  onChangeInputHandler: (_value: string, _side: 'front' | 'back') => void;
-  onChangeSwitchSideHandler: () => void;
+  onChangeInput: (_value: string, _side: 'front' | 'back') => void;
+  onChangeSwitchSide: () => void;
 }
 
 const CardEditor: FC<ICardEditorProps> = ({
   card,
   side,
   errorIsVisible,
-  onChangeInputHandler,
-  onChangeSwitchSideHandler,
+  onChangeInput,
+  onChangeSwitchSide,
 }) => {
   return (
     <div
@@ -30,9 +30,9 @@ const CardEditor: FC<ICardEditorProps> = ({
         className={styles.textarea}
         placeholder={`Type on the ${side} side...`}
         value={card[`${side}Text`]}
-        onChange={(event) => onChangeInputHandler(event.target.value, side)}
+        onChange={(event) => onChangeInput(event.target.value, side)}
       />
-      <SidePanel onSwitchChange={onChangeSwitchSideHandler} side={side} />
+      <SidePanel onChangeSwitchSide={onChangeSwitchSide} side={side} />
     </div>
   );
 };

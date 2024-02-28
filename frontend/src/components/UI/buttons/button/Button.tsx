@@ -20,17 +20,13 @@ const Button: FC<IButtonProps> = ({
   children,
   onClick,
 }) => {
-  function onClickHandler(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) {
-    event.preventDefault();
-    onClick && onClick();
-  }
-
   return (
     <button
       className={`${styles.button} ${styles[variant]} ${styles[size]} ${styles[fontColor]}`}
-      onClick={(event) => onClickHandler(event)}
+      onClick={(event) => {
+        event.preventDefault();
+        onClick && onClick();
+      }}
       disabled={disabled}
     >
       {icon && icon}
