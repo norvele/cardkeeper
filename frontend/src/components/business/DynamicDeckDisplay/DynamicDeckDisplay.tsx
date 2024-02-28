@@ -3,16 +3,18 @@ import { useEffect } from 'react';
 import DeckList from '@/components/business/DeckList/DeckList';
 import styles from '@/components/business/DynamicDeckDisplay/dynamicDeckDisplay.module.scss';
 import NoCards from '@/components/business/NoCards/NoCards';
-import { $cards, fetchCards } from '@/store/cardsStore';
+import { $cards, fetchCards, fetchCardsFx } from '@/store/cardsStore';
 
 const DynamicDeckDisplay = () => {
-  const cards = useUnit($cards);
+  const [cards, isLoading] = useUnit([$cards, fetchCardsFx.pending]);
 
   useEffect(() => {
-    fetchCards();
+    if (cards.data === null) {
+      fetchCards();
+    }
   }, []);
 
-  if (cards.isLoading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
@@ -20,19 +22,21 @@ const DynamicDeckDisplay = () => {
     return <div>Error (x . x)</div>;
   }
 
-  return (
-    <>
-      {cards.data.length === 0 ? (
-        <main className={styles.nocards}>
-          <NoCards />
-        </main>
-      ) : (
-        <main className={styles.decklist}>
-          <DeckList cardsLength={cards.data.length} />
-        </main>
-      )}
-    </>
-  );
+  if (cards.data?.length === 0) {
+    return (
+      <main className={styles.nocards}>
+        <NoCards />
+      </main>
+    );
+  }
+
+  if (cards.data !== null) {
+    return (
+      <main className={styles.decklist}>
+        <DeckList cardsLength={cards.data?.length} />
+      </main>
+    );
+  }
 };
 
 export default DynamicDeckDisplay;

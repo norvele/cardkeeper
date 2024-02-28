@@ -45,14 +45,23 @@ export const saveCardFx = createEffect<
   }
 });
 
+export const $cardSide = createStore<'front' | 'back'>('front')
+  .on(toggleSideSwitch, (cardSide) => {
+    if (cardSide === 'front') {
+      return 'back';
+    } else {
+      return 'front';
+    }
+  })
+  .on(setCardSide, (_, cardSide) => cardSide)
+  .reset(resetCardForm);
+
 export const $savingCardFormStatus = createStore<{
   error: string;
   isDone: boolean;
-  isLoading: boolean;
 }>({
   error: '',
   isDone: false,
-  isLoading: false,
 })
   .on(saveCardFx.failData, (savingCardFormStatus, effectError) => ({
     ...savingCardFormStatus,

@@ -6,28 +6,37 @@ import CardPageLayout from '@/components/business/CardPageLayout/CardPageLayout'
 import {
   $cardError,
   $cardForm,
+  $cardSide,
   $savingCardFormStatus,
   resetCardForm,
   resetSavingCardFormStatus,
   saveCard,
+  saveCardFx,
   toggleCanBeInFocusedCheckbox,
+  toggleSideSwitch,
   updateInputEvent,
 } from '@/store/cardFormStore';
 
 const CreateCardPage = () => {
+  const [formIsReset, setFormIsReset] = useState(false);
+
   const navigate = useNavigate();
 
-  const [cardSide, setCardSide] = useState<'front' | 'back'>('front');
+  const cardSide = useUnit($cardSide);
   const cardForm = useUnit($cardForm);
   const cardError = useUnit($cardError);
-  const savingCardFormStatus = useUnit($savingCardFormStatus);
+  const [savingCardFormStatus, saveIsLoading] = useUnit([
+    $savingCardFormStatus,
+    saveCardFx.pending,
+  ]);
 
   useEffect(() => {
     resetCardForm();
+    setFormIsReset(true);
   }, []);
 
   useEffect(() => {
-    if (!savingCardFormStatus.error && savingCardFormStatus.isDone) {
+    if (savingCardFormStatus.isDone) {
       navigate('/home');
       resetSavingCardFormStatus();
     }
@@ -46,32 +55,30 @@ const CreateCardPage = () => {
   }
 
   function onChangeSwitchSideHandler() {
-    if (cardSide === 'front') {
-      setCardSide('back');
-    } else {
-      setCardSide('front');
-    }
+    toggleSideSwitch();
   }
 
-  return (
-    <CardPageLayout
-      type="Create"
-      saveHandler={saveHandler}
-      saveButtonDisabled={savingCardFormStatus.isLoading}
-    >
-      <CardForm
+  if (formIsReset) {
+    return (
+      <CardPageLayout
         type="Create"
-        card={cardForm}
-        side={cardSide}
-        onChangeSwitchSideHandler={onChangeSwitchSideHandler}
-        errorIsVisible={cardError.errorIsVisible}
-        onChangeInputHandler={onChangeInputHandler}
-        onChangeCanBeInFocusedCheckboxHandler={
-          onChangeCanBeInFocusedCheckboxHandler
-        }
-      />
-    </CardPageLayout>
-  );
+        saveHandler={saveHandler}
+        saveButtonDisabled={saveIsLoading}
+      >
+        <CardForm
+          type="Create"
+          card={cardForm}
+          side={cardSide}
+          onChangeSwitchSideHandler={onChangeSwitchSideHandler}
+          errorIsVisible={cardError.errorIsVisible}
+          onChangeInputHandler={onChangeInputHandler}
+          onChangeCanBeInFocusedCheckboxHandler={
+            onChangeCanBeInFocusedCheckboxHandler
+          }
+        />
+      </CardPageLayout>
+    );
+  }
 };
 
 export default CreateCardPage;
