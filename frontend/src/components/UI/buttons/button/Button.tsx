@@ -5,6 +5,7 @@ interface IButtonProps {
   variant: 'primary' | 'default' | 'transparent';
   size: 'small' | 'regular';
   fontColor?: 'red' | 'black';
+  disabled?: boolean;
   children: ReactNode;
   icon?: ReactNode;
   onClick: null | (() => void);
@@ -14,6 +15,7 @@ const Button: FC<IButtonProps> = ({
   variant,
   size,
   fontColor = 'black',
+  disabled,
   icon,
   children,
   onClick,
@@ -29,6 +31,7 @@ const Button: FC<IButtonProps> = ({
     <button
       className={`${styles.button} ${styles[variant]} ${styles[size]} ${styles[fontColor]}`}
       onClick={(event) => onClickHandler(event)}
+      disabled={disabled}
     >
       {icon && icon}
       {children}

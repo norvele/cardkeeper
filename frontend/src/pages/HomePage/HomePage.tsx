@@ -4,7 +4,6 @@ import MenuIcon from '@/assets/icons/menu.svg?react';
 import IconButton from '@/components/UI/buttons/iconButton/IconButton';
 import DynamicDeckDisplay from '@/components/business/DynamicDeckDisplay/DynamicDeckDisplay';
 import TopBar from '@/components/business/TopBar/TopBar';
-// import styles from '@/pages/HomePage/homePage.module.scss';
 
 const HomePage = () => {
   return (

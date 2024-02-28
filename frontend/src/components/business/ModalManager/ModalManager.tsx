@@ -1,11 +1,12 @@
+import { useUnit } from 'effector-react';
 import { FC, createElement } from 'react';
 import ConfirmModal from '@/components/business/ConfirmModal/ConfirmModal';
 import ListContextModal from '@/components/business/ListContextModal/ListContextModal';
-import { useModal } from '@/hooks/useModal';
+import { $modal, hideModal } from '@/store/modalStore';
 import { TModalName } from '@/types';
 
 const ModalManager = () => {
-  const { modal, hideModal } = useModal();
+  const modal = useUnit($modal);
 
   const modalComponentsMap = {
     confirmation: ConfirmModal,

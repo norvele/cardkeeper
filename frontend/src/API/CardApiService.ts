@@ -10,7 +10,7 @@ export default class CardApiService {
   }
 
   public async getCards() {
-    // const response = await this.ApiService.get(`${BASE_URL}/cards`);
+    // const response = await this.apiService.get(`${BASE_URL}/cards`);
     // return await response.json();
 
     await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -37,12 +37,15 @@ export default class CardApiService {
   }
 
   public async postCard(card: ICard) {
-    await this.apiService.post(`${BASE_URL}/cards`, {
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-      },
-      body: JSON.stringify(card),
-    });
+    // await this.apiService.post(`${BASE_URL}/cards`, {
+    //   headers: {
+    //     'Content-Type': 'application/json;charset=utf-8',
+    //   },
+    //   body: JSON.stringify(card),
+    // });
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return true;
   }
 
   public async deleteCard(id: string) {
