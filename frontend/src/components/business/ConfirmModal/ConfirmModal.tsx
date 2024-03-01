@@ -12,7 +12,7 @@ interface IConfirmModalProps {
 
 const ConfirmModal: FC<IConfirmModalProps> = ({ params, onClose }) => {
   return (
-    <Modal hideModal={onClose}>
+    <Modal onClickBehind={onClose}>
       <div className={styles.text}>{params.notification}</div>
       <ButtonGroup position="horizontal">
         <Button size="regular" variant="transparent" onClick={onClose}>

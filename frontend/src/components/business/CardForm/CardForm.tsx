@@ -13,9 +13,9 @@ interface ICardFormProps {
   card: ICard;
   side: 'back' | 'front';
   errorIsVisible: boolean;
-  onChangeInputHandler: (_value: string, _side: 'front' | 'back') => void;
-  onChangeSwitchSideHandler: () => void;
-  onChangeCanBeInFocusedCheckboxHandler: () => void;
+  onChangeInput: (_value: string, _side: 'front' | 'back') => void;
+  onChangeSwitchSide: () => void;
+  onChangeCanBeInFocusedCheckbox: () => void;
 }
 
 const CardForm: FC<ICardFormProps> = ({
@@ -23,9 +23,9 @@ const CardForm: FC<ICardFormProps> = ({
   card,
   side,
   errorIsVisible,
-  onChangeInputHandler,
-  onChangeSwitchSideHandler,
-  onChangeCanBeInFocusedCheckboxHandler,
+  onChangeInput,
+  onChangeSwitchSide,
+  onChangeCanBeInFocusedCheckbox,
 }) => {
   // const { deleteCard } = useCards();
   const navigate = useNavigate();
@@ -55,13 +55,13 @@ const CardForm: FC<ICardFormProps> = ({
           card={card}
           side={side}
           errorIsVisible={errorIsVisible}
-          onChangeInputHandler={onChangeInputHandler}
-          onChangeSwitchSideHandler={onChangeSwitchSideHandler}
+          onChangeInput={onChangeInput}
+          onChangeSwitchSide={onChangeSwitchSide}
         />
       </div>
       <Divider />
       <div className={styles.checkbox}>
-        <LabeledCheckbox onChange={onChangeCanBeInFocusedCheckboxHandler}>
+        <LabeledCheckbox onChange={onChangeCanBeInFocusedCheckbox}>
           Can be in the focused deck
         </LabeledCheckbox>
       </div>

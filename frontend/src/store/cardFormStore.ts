@@ -2,7 +2,7 @@ import { createEffect, createEvent, createStore, sample } from 'effector';
 import { cardApiService } from '@/container';
 import { ICard } from '@/types/index';
 
-export const updateInputEvent = createEvent<{
+export const updateInput = createEvent<{
   side: 'front' | 'back';
   value: string;
 }>();
@@ -91,7 +91,7 @@ export const $cardForm = createStore<ICard>({
   backText: '',
   canBeInFocused: false,
 })
-  .on(updateInputEvent, (cardForm, { side, value }) => ({
+  .on(updateInput, (cardForm, { side, value }) => ({
     ...cardForm,
     [`${side}Text`]: value,
   }))

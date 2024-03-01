@@ -24,17 +24,17 @@ const DynamicDeckDisplay = () => {
 
   if (cards.data?.length === 0) {
     return (
-      <main className={styles.nocards}>
+      <div className={styles.nocards}>
         <NoCards />
-      </main>
+      </div>
     );
   }
 
   if (cards.data !== null) {
     return (
-      <main className={styles.decklist}>
+      <div className={styles.decklist}>
         <DeckList cardsLength={cards.data?.length} />
-      </main>
+      </div>
     );
   }
 };

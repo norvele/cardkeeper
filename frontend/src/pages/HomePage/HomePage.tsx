@@ -23,7 +23,9 @@ const HomePage = () => {
           </Link>
         }
       />
-      <DynamicDeckDisplay />
+      <main>
+        <DynamicDeckDisplay />
+      </main>
     </>
   );
 };
