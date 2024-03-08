@@ -2,14 +2,20 @@ import { createEffect, createEvent, createStore, sample } from 'effector';
 import { cardApiService } from '@/container';
 import { ICard } from '@/types/index';
 
+type TSaveCardAction = 'edit' | 'create';
+
 export const updateInput = createEvent<{
   side: 'front' | 'back';
   value: string;
 }>();
 export const resetCardForm = createEvent();
+export const resetCardSide = createEvent();
 export const toggleCanBeInFocusedCheckbox = createEvent();
 export const toggleSideSwitch = createEvent();
-export const saveCard = createEvent();
+export const saveCard = createEvent<TSaveCardAction>();
+export const editCard = createEvent<ICardSide>();
+
+export const fetchEditingCard = createEvent<string>();
 
 export const resetSavingCardFormStatus = createEvent();
 
@@ -21,9 +27,9 @@ export const setCardSide = createEvent<ICardSide>();
 export const setIsLoading = createEvent<boolean>();
 
 export const saveCardFx = createEffect<
-  { $cardForm: ICard; $cardError: ICardError },
+  { $cardForm: ICard; $cardError: ICardError; action: TSaveCardAction },
   boolean
->(async ({ $cardForm, $cardError }) => {
+>(async ({ $cardForm, $cardError, action }) => {
   if ($cardError.hasError) {
     setErrorIsVisible(true);
 
@@ -37,15 +43,26 @@ export const saveCardFx = createEffect<
       return false;
     }
     return false;
-  } else {
-    setIsLoading(true);
-    await cardApiService.postCard($cardForm);
-    setIsLoading(false);
+  }
+
+  if (action === 'create') {
+    const newCard = { ...$cardForm, id: `${Date.now()}` };
+    await cardApiService.postCard(newCard);
     return true;
   }
+
+  if (action === 'edit') {
+    await cardApiService.patchCard($cardForm, $cardForm.id);
+    return true;
+  }
+  return false;
 });
 
-export const $cardSide = createStore<'front' | 'back'>('front')
+export const fetchEditingCardFx = createEffect(async (id: string) => {
+  return await cardApiService.getCard(id);
+});
+
+export const $cardSide = createStore<ICardSide>('front')
   .on(toggleSideSwitch, (cardSide) => {
     if (cardSide === 'front') {
       return 'back';
@@ -54,7 +71,8 @@ export const $cardSide = createStore<'front' | 'back'>('front')
     }
   })
   .on(setCardSide, (_, cardSide) => cardSide)
-  .reset(resetCardForm);
+  .on(editCard, (_, side) => side)
+  .reset(resetCardSide);
 
 export const $savingCardFormStatus = createStore<{
   error: string;
@@ -79,10 +97,6 @@ export const $savingCardFormStatus = createStore<{
       ...savingCardFormStatus,
     };
   })
-  .on(setIsLoading, (savingCardFormStatus, isLoading) => ({
-    ...savingCardFormStatus,
-    isLoading,
-  }))
   .reset(resetSavingCardFormStatus);
 
 export const $cardForm = createStore<ICard>({
@@ -99,10 +113,7 @@ export const $cardForm = createStore<ICard>({
     ...cardForm,
     canBeInFocused: !cardForm.canBeInFocused,
   }))
-  .on(saveCard, (cardForm) => ({
-    ...cardForm,
-    id: `${Date.now()}`,
-  }))
+  .on(fetchEditingCardFx.doneData, (_, data) => data)
   .reset(resetCardForm);
 
 $cardForm.watch((cardForm) => {
@@ -132,5 +143,11 @@ export const $cardError = createStore<ICardError>({
 sample({
   clock: saveCard,
   source: { $cardForm, $cardError },
+  fn: (source, clock) => ({ ...source, action: clock }),
   target: saveCardFx,
+});
+
+sample({
+  clock: fetchEditingCard,
+  target: fetchEditingCardFx,
 });

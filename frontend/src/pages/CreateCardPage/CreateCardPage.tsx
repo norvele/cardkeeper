@@ -10,11 +10,12 @@ import {
   $savingCardFormStatus,
   resetCardForm,
   resetSavingCardFormStatus,
-  saveCard,
   saveCardFx,
   toggleCanBeInFocusedCheckbox,
   toggleSideSwitch,
   updateInput,
+  saveCard,
+  resetCardSide,
 } from '@/store/cardFormStore';
 
 const CreateCardPage = () => {
@@ -32,6 +33,7 @@ const CreateCardPage = () => {
 
   useEffect(() => {
     resetCardForm();
+    resetCardSide();
     setFormIsReset(true);
   }, []);
 
@@ -50,8 +52,12 @@ const CreateCardPage = () => {
     toggleCanBeInFocusedCheckbox();
   }
 
-  function onClickSave() {
-    saveCard();
+  function onClickGoToBack() {
+    navigate(-1);
+  }
+
+  function onClickSaveCard() {
+    saveCard('create');
   }
 
   function onChangeSwitchSide() {
@@ -62,8 +68,9 @@ const CreateCardPage = () => {
     return (
       <CardPageLayout
         type="Create"
-        onClickSave={onClickSave}
-        saveButtonDisabled={saveIsLoading}
+        onClickLeft={onClickGoToBack}
+        onClickRight={onClickSaveCard}
+        rightButtonDisabled={saveIsLoading}
       >
         <CardForm
           type="Create"
@@ -71,6 +78,7 @@ const CreateCardPage = () => {
           side={cardSide}
           onChangeSwitchSide={onChangeSwitchSide}
           errorIsVisible={cardError.errorIsVisible}
+          checkboxIsChecked={cardForm.canBeInFocused}
           onChangeInput={onChangeInput}
           onChangeCanBeInFocusedCheckbox={onChangeCanBeInFocusedCheckbox}
         />

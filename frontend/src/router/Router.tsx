@@ -1,6 +1,8 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 import CreateCardPage from '@/pages/CreateCardPage/CreateCardPage';
+import EditCardPage from '@/pages/EditCardPage/EditCardPage';
 import HomePage from '@/pages/HomePage/HomePage';
+import LearningPage from '@/pages/LearningPage/LearningPage';
 
 const isAuth = true;
 
@@ -16,6 +18,14 @@ const privateRoutes: Array<object> = [
   {
     path: '/create-card',
     element: <CreateCardPage />,
+  },
+  {
+    path: 'edit-card/:id',
+    element: <EditCardPage />,
+  },
+  {
+    path: '/learning/:id',
+    element: <LearningPage />,
   },
 ];
 

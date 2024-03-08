@@ -10,14 +10,14 @@ const HomePage = () => {
     <>
       <TopBar
         leftSlot={
-          <IconButton>
+          <IconButton size="small" variant="primary">
             <MenuIcon />
           </IconButton>
         }
         title="Card keeper"
         rightSlot={
           <Link to="/create-card">
-            <IconButton>
+            <IconButton size="small" variant="primary">
               <AddIcon />
             </IconButton>
           </Link>

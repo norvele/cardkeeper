@@ -1,28 +1,35 @@
 import { useUnit } from 'effector-react';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DeckList from '@/components/business/DeckList/DeckList';
 import styles from '@/components/business/DynamicDeckDisplay/dynamicDeckDisplay.module.scss';
 import NoCards from '@/components/business/NoCards/NoCards';
-import { $cards, fetchCards, fetchCardsFx } from '@/store/cardsStore';
+import { $decks, fetchDecks, fetchDecksFx } from '@/store/decksStore';
+import { IDeck } from '@/types/deck';
 
 const DynamicDeckDisplay = () => {
-  const [cards, isLoading] = useUnit([$cards, fetchCardsFx.pending]);
+  const navigate = useNavigate();
+  const [decks, isLoading] = useUnit([$decks, fetchDecksFx.pending]);
 
   useEffect(() => {
-    if (cards.data === null) {
-      fetchCards();
+    if (decks.data === null) {
+      fetchDecks();
     }
   }, []);
+
+  function onClickOpenDeck(deck: IDeck) {
+    navigate(`/learning/${deck.id}?title=${deck.name}`);
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (cards.error) {
+  if (decks.error) {
     return <div>Error (x . x)</div>;
   }
 
-  if (cards.data?.length === 0) {
+  if (decks.data?.length === 0) {
     return (
       <div className={styles.nocards}>
         <NoCards />
@@ -30,10 +37,14 @@ const DynamicDeckDisplay = () => {
     );
   }
 
-  if (cards.data !== null) {
+  if (decks.data !== null) {
     return (
       <div className={styles.decklist}>
-        <DeckList cardsLength={cards.data?.length} />
+        <DeckList
+          cardsLength={72}
+          decks={decks.data}
+          onClickOpenDeck={onClickOpenDeck}
+        />
       </div>
     );
   }

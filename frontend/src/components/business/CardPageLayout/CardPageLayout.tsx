@@ -1,5 +1,4 @@
 import { FC, ReactNode } from 'react';
-import { Link } from 'react-router-dom';
 import ArrowBackIcon from '@/assets/icons/arrow_back.svg?react';
 import CheckIcon from '@/assets/icons/check.svg?react';
 import Button from '@/components/UI/buttons/button/Button';
@@ -8,34 +7,34 @@ import TopBar from '@/components/business/TopBar/TopBar';
 
 interface ICardPageLayoutProps {
   type: 'Edit' | 'Create';
-  saveButtonDisabled: boolean;
+  rightButtonDisabled: boolean;
   children: ReactNode;
-  onClickSave: () => void;
+  onClickRight: () => void;
+  onClickLeft: () => void;
 }
 
 const CardPageLayout: FC<ICardPageLayoutProps> = ({
   children,
-  saveButtonDisabled,
+  rightButtonDisabled,
   type,
-  onClickSave,
+  onClickRight,
+  onClickLeft,
 }) => {
   return (
     <>
       <TopBar
         leftSlot={
-          <Link to="/home">
-            <IconButton>
-              <ArrowBackIcon />
-            </IconButton>
-          </Link>
+          <IconButton variant="primary" size="small" onClick={onClickLeft}>
+            <ArrowBackIcon />
+          </IconButton>
         }
         title={`${type} card`}
         rightSlot={
           <Button
             size="small"
             variant="primary"
-            disabled={saveButtonDisabled}
-            onClick={onClickSave}
+            disabled={rightButtonDisabled}
+            onClick={onClickRight}
             icon={<CheckIcon />}
           >
             Save
