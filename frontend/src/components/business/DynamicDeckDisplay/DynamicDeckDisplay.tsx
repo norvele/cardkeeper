@@ -18,7 +18,7 @@ const DynamicDeckDisplay = () => {
   }, []);
 
   function onClickOpenDeck(deck: IDeck) {
-    navigate(`/learning/${deck.id}?title=${deck.name}`);
+    navigate(`/learning/${deck.id}`);
   }
 
   if (isLoading) {
@@ -29,7 +29,7 @@ const DynamicDeckDisplay = () => {
     return <div>Error (x . x)</div>;
   }
 
-  if (decks.data?.length === 0) {
+  if (decks.data?.items.length === 0) {
     return (
       <div className={styles.nocards}>
         <NoCards />
@@ -41,8 +41,8 @@ const DynamicDeckDisplay = () => {
     return (
       <div className={styles.decklist}>
         <DeckList
-          cardsLength={72}
-          decks={decks.data}
+          cardsLength={decks.data.additional.numberOfCardsToOpenMoreDecks}
+          decks={decks.data.items}
           onClickOpenDeck={onClickOpenDeck}
         />
       </div>

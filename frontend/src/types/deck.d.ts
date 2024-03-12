@@ -4,3 +4,11 @@ export interface IDeck {
   color: 'blue' | 'orange' | 'pink';
   id: string;
 }
+
+export interface IDecksData {
+  items: IDeck[];
+  additional: {
+    numberOfCardsToOpenMoreDecks: number;
+  };
+  pagination: object;
+}

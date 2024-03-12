@@ -7,7 +7,7 @@ import IconButton from '@/components/UI/buttons/iconButton/IconButton';
 import styles from '@/components/business/LearningPanel/learningPanel.module.scss';
 
 interface ILearningPanelProps {
-  isFliped: boolean;
+  isFlipped: boolean;
   loading: boolean;
   onClickFlipCard: () => void;
   onClickForgot: () => void;
@@ -16,7 +16,7 @@ interface ILearningPanelProps {
 }
 
 const LearningPanel: FC<ILearningPanelProps> = ({
-  isFliped,
+  isFlipped,
   loading,
   onClickFlipCard,
   onClickForgot,
@@ -25,7 +25,7 @@ const LearningPanel: FC<ILearningPanelProps> = ({
 }) => {
   return (
     <>
-      {isFliped == false && (
+      {isFlipped == false && (
         <div className={styles.frontButton}>
           <IconButton
             size="large"
@@ -38,7 +38,7 @@ const LearningPanel: FC<ILearningPanelProps> = ({
           </IconButton>
         </div>
       )}
-      {isFliped === true && (
+      {isFlipped === true && (
         <div className={styles.backButtons}>
           <IconButton size="large" variant="secondary" onClick={onClickForgot}>
             <BroodingIcon width={30} height={30} />

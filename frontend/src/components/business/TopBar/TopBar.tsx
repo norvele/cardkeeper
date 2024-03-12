@@ -3,7 +3,7 @@ import styles from '@/components/business/TopBar/topBar.module.scss';
 
 interface ITopBarProps {
   leftSlot: ReactNode;
-  title?: string | null;
+  title?: string;
   rightSlot: ReactNode;
 }
 

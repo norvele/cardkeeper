@@ -1,3 +1,3 @@
-type ICardSide = 'front' | 'back';
+export type TCardSide = 'front' | 'back';
 
-type ICardError = { hasError: boolean; errorIsVisible: boolean };
+export type ICardError = { hasError: boolean; errorIsVisible: boolean };

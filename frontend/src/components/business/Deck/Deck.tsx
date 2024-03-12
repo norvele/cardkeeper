@@ -5,12 +5,12 @@ interface IDeckProps {
   color: 'blue' | 'orange' | 'pink';
   text: string;
   count: number;
-  onClick: (_group: string) => void;
+  onClick: () => void;
 }
 
 const Deck: FC<IDeckProps> = ({ color, count, text, onClick }) => {
   return (
-    <div className={styles.deck} onClick={() => onClick(text)}>
+    <div className={styles.deck} onClick={onClick}>
       <div className={`${styles.clip} ${styles[color]}`} />
       <div className={styles.sheet}>
         <div className={styles.info}>

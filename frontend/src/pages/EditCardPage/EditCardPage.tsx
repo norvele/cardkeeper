@@ -54,9 +54,9 @@ const EditCardPage = () => {
   return (
     <CardPageLayout
       type="Edit"
-      onClickLeft={onClickGoToBack}
-      onClickRight={onClickReplaceCard}
-      rightButtonDisabled={false}
+      onClickGoToBack={onClickGoToBack}
+      onClickSaveCard={onClickReplaceCard}
+      saveButtonDisabled={false}
     >
       <CardForm
         type="Edit"

@@ -1,6 +1,7 @@
 import { createEffect, createEvent, createStore, sample } from 'effector';
 import { cardApiService } from '@/container';
-import { ICard } from '@/types/index';
+import { TCardSide } from '@/types/cardForm';
+import { ICard, ILearningCardData } from '@/types/index';
 
 interface ICardsStore {
   data: ICard[] | null;
@@ -8,7 +9,7 @@ interface ICardsStore {
 }
 
 interface ILearningCardStore {
-  data: ICard | null;
+  data: ILearningCardData | null;
   error: string;
 }
 
@@ -26,7 +27,7 @@ export const fetchLearningCardFx = createEffect(async (id: string) => {
 });
 
 export const toggleLearningCardSide = createEvent();
-export const setLearningCardIsFliped = createEvent<boolean>();
+export const setLearningCardIsFlipped = createEvent<boolean>();
 export const resetLearningCard = createEvent();
 
 export const $cards = createStore<ICardsStore>({ data: null, error: '' })
@@ -64,7 +65,7 @@ sample({
   target: fetchLearningCardFx,
 });
 
-export const $learningCardSide = createStore<ICardSide>('front')
+export const $learningCardSide = createStore<TCardSide>('front')
   .on(toggleLearningCardSide, (learningCardSide) => {
     if (learningCardSide === 'front') {
       return 'back';
@@ -74,6 +75,6 @@ export const $learningCardSide = createStore<ICardSide>('front')
   })
   .reset(resetLearningCard);
 
-export const $learningCardIsFliped = createStore<boolean>(false)
-  .on(setLearningCardIsFliped, (_, isFliped) => isFliped)
+export const $learningCardIsFlipped = createStore<boolean>(false)
+  .on(setLearningCardIsFlipped, (_, isFlipped) => isFlipped)
   .reset(resetLearningCard);

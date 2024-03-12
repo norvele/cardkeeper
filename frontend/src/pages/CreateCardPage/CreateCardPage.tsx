@@ -19,7 +19,7 @@ import {
 } from '@/store/cardFormStore';
 
 const CreateCardPage = () => {
-  const [formIsReset, setFormIsReset] = useState(false);
+  const [formHasBeenReset, setFormHasBeenReset] = useState(false);
 
   const navigate = useNavigate();
 
@@ -34,7 +34,7 @@ const CreateCardPage = () => {
   useEffect(() => {
     resetCardForm();
     resetCardSide();
-    setFormIsReset(true);
+    setFormHasBeenReset(true);
   }, []);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const CreateCardPage = () => {
     navigate(-1);
   }
 
-  function onClickSaveCard() {
+  function onClickCreateCard() {
     saveCard('create');
   }
 
@@ -64,13 +64,13 @@ const CreateCardPage = () => {
     toggleSideSwitch();
   }
 
-  if (formIsReset) {
+  if (formHasBeenReset) {
     return (
       <CardPageLayout
         type="Create"
-        onClickLeft={onClickGoToBack}
-        onClickRight={onClickSaveCard}
-        rightButtonDisabled={saveIsLoading}
+        onClickGoToBack={onClickGoToBack}
+        onClickSaveCard={onClickCreateCard}
+        saveButtonDisabled={saveIsLoading}
       >
         <CardForm
           type="Create"

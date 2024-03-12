@@ -1,5 +1,5 @@
 import { IApiService } from '@/types';
-import { IDeck } from '@/types/deck';
+import { IDeck, IDecksData } from '@/types/deck';
 
 const decks: IDeck[] = [
   {
@@ -29,12 +29,18 @@ export default class DeckApiService {
     this.apiService = apiService;
   }
 
-  public async getDecks(): Promise<IDeck[]> {
+  public async getDecks(): Promise<IDecksData> {
     // const response = await this.apiService.get(`${BASE_URL}/decks`);
     // return await response.json();
 
     await new Promise((resolve) => setTimeout(resolve, 200));
-    return decks;
+    return {
+      items: decks,
+      additional: {
+        numberOfCardsToOpenMoreDecks: 72,
+      },
+      pagination: {},
+    };
   }
 
   public async getDeck(id: string): Promise<IDeck> {

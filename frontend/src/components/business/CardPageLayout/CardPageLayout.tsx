@@ -7,24 +7,24 @@ import TopBar from '@/components/business/TopBar/TopBar';
 
 interface ICardPageLayoutProps {
   type: 'Edit' | 'Create';
-  rightButtonDisabled: boolean;
+  saveButtonDisabled: boolean;
   children: ReactNode;
-  onClickRight: () => void;
-  onClickLeft: () => void;
+  onClickSaveCard: () => void;
+  onClickGoToBack: () => void;
 }
 
 const CardPageLayout: FC<ICardPageLayoutProps> = ({
   children,
-  rightButtonDisabled,
+  saveButtonDisabled,
   type,
-  onClickRight,
-  onClickLeft,
+  onClickSaveCard,
+  onClickGoToBack,
 }) => {
   return (
     <>
       <TopBar
         leftSlot={
-          <IconButton variant="primary" size="small" onClick={onClickLeft}>
+          <IconButton variant="primary" size="small" onClick={onClickGoToBack}>
             <ArrowBackIcon />
           </IconButton>
         }
@@ -33,8 +33,8 @@ const CardPageLayout: FC<ICardPageLayoutProps> = ({
           <Button
             size="small"
             variant="primary"
-            disabled={rightButtonDisabled}
-            onClick={onClickRight}
+            disabled={saveButtonDisabled}
+            onClick={onClickSaveCard}
             icon={<CheckIcon />}
           >
             Save

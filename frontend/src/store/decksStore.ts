@@ -1,9 +1,9 @@
 import { createEffect, createEvent, createStore, sample } from 'effector';
 import { deckApiService } from '@/container';
-import { IDeck } from '@/types/deck';
+import { IDeck, IDecksData } from '@/types/deck';
 
 interface IDecksStore {
-  data: IDeck[] | null;
+  data: IDecksData | null;
   error: string;
 }
 

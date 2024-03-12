@@ -1,11 +1,6 @@
 import { useUnit } from 'effector-react';
 import { useEffect } from 'react';
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import ArrowBackIcon from '@/assets/icons/arrow_back.svg?react';
 import SettingsIcon from '@/assets/icons/settings.svg?react';
 import IconButton from '@/components/UI/buttons/iconButton/IconButton';
@@ -15,47 +10,46 @@ import TopBar from '@/components/business/TopBar/TopBar';
 import { cardApiService } from '@/container';
 import styles from '@/pages/LearningPage/learningPage.module.scss';
 import { editCard } from '@/store/cardFormStore';
+import { $openedDeck, fetchOpenedDeck } from '@/store/decksStore';
 import {
   $learningCard,
-  $learningCardIsFliped,
+  $learningCardIsFlipped,
   $learningCardSide,
   fetchLearningCard,
   fetchLearningCardFx,
   resetLearningCard,
-  setLearningCardIsFliped,
+  setLearningCardIsFlipped,
   toggleLearningCardSide,
-} from '@/store/cardsStore';
+} from '@/store/learningStore';
 
 const LearningPage = () => {
-  const learningCardIsFliped = useUnit($learningCardIsFliped);
-
+  const learningCardIsFlipped = useUnit($learningCardIsFlipped);
   const learningCardSide = useUnit($learningCardSide);
-
   const [learningCard, loading] = useUnit([
     $learningCard,
     fetchLearningCardFx.pending,
   ]);
 
-  const { id } = useParams();
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const openedDeck = useUnit($openedDeck);
 
-  const title = searchParams.get('title');
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
       resetLearningCard();
       fetchLearningCard(id);
+      fetchOpenedDeck(id);
     }
   }, []);
 
   const text =
     learningCardSide === 'front'
-      ? learningCard.data?.frontText
-      : learningCard.data?.backText;
+      ? learningCard.data?.card.frontText
+      : learningCard.data?.card.backText;
 
   function onClickFlipCard() {
-    setLearningCardIsFliped(true);
+    setLearningCardIsFlipped(true);
     toggleLearningCardSide();
   }
 
@@ -64,7 +58,7 @@ const LearningPage = () => {
   }
 
   function onClickEditCard() {
-    navigate(`/edit-card/${learningCard.data?.id}`);
+    navigate(`/edit-card/${learningCard.data?.card.id}`);
     editCard(learningCardSide);
   }
 
@@ -94,7 +88,7 @@ const LearningPage = () => {
             <ArrowBackIcon />
           </IconButton>
         }
-        title={title}
+        title={openedDeck.data?.name}
         rightSlot={
           <Link to="/settings">
             <IconButton variant="primary" size="small">
@@ -110,7 +104,7 @@ const LearningPage = () => {
           editingIsDisabled={loading}
         />
         <LearningPanel
-          isFliped={learningCardIsFliped}
+          isFlipped={learningCardIsFlipped}
           loading={loading}
           onClickFlipCard={onClickFlipCard}
           onClickForgot={onClickForgot}

@@ -1,5 +1,6 @@
 import { createEffect, createEvent, createStore, sample } from 'effector';
 import { cardApiService } from '@/container';
+import { ICardError, TCardSide } from '@/types/cardForm';
 import { ICard } from '@/types/index';
 
 type TSaveCardAction = 'edit' | 'create';
@@ -13,7 +14,7 @@ export const resetCardSide = createEvent();
 export const toggleCanBeInFocusedCheckbox = createEvent();
 export const toggleSideSwitch = createEvent();
 export const saveCard = createEvent<TSaveCardAction>();
-export const editCard = createEvent<ICardSide>();
+export const editCard = createEvent<TCardSide>();
 
 export const fetchEditingCard = createEvent<string>();
 
@@ -22,7 +23,7 @@ export const resetSavingCardFormStatus = createEvent();
 export const setHasError = createEvent<boolean>();
 export const setErrorIsVisible = createEvent<boolean>();
 
-export const setCardSide = createEvent<ICardSide>();
+export const setCardSide = createEvent<TCardSide>();
 
 export const setIsLoading = createEvent<boolean>();
 
@@ -46,8 +47,7 @@ export const saveCardFx = createEffect<
   }
 
   if (action === 'create') {
-    const newCard = { ...$cardForm, id: `${Date.now()}` };
-    await cardApiService.postCard(newCard);
+    await cardApiService.postCard($cardForm);
     return true;
   }
 
@@ -62,7 +62,7 @@ export const fetchEditingCardFx = createEffect(async (id: string) => {
   return await cardApiService.getCard(id);
 });
 
-export const $cardSide = createStore<ICardSide>('front')
+export const $cardSide = createStore<TCardSide>('front')
   .on(toggleSideSwitch, (cardSide) => {
     if (cardSide === 'front') {
       return 'back';
