@@ -165,13 +165,10 @@ export default class CardApiService {
   public async getCardByDeckId(id: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     return {
-      card: {
-        id: '20',
-        frontText: 'frontText card 20',
-        backText: 'backtext card 20',
-        canBeInFocused: true,
-      },
-      deck: {},
+      id: '20',
+      frontText: 'frontText card 20',
+      backText: 'backtext card 20',
+      canBeInFocused: true,
     };
   }
 

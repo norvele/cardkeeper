@@ -10,7 +10,7 @@ import TopBar from '@/components/business/TopBar/TopBar';
 import { cardApiService } from '@/container';
 import styles from '@/pages/LearningPage/learningPage.module.scss';
 import { editCard } from '@/store/cardFormStore';
-import { $openedDeck, fetchOpenedDeck } from '@/store/decksStore';
+import { $openedDeck, fetchOpenedDeck } from '@/store/learningStore';
 import {
   $learningCard,
   $learningCardIsFlipped,
@@ -45,8 +45,8 @@ const LearningPage = () => {
 
   const text =
     learningCardSide === 'front'
-      ? learningCard.data?.card.frontText
-      : learningCard.data?.card.backText;
+      ? learningCard.data?.frontText
+      : learningCard.data?.backText;
 
   function onClickFlipCard() {
     setLearningCardIsFlipped(true);
@@ -58,7 +58,7 @@ const LearningPage = () => {
   }
 
   function onClickEditCard() {
-    navigate(`/edit-card/${learningCard.data?.card.id}`);
+    navigate(`/edit-card/${learningCard.data?.id}`);
     editCard(learningCardSide);
   }
 

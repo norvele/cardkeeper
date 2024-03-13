@@ -1,24 +1,20 @@
 import { createEffect, createEvent, createStore, sample } from 'effector';
-import { cardApiService } from '@/container';
+import { cardApiService, deckApiService } from '@/container';
 import { TCardSide } from '@/types/cardForm';
-import { ICard, ILearningCardData } from '@/types/index';
-
-interface ICardsStore {
-  data: ICard[] | null;
-  error: string;
-}
+import { IDeck } from '@/types/deck';
+import { ICard } from '@/types/index';
 
 interface ILearningCardStore {
-  data: ILearningCardData | null;
+  data: ICard | null;
   error: string;
 }
 
-export const fetchCards = createEvent();
-export const resetCards = createEvent();
+interface IOpenedDeckStore {
+  data: IDeck | null;
+  error: string;
+}
 
-export const fetchCardsFx = createEffect(async () => {
-  return await cardApiService.getCards();
-});
+export const resetCards = createEvent();
 
 export const fetchLearningCard = createEvent<string>();
 
@@ -26,24 +22,32 @@ export const fetchLearningCardFx = createEffect(async (id: string) => {
   return await cardApiService.getCardByDeckId(id);
 });
 
+export const fetchOpenedDeck = createEvent<string>();
+
+export const fetchOpenedDeckFx = createEffect(async (id: string) => {
+  return await deckApiService.getDeck(id);
+});
+
 export const toggleLearningCardSide = createEvent();
 export const setLearningCardIsFlipped = createEvent<boolean>();
 export const resetLearningCard = createEvent();
 
-export const $cards = createStore<ICardsStore>({ data: null, error: '' })
-  .on(fetchCardsFx.doneData, (cards, data) => ({
-    ...cards,
+export const $openedDeck = createStore<IOpenedDeckStore>({
+  data: null,
+  error: '',
+})
+  .on(fetchOpenedDeckFx.doneData, (openedDeck, data) => ({
+    ...openedDeck,
     data,
   }))
-  .on(fetchCardsFx.failData, (cards, error) => ({
-    ...cards,
+  .on(fetchOpenedDeckFx.failData, (openedDeck, error) => ({
+    ...openedDeck,
     error: error.message,
-  }))
-  .reset(resetCards);
+  }));
 
 sample({
-  clock: fetchCards,
-  target: fetchCardsFx,
+  clock: fetchOpenedDeck,
+  target: fetchOpenedDeckFx,
 });
 
 export const $learningCard = createStore<ILearningCardStore>({
@@ -54,7 +58,7 @@ export const $learningCard = createStore<ILearningCardStore>({
     ...learningCard,
     data,
   }))
-  .on(fetchCardsFx.failData, (learningCard, error) => ({
+  .on(fetchLearningCardFx.failData, (learningCard, error) => ({
     ...learningCard,
     error: error.message,
   }))
