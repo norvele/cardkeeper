@@ -1,8 +1,9 @@
 import { useUnit } from 'effector-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CardForm from '@/components/business/CardForm/CardForm';
 import CardPageLayout from '@/components/business/CardPageLayout/CardPageLayout';
+import Resolver from '@/components/business/Resolver/Resolver';
 import {
   $cardError,
   $cardForm,
@@ -19,8 +20,6 @@ import {
 } from '@/store/cardFormStore';
 
 const CreateCardPage = () => {
-  const [formHasBeenReset, setFormHasBeenReset] = useState(false);
-
   const navigate = useNavigate();
 
   const cardSide = useUnit($cardSide);
@@ -31,11 +30,10 @@ const CreateCardPage = () => {
     saveCardFx.pending,
   ]);
 
-  useEffect(() => {
+  function resolverCallback() {
     resetCardForm();
     resetCardSide();
-    setFormHasBeenReset(true);
-  }, []);
+  }
 
   useEffect(() => {
     if (savingCardFormStatus.isDone) {
@@ -64,8 +62,8 @@ const CreateCardPage = () => {
     toggleSideSwitch();
   }
 
-  if (formHasBeenReset) {
-    return (
+  return (
+    <Resolver callback={resolverCallback}>
       <CardPageLayout
         type="Create"
         onClickGoToBack={onClickGoToBack}
@@ -83,8 +81,8 @@ const CreateCardPage = () => {
           onChangeCanBeInFocusedCheckbox={onChangeCanBeInFocusedCheckbox}
         />
       </CardPageLayout>
-    );
-  }
+    </Resolver>
+  );
 };
 
 export default CreateCardPage;
