@@ -4,16 +4,6 @@ import { TCardSide } from '@/types/cardForm';
 import { IDeck } from '@/types/deck';
 import { ICard } from '@/types/index';
 
-interface ILearningCardStore {
-  data: ICard | null;
-  error: string;
-}
-
-interface IOpenedDeckStore {
-  data: IDeck | null;
-  error: string;
-}
-
 export const resetCards = createEvent();
 
 export const fetchLearningCard = createEvent<string>();
@@ -32,36 +22,18 @@ export const toggleLearningCardSide = createEvent();
 export const setLearningCardIsFlipped = createEvent<boolean>();
 export const resetLearningCard = createEvent();
 
-export const $openedDeck = createStore<IOpenedDeckStore>({
-  data: null,
-  error: '',
-})
-  .on(fetchOpenedDeckFx.doneData, (openedDeck, data) => ({
-    ...openedDeck,
-    data,
-  }))
-  .on(fetchOpenedDeckFx.failData, (openedDeck, error) => ({
-    ...openedDeck,
-    error: error.message,
-  }));
+export const $openedDeck = createStore<IDeck | null>(null).on(
+  fetchOpenedDeckFx.doneData,
+  (_, data) => data,
+);
 
 sample({
   clock: fetchOpenedDeck,
   target: fetchOpenedDeckFx,
 });
 
-export const $learningCard = createStore<ILearningCardStore>({
-  data: null,
-  error: '',
-})
-  .on(fetchLearningCardFx.doneData, (learningCard, data) => ({
-    ...learningCard,
-    data,
-  }))
-  .on(fetchLearningCardFx.failData, (learningCard, error) => ({
-    ...learningCard,
-    error: error.message,
-  }))
+export const $learningCard = createStore<ICard | null>(null)
+  .on(fetchLearningCardFx.doneData, (_, data) => data)
   .reset(resetLearningCard);
 
 sample({

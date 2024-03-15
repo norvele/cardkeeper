@@ -30,10 +30,7 @@ const CreateCardPage = () => {
     saveCardFx.pending,
   ]);
 
-  function resolverCallback() {
-    resetCardForm();
-    resetCardSide();
-  }
+  const resolverCallbacks = [resetCardForm, resetCardSide];
 
   useEffect(() => {
     if (savingCardFormStatus.isDone) {
@@ -63,7 +60,7 @@ const CreateCardPage = () => {
   }
 
   return (
-    <Resolver callback={resolverCallback}>
+    <Resolver callbacks={resolverCallbacks}>
       <CardPageLayout
         type="Create"
         onClickGoToBack={onClickGoToBack}

@@ -12,16 +12,14 @@ import styles from '@/pages/LearningPage/learningPage.module.scss';
 import { editCard } from '@/store/cardFormStore';
 import {
   $openedDeck,
-  fetchOpenedDeck,
   fetchOpenedDeckFx,
+  resetLearningCard,
 } from '@/store/learningStore';
 import {
   $learningCard,
   $learningCardIsFlipped,
   $learningCardSide,
-  fetchLearningCard,
   fetchLearningCardFx,
-  resetLearningCard,
   setLearningCardIsFlipped,
   toggleLearningCardSide,
 } from '@/store/learningStore';
@@ -29,30 +27,29 @@ import {
 const LearningPage = () => {
   const learningCardIsFlipped = useUnit($learningCardIsFlipped);
   const learningCardSide = useUnit($learningCardSide);
-  const [learningCard, loadingLearningCard] = useUnit([
+  const [learningCard, fetchLearningCard, loadingLearningCard] = useUnit([
     $learningCard,
+    fetchLearningCardFx,
     fetchLearningCardFx.pending,
   ]);
-  const [openedDeck, loadingOpenedDeck] = useUnit([
+  const [openedDeck, fetchOpenedDeck] = useUnit([
     $openedDeck,
-    fetchOpenedDeckFx.pending,
+    fetchOpenedDeckFx,
   ]);
 
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
   const navigate = useNavigate();
 
-  function resolverCallback() {
-    if (id) {
-      resetLearningCard();
-      fetchLearningCard(id);
-      fetchOpenedDeck(id);
-    }
-  }
+  const resolverCallbacks = [
+    () => fetchLearningCard(id),
+    () => fetchOpenedDeck(id),
+    resetLearningCard,
+  ];
 
   const text =
     learningCardSide === 'front'
-      ? learningCard.data?.frontText
-      : learningCard.data?.backText;
+      ? learningCard?.frontText
+      : learningCard?.backText;
 
   function onClickFlipCard() {
     setLearningCardIsFlipped(true);
@@ -64,7 +61,7 @@ const LearningPage = () => {
   }
 
   function onClickEditCard() {
-    navigate(`/edit-card/${learningCard.data?.id}`);
+    navigate(`/edit-card/${learningCard?.id}`);
     editCard(learningCardSide);
   }
 
@@ -87,17 +84,14 @@ const LearningPage = () => {
   }
 
   return (
-    <Resolver
-      callback={resolverCallback}
-      loading={loadingLearningCard || loadingOpenedDeck}
-    >
+    <Resolver callbacks={resolverCallbacks}>
       <TopBar
         leftSlot={
           <IconButton variant="primary" size="small" onClick={onClickGoToBack}>
             <ArrowBackIcon />
           </IconButton>
         }
-        title={openedDeck.data?.name}
+        title={openedDeck?.name}
         rightSlot={
           <Link to="/settings">
             <IconButton variant="primary" size="small">

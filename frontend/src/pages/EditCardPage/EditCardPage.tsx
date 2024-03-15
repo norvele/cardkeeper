@@ -7,7 +7,6 @@ import {
   $cardError,
   $cardForm,
   $cardSide,
-  fetchEditingCard,
   fetchEditingCardFx,
   resetCardForm,
   saveCard,
@@ -19,21 +18,13 @@ import {
 const EditCardPage = () => {
   const navigate = useNavigate();
 
-  const [cardForm, loadingEditingCard] = useUnit([
-    $cardForm,
-    fetchEditingCardFx.pending,
-  ]);
+  const [cardForm, fetchEditingCard] = useUnit([$cardForm, fetchEditingCardFx]);
   const cardSide = useUnit($cardSide);
   const cardError = useUnit($cardError);
 
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
 
-  function resolverCallback() {
-    resetCardForm();
-    if (id) {
-      fetchEditingCard(id);
-    }
-  }
+  const resolverCallbacks = [resetCardForm, () => fetchEditingCard(id)];
 
   function onChangeInput(value: string, side: 'front' | 'back') {
     updateInput({ value, side });
@@ -56,7 +47,7 @@ const EditCardPage = () => {
   }
 
   return (
-    <Resolver callback={resolverCallback} loading={loadingEditingCard}>
+    <Resolver callbacks={resolverCallbacks}>
       <CardPageLayout
         type="Edit"
         onClickGoToBack={onClickGoToBack}
