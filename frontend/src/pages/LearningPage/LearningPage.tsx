@@ -1,23 +1,25 @@
 import { useUnit } from 'effector-react';
-import { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import ArrowBackIcon from '@/assets/icons/arrow_back.svg?react';
 import SettingsIcon from '@/assets/icons/settings.svg?react';
 import IconButton from '@/components/UI/buttons/iconButton/IconButton';
 import LearningCard from '@/components/business/LearningCard/LearningCard';
 import LearningPanel from '@/components/business/LearningPanel/LearningPanel';
+import Resolver from '@/components/business/Resolver/Resolver';
 import TopBar from '@/components/business/TopBar/TopBar';
 import { cardApiService } from '@/container';
 import styles from '@/pages/LearningPage/learningPage.module.scss';
 import { editCard } from '@/store/cardFormStore';
-import { $openedDeck, fetchOpenedDeck } from '@/store/learningStore';
+import {
+  $openedDeck,
+  fetchOpenedDeckFx,
+  resetLearningCard,
+} from '@/store/learningStore';
 import {
   $learningCard,
   $learningCardIsFlipped,
   $learningCardSide,
-  fetchLearningCard,
   fetchLearningCardFx,
-  resetLearningCard,
   setLearningCardIsFlipped,
   toggleLearningCardSide,
 } from '@/store/learningStore';
@@ -25,28 +27,29 @@ import {
 const LearningPage = () => {
   const learningCardIsFlipped = useUnit($learningCardIsFlipped);
   const learningCardSide = useUnit($learningCardSide);
-  const [learningCard, loading] = useUnit([
+  const [learningCard, fetchLearningCard, loadingLearningCard] = useUnit([
     $learningCard,
+    fetchLearningCardFx,
     fetchLearningCardFx.pending,
   ]);
+  const [openedDeck, fetchOpenedDeck] = useUnit([
+    $openedDeck,
+    fetchOpenedDeckFx,
+  ]);
 
-  const openedDeck = useUnit($openedDeck);
-
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (id) {
-      resetLearningCard();
-      fetchLearningCard(id);
-      fetchOpenedDeck(id);
-    }
-  }, []);
+  const resolverCallbacks = [
+    () => fetchLearningCard(id),
+    () => fetchOpenedDeck(id),
+    resetLearningCard,
+  ];
 
   const text =
     learningCardSide === 'front'
-      ? learningCard.data?.frontText
-      : learningCard.data?.backText;
+      ? learningCard?.frontText
+      : learningCard?.backText;
 
   function onClickFlipCard() {
     setLearningCardIsFlipped(true);
@@ -58,7 +61,7 @@ const LearningPage = () => {
   }
 
   function onClickEditCard() {
-    navigate(`/edit-card/${learningCard.data?.id}`);
+    navigate(`/edit-card/${learningCard?.id}`);
     editCard(learningCardSide);
   }
 
@@ -81,14 +84,14 @@ const LearningPage = () => {
   }
 
   return (
-    <>
+    <Resolver callbacks={resolverCallbacks}>
       <TopBar
         leftSlot={
           <IconButton variant="primary" size="small" onClick={onClickGoToBack}>
             <ArrowBackIcon />
           </IconButton>
         }
-        title={openedDeck.data?.name}
+        title={openedDeck?.name}
         rightSlot={
           <Link to="/settings">
             <IconButton variant="primary" size="small">
@@ -101,18 +104,18 @@ const LearningPage = () => {
         <LearningCard
           text={text}
           onClickEditCard={onClickEditCard}
-          editingIsDisabled={loading}
+          editingIsDisabled={loadingLearningCard}
         />
         <LearningPanel
           isFlipped={learningCardIsFlipped}
-          loading={loading}
+          loading={loadingLearningCard}
           onClickFlipCard={onClickFlipCard}
           onClickForgot={onClickForgot}
           onClickKnow={onClickKnow}
           onClickRotateCard={onClickRotateCard}
         />
       </main>
-    </>
+    </Resolver>
   );
 };
 
