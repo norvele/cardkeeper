@@ -13,6 +13,7 @@ interface ICardFormProps {
   card: ICard;
   side: 'back' | 'front';
   errorIsVisible: boolean;
+  checkboxIsChecked: boolean;
   onChangeInput: (_value: string, _side: 'front' | 'back') => void;
   onChangeSwitchSide: () => void;
   onChangeCanBeInFocusedCheckbox: () => void;
@@ -23,13 +24,13 @@ const CardForm: FC<ICardFormProps> = ({
   card,
   side,
   errorIsVisible,
+  checkboxIsChecked,
   onChangeInput,
   onChangeSwitchSide,
   onChangeCanBeInFocusedCheckbox,
 }) => {
   // const { deleteCard } = useCards();
   const navigate = useNavigate();
-
   // function deleteHandler(id: string) {
   //   const sucessfully = deleteCard(id);
   //   if (sucessfully) {
@@ -61,11 +62,14 @@ const CardForm: FC<ICardFormProps> = ({
       </div>
       <Divider />
       <div className={styles.checkbox}>
-        <LabeledCheckbox onChange={onChangeCanBeInFocusedCheckbox}>
+        <LabeledCheckbox
+          onChange={onChangeCanBeInFocusedCheckbox}
+          isChecked={checkboxIsChecked}
+        >
           Can be in the focused deck
         </LabeledCheckbox>
       </div>
-      {type === 'Create' && (
+      {type === 'Edit' && (
         <>
           <Divider />
           <div className={styles.delete}>

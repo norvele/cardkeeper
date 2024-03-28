@@ -10,13 +10,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.invalid {
-  border: 2px solid #f37075;
-}
-
-.secondary {
   background: linear-gradient(
       320deg,
       #fafafa 2.67%,
@@ -28,6 +21,10 @@
       rgba(0, 0, 0, 0) 50.74%
     ),
     #f7f7f7;
+}
+
+.invalid {
+  border: 2px solid #f37075;
 }
 
 .textarea {

@@ -10,3 +10,8 @@ export interface ICardState {
   error: string;
   isLoading: boolean;
 }
+
+export interface ILearningCardData {
+  card: ICard;
+  deck: IDeck;
+}

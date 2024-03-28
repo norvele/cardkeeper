@@ -16,7 +16,7 @@ export interface IListContextModal {
   };
 }
 
-interface TEmptyModal {
+export interface TEmptyModal {
   name: '';
   params: object;
 }

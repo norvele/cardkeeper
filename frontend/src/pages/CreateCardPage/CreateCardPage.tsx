@@ -1,8 +1,9 @@
 import { useUnit } from 'effector-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CardForm from '@/components/business/CardForm/CardForm';
 import CardPageLayout from '@/components/business/CardPageLayout/CardPageLayout';
+import Resolver from '@/components/business/Resolver/Resolver';
 import {
   $cardError,
   $cardForm,
@@ -10,16 +11,15 @@ import {
   $savingCardFormStatus,
   resetCardForm,
   resetSavingCardFormStatus,
-  saveCard,
   saveCardFx,
   toggleCanBeInFocusedCheckbox,
   toggleSideSwitch,
   updateInput,
+  saveCard,
+  resetCardSide,
 } from '@/store/cardFormStore';
 
 const CreateCardPage = () => {
-  const [formIsReset, setFormIsReset] = useState(false);
-
   const navigate = useNavigate();
 
   const cardSide = useUnit($cardSide);
@@ -30,10 +30,7 @@ const CreateCardPage = () => {
     saveCardFx.pending,
   ]);
 
-  useEffect(() => {
-    resetCardForm();
-    setFormIsReset(true);
-  }, []);
+  const resolverCallbacks = [resetCardForm, resetCardSide];
 
   useEffect(() => {
     if (savingCardFormStatus.isDone) {
@@ -50,19 +47,24 @@ const CreateCardPage = () => {
     toggleCanBeInFocusedCheckbox();
   }
 
-  function onClickSave() {
-    saveCard();
+  function onClickGoToBack() {
+    navigate(-1);
+  }
+
+  function onClickCreateCard() {
+    saveCard('create');
   }
 
   function onChangeSwitchSide() {
     toggleSideSwitch();
   }
 
-  if (formIsReset) {
-    return (
+  return (
+    <Resolver callbacks={resolverCallbacks}>
       <CardPageLayout
         type="Create"
-        onClickSave={onClickSave}
+        onClickGoToBack={onClickGoToBack}
+        onClickSaveCard={onClickCreateCard}
         saveButtonDisabled={saveIsLoading}
       >
         <CardForm
@@ -71,12 +73,13 @@ const CreateCardPage = () => {
           side={cardSide}
           onChangeSwitchSide={onChangeSwitchSide}
           errorIsVisible={cardError.errorIsVisible}
+          checkboxIsChecked={cardForm.canBeInFocused}
           onChangeInput={onChangeInput}
           onChangeCanBeInFocusedCheckbox={onChangeCanBeInFocusedCheckbox}
         />
       </CardPageLayout>
-    );
-  }
+    </Resolver>
+  );
 };
 
 export default CreateCardPage;
