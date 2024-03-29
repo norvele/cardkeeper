@@ -65,6 +65,7 @@ const CardForm: FC<ICardFormProps> = ({
         <LabeledCheckbox
           onChange={onChangeCanBeInFocusedCheckbox}
           isChecked={checkboxIsChecked}
+          size="normal"
         >
           Can be in the focused deck
         </LabeledCheckbox>

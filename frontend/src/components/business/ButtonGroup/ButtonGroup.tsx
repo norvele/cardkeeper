@@ -28,7 +28,9 @@ const ButtonGroup: FC<IButtonGroupProps> = ({ position, children }) => {
 
   return (
     <>
-      <hr className={`${styles.horizontalDivider} ${styles.hr}`} />
+      {position === 'horizontal' && (
+        <hr className={`${styles.horizontalDivider} ${styles.hr}`} />
+      )}
       <div className={styles[position]}>{buttons}</div>
     </>
   );

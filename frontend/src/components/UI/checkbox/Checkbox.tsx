@@ -3,10 +3,11 @@ import styles from '@/components/UI/checkbox/checkbox.module.scss';
 
 interface ICheckboxProps {
   isChecked: boolean;
+  size: 'small' | 'normal';
   onChange: () => void;
 }
 
-const Checkbox: FC<ICheckboxProps> = ({ isChecked, onChange }) => {
+const Checkbox: FC<ICheckboxProps> = ({ isChecked, onChange, size }) => {
   return (
     <label className={styles.label}>
       <input
@@ -15,7 +16,7 @@ const Checkbox: FC<ICheckboxProps> = ({ isChecked, onChange }) => {
         onChange={onChange}
         checked={isChecked}
       />
-      <span className={styles.checkbox} />
+      <span className={`${styles.checkbox} ${styles[size]}`} />
     </label>
   );
 };
