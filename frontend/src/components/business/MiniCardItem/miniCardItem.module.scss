@@ -1,0 +1,26 @@
+.container {
+  box-shadow:
+    13px 17px 32px 0px #aeaec014,
+    0px 2px 2px 0px #aeaec026,
+    -1px 1px 4px 0px #aeaec017;
+  background: 
+    linear-gradient(
+      135.99deg,
+      rgba(79, 115, 149, 0.036) 1.69%,
+      rgba(0, 0, 0, 0) 50.74%
+    ),
+    linear-gradient(319.56deg, #fafafa 2.67%, rgba(255, 255, 255, 0) 13.36%),
+    linear-gradient(0deg, #f7f7f7, #f7f7f7);
+  border-radius: 6px;
+  padding: 6px 6px 6px 12px;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 10px
+}
+
+.text {
+  margin: 0;  
+  color: var(--font-color-normal);
+  font-size: 14px;
+}

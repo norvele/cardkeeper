@@ -12,7 +12,12 @@ export interface IConfirmationModal {
 export interface IListContextModal {
   name: 'listContext';
   params: {
-    /*...*/
+    cardText: string;
+    buttons: Array<{
+      textButton: string;
+      callback: null | (() => void);
+      textColor?: 'red';
+    }>;
   };
 }
 

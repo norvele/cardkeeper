@@ -5,6 +5,7 @@ import styles from '@/components/UI/labeledCheckbox/labeledCheckbox.module.scss'
 interface ILabeledCheckboxProps {
   isChecked: boolean;
   children: ReactNode;
+  size: 'small' | 'normal';
   onChange: () => void;
 }
 
@@ -15,7 +16,7 @@ const LabeledCheckbox: FC<ILabeledCheckboxProps> = ({
 }) => {
   return (
     <label className={styles.label}>
-      <Checkbox onChange={onChange} isChecked={isChecked} />
+      <Checkbox onChange={onChange} isChecked={isChecked} size="normal" />
       <span>{children}</span>
     </label>
   );

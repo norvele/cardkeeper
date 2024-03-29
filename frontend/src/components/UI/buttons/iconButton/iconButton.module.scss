@@ -49,6 +49,11 @@
   color: var(--font-color-lighter);
 }
 
+.smaller {
+  width: 24px;
+  height: 24px;
+}
+
 .small {
   width: 36px;
   height: 36px;
@@ -62,4 +67,8 @@
 .large {
   width: 120px;
   height: 120px;
+}
+
+.red {
+  color: #F37075
 }
