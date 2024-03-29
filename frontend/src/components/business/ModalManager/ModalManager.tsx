@@ -1,7 +1,7 @@
 import { useUnit } from 'effector-react';
 import { FC, createElement } from 'react';
+import CardListContextModal from '@/components/business/CardListContextModal/CardListContextModal';
 import ConfirmModal from '@/components/business/ConfirmModal/ConfirmModal';
-import ListContextModal from '@/components/business/ListContextModal/ListContextModal';
 import { $modal, hideModal } from '@/store/modalStore';
 import { TModalName } from '@/types';
 
@@ -10,7 +10,7 @@ const ModalManager = () => {
 
   const modalComponentsMap = {
     confirmation: ConfirmModal,
-    listContext: ListContextModal,
+    cardListContext: CardListContextModal,
   } satisfies Record<TModalName, FC<any>>;
 
   if (modal.name) {

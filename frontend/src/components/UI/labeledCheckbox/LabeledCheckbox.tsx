@@ -12,11 +12,12 @@ interface ILabeledCheckboxProps {
 const LabeledCheckbox: FC<ILabeledCheckboxProps> = ({
   isChecked,
   children,
+  size,
   onChange,
 }) => {
   return (
     <label className={styles.label}>
-      <Checkbox onChange={onChange} isChecked={isChecked} size="normal" />
+      <Checkbox onChange={onChange} isChecked={isChecked} size={size} />
       <span>{children}</span>
     </label>
   );

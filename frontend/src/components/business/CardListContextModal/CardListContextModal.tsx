@@ -3,16 +3,19 @@ import Button from '@/components/UI/buttons/button/Button';
 import ModalContent from '@/components/UI/modals/ModalContent/ModalContent';
 import Modal from '@/components/UI/modals/modal/Modal';
 import ButtonGroup from '@/components/business/ButtonGroup/ButtonGroup';
-import styles from '@/components/business/ListContextModal/listContextModal.module.scss';
+import styles from '@/components/business/CardListContextModal/cardListContextModal.module.scss';
 import MiniCardItem from '@/components/business/MiniCardItem/MiniCardItem';
-import { IListContextModal } from '@/types';
+import { ICardListContextModal } from '@/types';
 
-interface IListContextModalProps {
-  params: IListContextModal['params'];
+interface ICardListContextModalProps {
+  params: ICardListContextModal['params'];
   onClose: () => void;
 }
 
-const ListContextModal: FC<IListContextModalProps> = ({ params, onClose }) => {
+const CardListContextModal: FC<ICardListContextModalProps> = ({
+  params,
+  onClose,
+}) => {
   return (
     <Modal onClickBehind={onClose}>
       <div className={styles.container}>
@@ -44,4 +47,4 @@ const ListContextModal: FC<IListContextModalProps> = ({ params, onClose }) => {
   );
 };
 
-export default ListContextModal;
+export default CardListContextModal;

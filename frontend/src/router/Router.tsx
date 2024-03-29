@@ -1,6 +1,6 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
+import AllDeckSettingsPage from '@/pages/AllDeckSettingsPage/AllDeckSettingsPage';
 import CreateCardPage from '@/pages/CreateCardPage/CreateCardPage';
-import DeckSettingsPage from '@/pages/DeckSettingsPage/DeckSettingsPage';
 import EditCardPage from '@/pages/EditCardPage/EditCardPage';
 import HomePage from '@/pages/HomePage/HomePage';
 import LearningPage from '@/pages/LearningPage/LearningPage';
@@ -30,7 +30,7 @@ const privateRoutes: Array<object> = [
   },
   {
     path: '/settings/:id',
-    element: <DeckSettingsPage />,
+    element: <AllDeckSettingsPage />,
   },
 ];
 

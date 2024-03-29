@@ -2,7 +2,7 @@ import { createEffect, createEvent, createStore, sample } from 'effector';
 import { deckApiService } from '@/container';
 import { IDeck } from '@/types/deck';
 
-export const setMode = createEvent<'normal' | 'kebab'>();
+export const setMode = createEvent<'normal' | 'selecting'>();
 
 export const fetchEditingDeck = createEvent<string>();
 
@@ -15,7 +15,7 @@ export const $editingDeck = createStore<IDeck | null>(null).on(
   (_, data) => data,
 );
 
-export const $mode = createStore<'normal' | 'kebab'>('normal').on(
+export const $mode = createStore<'normal' | 'selecting'>('normal').on(
   setMode,
   (_, mode) => mode,
 );

@@ -8,7 +8,7 @@ import IconButton from '@/components/UI/buttons/iconButton/IconButton';
 import MiniCardItem from '@/components/business/MiniCardItem/MiniCardItem';
 import Resolver from '@/components/business/Resolver/Resolver';
 import TopBar from '@/components/business/TopBar/TopBar';
-import styles from '@/pages/DeckSettingsPage/deckSettingsPage.module.scss';
+import styles from '@/pages/AllDeckSettingsPage/allDeckSettingsPage.module.scss';
 import {
   $editingDeck,
   $mode,
@@ -43,7 +43,7 @@ const SettingsPage = () => {
 
   function onClickMore() {
     showModal({
-      name: 'listContext',
+      name: 'cardListContext',
       params: {
         cardText: `Я сегодня не работаю (выходной). И еще очень много текста потомучто
         такая вот карточка. И еще очень много текста потомучто`,
@@ -51,7 +51,7 @@ const SettingsPage = () => {
           {
             textButton: 'Select',
             callback: () => {
-              setMode('kebab');
+              setMode('selecting');
             },
           },
           {
@@ -111,7 +111,7 @@ const SettingsPage = () => {
         </>
       )}
 
-      {mode === 'kebab' && (
+      {mode === 'selecting' && (
         <>
           <TopBar
             leftSlot={

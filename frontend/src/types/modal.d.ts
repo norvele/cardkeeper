@@ -1,4 +1,4 @@
-export type TModalName = 'confirmation' | 'listContext';
+export type TModalName = 'confirmation' | 'cardListContext';
 
 export interface IConfirmationModal {
   name: 'confirmation';
@@ -9,8 +9,8 @@ export interface IConfirmationModal {
   };
 }
 
-export interface IListContextModal {
-  name: 'listContext';
+export interface ICardListContextModal {
+  name: 'cardListContext';
   params: {
     cardText: string;
     buttons: Array<{
@@ -26,4 +26,4 @@ export interface TEmptyModal {
   params: object;
 }
 
-export type TModal = IConfirmationModal | IListContextModal;
+export type TModal = IConfirmationModal | ICardListContextModal;
