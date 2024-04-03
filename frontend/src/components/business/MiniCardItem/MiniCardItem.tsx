@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { ChangeEvent, FC, memo } from 'react';
 import MoreIcon from '@/assets/icons/more.svg?react';
 import IconButton from '@/components/UI/buttons/iconButton/IconButton';
 import Checkbox from '@/components/UI/checkbox/Checkbox';
@@ -6,19 +6,32 @@ import styles from '@/components/business/MiniCardItem/miniCardItem.module.scss'
 
 interface MiniCardItemProps {
   children: string;
-  checkbox?: boolean;
+  id: string;
+  isChecked: boolean;
   onClickMore?: () => void;
+  onChangeCheckbox?: (
+    _id: string,
+    _event: ChangeEvent<HTMLInputElement>,
+  ) => void;
 }
 
 const MiniCardItem: FC<MiniCardItemProps> = ({
   children,
+  id,
+  isChecked,
   onClickMore,
-  checkbox,
+  onChangeCheckbox,
 }) => {
   return (
     <div className={styles.container}>
-      {checkbox && (
-        <Checkbox size="small" isChecked={false} onChange={() => {}} />
+      {onChangeCheckbox && (
+        <Checkbox
+          size="small"
+          isChecked={isChecked}
+          onChange={(event) => {
+            onChangeCheckbox(id, event);
+          }}
+        />
       )}
       <p className={styles.text}>{children}</p>
       {onClickMore && (
@@ -30,4 +43,4 @@ const MiniCardItem: FC<MiniCardItemProps> = ({
   );
 };
 
-export default MiniCardItem;
+export default memo(MiniCardItem);

@@ -1,13 +1,24 @@
 .button {
   border: none;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  padding: 0;
+  font-family: inherit;
 
   &:hover {
     cursor: pointer;
+  }
+
+  
+  // padding with text
+  svg + * {
+    padding: 0;
+    margin: 0 4.5px 0 0;
+  }
+
+  svg:has( + *){
+    margin-left: 4.5px;
   }
 }
 
@@ -20,9 +31,9 @@
     -5px 5px 10px 0px #d5d5dd1a,
     -1px -1px 2px 0px #e5e5e9 inset,
     1px 1px 2px 0px #fcfcff80 inset;
-  padding: 6px;
   border-radius: 8px;
   color: var(--font-color-light);
+  font-weight: 500;
 }
 
 .secondary {
@@ -37,6 +48,8 @@
   font-family: inherit;
   font-weight: 500;
   font-size: 16px;
+  flex-direction: column;
+  gap: 6px;
 
   &:active {
     background: linear-gradient(135deg, #ffffff 0%, #e5e5e9 100%),
@@ -55,8 +68,10 @@
 }
 
 .small {
-  width: 36px;
+  min-width: 36px;
   height: 36px;
+  font-size: 16px;
+
 }
 
 .medium {
@@ -72,3 +87,5 @@
 .red {
   color: #F37075
 }
+
+

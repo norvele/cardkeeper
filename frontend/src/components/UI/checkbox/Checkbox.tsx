@@ -1,10 +1,10 @@
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
 import styles from '@/components/UI/checkbox/checkbox.module.scss';
 
 interface ICheckboxProps {
   isChecked: boolean;
   size: 'small' | 'normal';
-  onChange: () => void;
+  onChange: (_event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const Checkbox: FC<ICheckboxProps> = ({ isChecked, onChange, size }) => {
@@ -13,7 +13,7 @@ const Checkbox: FC<ICheckboxProps> = ({ isChecked, onChange, size }) => {
       <input
         type="checkbox"
         className={styles.input}
-        onChange={onChange}
+        onChange={(event) => onChange(event)}
         checked={isChecked}
       />
       <span className={`${styles.checkbox} ${styles[size]}`} />

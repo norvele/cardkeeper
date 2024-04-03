@@ -1,7 +1,8 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
+import { IFetchCardsActions } from '@/types';
 
 interface IResolverProps {
-  callbacks: (() => Promise<unknown> | void)[];
+  callbacks: (() => Promise<unknown> | void | IFetchCardsActions)[];
   children: ReactNode;
 }
 
