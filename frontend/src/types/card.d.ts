@@ -16,7 +16,7 @@ export interface ILearningCardData {
   deck: IDeck;
 }
 
-export interface IFetchCardsActions {
+export interface IFetchCardsArguments {
   deckId: string;
   limitCards: number;
   currentPage: number;

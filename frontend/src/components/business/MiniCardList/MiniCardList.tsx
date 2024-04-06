@@ -1,17 +1,17 @@
 import { useUnit } from 'effector-react';
-import { ChangeEvent, FC, useCallback, useEffect } from 'react';
-import MiniCardItemLayout from '@/components/business/MiniCardItemLayout/MiniCardItemLayout';
+import { FC, useCallback, useEffect } from 'react';
+import MiniCardItem from '@/components/business/MiniCardItem/MiniCardItem';
 import styles from '@/components/business/MiniCardList/miniCardList.module.scss';
 import {
   $selectedCards,
   resetSelectedCards,
   selectCard,
   unSelectCard,
-} from '@/store/deckSettingsStore';
+} from '@/store/allDeckSettingsStore';
 import { ICard } from '@/types';
 
 interface IMiniCardListProps {
-  cardList: ICard[] | null;
+  cardList: ICard[];
   mode: 'normal' | 'selecting';
   onClickMore?: (_card: ICard) => void;
 }
@@ -27,32 +27,31 @@ const MiniCardList: FC<IMiniCardListProps> = ({
     if (mode === 'normal') resetSelectedCards();
   }, []);
 
-  const cashedOnChangeCheckbox = useCallback(function onChangeCheckbox(
+  const cachedOnChangeCheckbox = useCallback(function onChangeCheckbox(
     id: string,
-    event: ChangeEvent<HTMLInputElement>,
+    isChecked: boolean,
   ) {
-    if (event.target.checked) {
+    if (isChecked) {
       selectCard(id);
-    }
-
-    if (!event.target.checked) {
+    } else {
       unSelectCard(id);
     }
   }, []);
 
   return (
     <div className={styles.cards}>
-      {cardList?.map((card) => (
-        <MiniCardItemLayout
+      {cardList.map((card) => (
+        <MiniCardItem
           card={card}
-          mode={mode}
           key={card.id}
-          onChangeCheckbox={cashedOnChangeCheckbox}
-          onClickMore={onClickMore}
           isChecked={selectedCards.includes(card.id)}
+          onChangeCheckbox={
+            mode === 'normal' ? undefined : cachedOnChangeCheckbox
+          }
+          onClickMore={onClickMore}
         >
           {card.frontText}
-        </MiniCardItemLayout>
+        </MiniCardItem>
       ))}
     </div>
   );

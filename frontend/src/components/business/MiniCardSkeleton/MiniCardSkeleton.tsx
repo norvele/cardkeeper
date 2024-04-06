@@ -1,30 +1,24 @@
+import { FC } from 'react';
 import styles from '@/components/business/MiniCardSkeleton/miniCardSkeleton.module.scss';
+import { randomInteger } from '@/utils/random';
 
-const MiniCardSkeleton = () => {
-  return (
-    <div>
-      <div className={`${styles.item} ${styles.item1}`} />
-      <div className={`${styles.item} ${styles.item2}`} />
-      <div className={`${styles.item} ${styles.item3}`} />
-      <div className={`${styles.item} ${styles.item4}`} />
-      <div className={`${styles.item} ${styles.item5}`} />
-      <div className={`${styles.item} ${styles.item6}`} />
-      <div className={`${styles.item} ${styles.item7}`} />
-      <div className={`${styles.item} ${styles.item8}`} />
-      <div className={`${styles.item} ${styles.item9}`} />
-      <div className={`${styles.item} ${styles.item10}`} />
-      <div className={`${styles.item} ${styles.item11}`} />
-      <div className={`${styles.item} ${styles.item12}`} />
-      <div className={`${styles.item} ${styles.item13}`} />
-      <div className={`${styles.item} ${styles.item14}`} />
-      <div className={`${styles.item} ${styles.item15}`} />
-      <div className={`${styles.item} ${styles.item16}`} />
-      <div className={`${styles.item} ${styles.item17}`} />
-      <div className={`${styles.item} ${styles.item18}`} />
-      <div className={`${styles.item} ${styles.item19}`} />
-      <div className={`${styles.item} ${styles.item20}`} />
-    </div>
-  );
+interface IMiniCardSkeleton {
+  count: number;
+}
+
+const MiniCardSkeleton: FC<IMiniCardSkeleton> = ({ count }) => {
+  const items = () => {
+    const arr = [];
+    const baseHeight = 18;
+
+    for (let i = 0; i < count; i++) {
+      const height = `${baseHeight * randomInteger(1, 4) + 18}px`;
+      arr.push(<div className={`${styles.item}`} style={{ height }} key={i} />);
+    }
+    return arr;
+  };
+
+  return items();
 };
 
 export default MiniCardSkeleton;

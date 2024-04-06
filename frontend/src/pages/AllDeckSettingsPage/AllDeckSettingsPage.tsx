@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { useUnit } from 'effector-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { useNavigate, useParams } from 'react-router-dom';
 import AddIcon from '@/assets/icons/add.svg?react';
 import ArrowBackIcon from '@/assets/icons/arrow_back.svg?react';
@@ -11,7 +12,6 @@ import MiniCardList from '@/components/business/MiniCardList/MiniCardList';
 import MiniCardSkeleton from '@/components/business/MiniCardSkeleton/MiniCardSkeleton';
 import Resolver from '@/components/business/Resolver/Resolver';
 import TopBar from '@/components/business/TopBar/TopBar';
-import { useObserver } from '@/hooks/useObserver';
 import styles from '@/pages/AllDeckSettingsPage/allDeckSettingsPage.module.scss';
 import {
   $cardList,
@@ -25,14 +25,14 @@ import {
   selectCard,
   setMode,
   setNextPage,
-} from '@/store/deckSettingsStore';
+} from '@/store/allDeckSettingsStore';
 import { showModal } from '@/store/modalStore';
 import { ICard } from '@/types';
 // import SearchIcon from '@/assets/icons/search.svg?react';
 // import TextInput from '@/components/UI/textInput/TextInput';
 
 const AllDeckSettingsPage = () => {
-  const lastElement = useRef<HTMLDivElement>(null);
+  const { ref, inView, entry } = useInView({ threshold: 0 });
 
   const [shadowIsVisible, setShadowIsVisible] = useState(false);
 
@@ -52,35 +52,40 @@ const AllDeckSettingsPage = () => {
 
   const resolverCallbacks = [
     () => fetchEditingDeck(deckId),
-    () => fetchCards({ deckId, limitCards, currentPage }),
+    () => {
+      fetchCards({ deckId, limitCards, currentPage });
+    },
   ];
 
-  const observerCallback = () => {
-    setNextPage();
-  };
+  useEffect(() => {
+    const canLoad = currentPage < totalPageCount;
+    const isLoading = cardsIsLoading || !cardList?.length;
 
-  useObserver(
-    currentPage < totalPageCount,
-    observerCallback,
-    lastElement,
-    cardsIsLoading || !cardList?.length,
-  );
+    if (entry?.isIntersecting && canLoad && !isLoading) {
+      setNextPage();
+    }
+  }, [inView]);
 
   useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setShadowIsVisible(true);
+      } else {
+        setShadowIsVisible(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+
     setMode('normal');
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   useEffect(() => {
     fetchCards({ deckId, limitCards, currentPage });
   }, [currentPage]);
-
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 0) {
-      setShadowIsVisible(true);
-    } else {
-      setShadowIsVisible(false);
-    }
-  });
 
   function onClickGoToBack() {
     navigate(-1);
@@ -90,7 +95,7 @@ const AllDeckSettingsPage = () => {
     setMode('normal');
   }
 
-  const cashedOnClickMore = useCallback(function onClickMore(card: ICard) {
+  const cachedOnClickMore = useCallback(function onClickMore(card: ICard) {
     showModal({
       name: 'cardListContext',
       params: {
@@ -172,10 +177,10 @@ const AllDeckSettingsPage = () => {
               <MiniCardList
                 mode="normal"
                 cardList={cardList}
-                onClickMore={cashedOnClickMore}
+                onClickMore={cachedOnClickMore}
               />
             </main>
-            {cardsIsLoading && <MiniCardSkeleton />}
+            {cardsIsLoading && <MiniCardSkeleton count={20} />}
           </div>
         )}
 
@@ -214,13 +219,14 @@ const AllDeckSettingsPage = () => {
               <MiniCardList
                 mode="selecting"
                 cardList={cardList}
-                onClickMore={cashedOnClickMore}
+                onClickMore={cachedOnClickMore}
               />
             </main>
+            {cardsIsLoading && <MiniCardSkeleton count={20} />}
           </div>
         )}
       </Resolver>
-      <div className={styles.lastElement} ref={lastElement} />
+      <div className={styles.lastElement} ref={ref} />
     </>
   );
 };

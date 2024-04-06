@@ -1,6 +1,6 @@
 import { createEffect, createEvent, createStore, sample } from 'effector';
 import { cardApiService, deckApiService } from '@/container';
-import { ICard, IFetchCardsActions } from '@/types';
+import { ICard, IFetchCardsArguments } from '@/types';
 import { IDeck } from '@/types/deck';
 import { getCountPages } from '@/utils/pages';
 
@@ -8,7 +8,7 @@ export const setMode = createEvent<'normal' | 'selecting'>();
 export const resetSelectedCards = createEvent();
 export const selectCard = createEvent<string>();
 export const unSelectCard = createEvent<string>();
-export const fetchCards = createEvent<IFetchCardsActions>();
+export const fetchCards = createEvent<IFetchCardsArguments>();
 export const resetCardList = createEvent();
 export const setNextPage = createEvent();
 
@@ -17,7 +17,7 @@ export const fetchEditingDeckFx = createEffect(async (id: string) => {
 });
 
 export const fetchCardsFx = createEffect(
-  async ({ deckId, limitCards, currentPage }: IFetchCardsActions) => {
+  async ({ deckId, limitCards, currentPage }: IFetchCardsArguments) => {
     return await cardApiService.getCards(deckId, limitCards, currentPage);
   },
 );
@@ -43,7 +43,7 @@ export const $paginationOptions = createStore<{
   totalCardsCount: number | null;
   totalPageCount: number;
 }>({
-  limitCards: 12,
+  limitCards: 13,
   currentPage: 1,
   totalCardsCount: null,
   totalPageCount: 0,
@@ -64,14 +64,14 @@ export const $paginationOptions = createStore<{
     return { ...options, currentPage: nextPage };
   });
 
-export const $cardList = createStore<ICard[] | null>(null)
+export const $cardList = createStore<ICard[]>([])
   .on(fetchCardsFx.doneData, (cards, response) => {
-    if (cards !== null) {
-      const firstDataId = Number(response.data[0]?.id);
-      if (cards[firstDataId - 1] === response.data[0]) return cards;
-      return [...cards, ...response.data];
-    }
-    return response.data;
+    const lastDataElement = response.data[response.data.length - 1];
+    const lastCardElement = cards[cards.length - 1];
+
+    if (cards.length === 0) return response.data;
+    if (lastDataElement.id === lastCardElement.id) return cards;
+    return [...cards, ...response.data];
   })
   .reset(resetCardList);
 
