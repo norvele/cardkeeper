@@ -14,12 +14,13 @@
   border-radius: 6px;
   padding: 6px 6px 6px 12px;
   display: flex;
-  align-items: start;
   justify-content: space-between;
+  align-items: center;
   gap: 10px
 }
 
 .text {
+  width: 100%;
   margin: 0;  
   color: var(--font-color-normal);
   font-size: 14px;

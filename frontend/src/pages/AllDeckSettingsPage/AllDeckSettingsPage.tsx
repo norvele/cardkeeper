@@ -1,37 +1,91 @@
+import clsx from 'clsx';
 import { useUnit } from 'effector-react';
+import { useCallback, useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { useNavigate, useParams } from 'react-router-dom';
 import AddIcon from '@/assets/icons/add.svg?react';
 import ArrowBackIcon from '@/assets/icons/arrow_back.svg?react';
 import CloseIcon from '@/assets/icons/close.svg?react';
 import DeleteIcon from '@/assets/icons/delete.svg?react';
 import IconButton from '@/components/UI/buttons/iconButton/IconButton';
-import MiniCardItem from '@/components/business/MiniCardItem/MiniCardItem';
+import MiniCardList from '@/components/business/MiniCardList/MiniCardList';
+import MiniCardSkeleton from '@/components/business/MiniCardSkeleton/MiniCardSkeleton';
 import Resolver from '@/components/business/Resolver/Resolver';
 import TopBar from '@/components/business/TopBar/TopBar';
 import styles from '@/pages/AllDeckSettingsPage/allDeckSettingsPage.module.scss';
 import {
+  $cardList,
   $editingDeck,
   $mode,
+  $paginationOptions,
+  $selectedCards,
+  fetchCards,
+  fetchCardsFx,
   fetchEditingDeckFx,
+  selectCard,
   setMode,
-} from '@/store/deckSettings';
+  setNextPage,
+} from '@/store/allDeckSettingsStore';
 import { showModal } from '@/store/modalStore';
+import { ICard } from '@/types';
 // import SearchIcon from '@/assets/icons/search.svg?react';
 // import TextInput from '@/components/UI/textInput/TextInput';
 
-const SettingsPage = () => {
+const AllDeckSettingsPage = () => {
+  const { ref, inView, entry } = useInView({ threshold: 0 });
+
+  const [shadowIsVisible, setShadowIsVisible] = useState(false);
+
+  const { currentPage, limitCards, totalPageCount } =
+    useUnit($paginationOptions);
   const [editingDeck, fetchEditingDeck] = useUnit([
     $editingDeck,
     fetchEditingDeckFx,
   ]);
-
+  const [cardList, cardsIsLoading] = useUnit([$cardList, fetchCardsFx.pending]);
   const mode = useUnit($mode);
+  const selectedCards = useUnit($selectedCards);
 
   const navigate = useNavigate();
 
-  const { id } = useParams() as { id: string };
+  const { id: deckId } = useParams() as { id: string };
 
-  const resolverCallbacks = [() => fetchEditingDeck(id)];
+  const resolverCallbacks = [
+    () => fetchEditingDeck(deckId),
+    () => {
+      fetchCards({ deckId, limitCards, currentPage });
+    },
+  ];
+
+  useEffect(() => {
+    const canLoad = currentPage < totalPageCount;
+    const isLoading = cardsIsLoading || !cardList?.length;
+
+    if (entry?.isIntersecting && canLoad && !isLoading) {
+      setNextPage();
+    }
+  }, [inView]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setShadowIsVisible(true);
+      } else {
+        setShadowIsVisible(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    setMode('normal');
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    fetchCards({ deckId, limitCards, currentPage });
+  }, [currentPage]);
 
   function onClickGoToBack() {
     navigate(-1);
@@ -41,23 +95,23 @@ const SettingsPage = () => {
     setMode('normal');
   }
 
-  function onClickMore() {
+  const cachedOnClickMore = useCallback(function onClickMore(card: ICard) {
     showModal({
       name: 'cardListContext',
       params: {
-        cardText: `Я сегодня не работаю (выходной). И еще очень много текста потомучто
-        такая вот карточка. И еще очень много текста потомучто`,
+        cardText: card.frontText,
         buttons: [
           {
             textButton: 'Select',
             callback: () => {
+              selectCard(card.id);
               setMode('selecting');
             },
           },
           {
             textButton: 'Edit',
             callback: () => {
-              navigate(`/edit-card/20`);
+              navigate(`/edit-card/${card.id}`);
             },
           },
           {
@@ -69,7 +123,7 @@ const SettingsPage = () => {
                 params: {
                   notification: 'Are you sure you want to delete this card?',
                   textButton: 'Delete',
-                  callback: null,
+                  callback: () => setMode('normal'),
                 },
               });
             },
@@ -77,70 +131,104 @@ const SettingsPage = () => {
         ],
       },
     });
+  }, []);
+
+  function onClickDeleteFewCards() {
+    showModal({
+      name: 'confirmation',
+      params: {
+        notification: `Are you sure you want to delete ${selectedCards.length} cards from all decks?`,
+        callback: () => setMode('normal'),
+        textButton: 'Delete',
+      },
+    });
   }
 
   return (
-    <Resolver callbacks={resolverCallbacks}>
-      {mode === 'normal' && (
-        <>
-          <TopBar
-            leftSlot={
-              <IconButton
-                variant="primary"
-                size="small"
-                onClick={onClickGoToBack}
-              >
-                <ArrowBackIcon />
-              </IconButton>
-            }
-            title={editingDeck?.name}
-            rightSlot={
-              <IconButton variant="primary" size="small">
-                <AddIcon />
-              </IconButton>
-            }
-          />
-          <main className={styles.main}>
-            {/* <TextInput placeholder="Search" icon={<SearchIcon />} /> */}
+    <>
+      <Resolver callbacks={resolverCallbacks}>
+        {mode === 'normal' && (
+          <div>
+            <div
+              className={clsx(styles.topContent, {
+                [styles.shadow]: shadowIsVisible,
+              })}
+            >
+              <TopBar
+                leftSlot={
+                  <IconButton
+                    variant="primary"
+                    size="small"
+                    onClick={onClickGoToBack}
+                  >
+                    <ArrowBackIcon />
+                  </IconButton>
+                }
+                title={editingDeck?.name}
+                rightSlot={
+                  <IconButton variant="primary" size="small">
+                    <AddIcon />
+                  </IconButton>
+                }
+              />
+              {/* <TextInput placeholder="Search" icon={<SearchIcon />} /> */}
+            </div>
+            <main className={styles.main}>
+              <MiniCardList
+                mode="normal"
+                cardList={cardList}
+                onClickMore={cachedOnClickMore}
+              />
+            </main>
+            {cardsIsLoading && <MiniCardSkeleton count={20} />}
+          </div>
+        )}
 
-            <MiniCardItem onClickMore={onClickMore} checkbox={false}>
-              Я сегодня не работаю (выходной). И еще очень много текста
-              потомучто такая вот карточка. И еще очень много текста потомучто
-            </MiniCardItem>
-          </main>
-        </>
-      )}
-
-      {mode === 'selecting' && (
-        <>
-          <TopBar
-            leftSlot={
-              <IconButton
-                variant="primary"
-                size="small"
-                onClick={onClickCancel}
-              >
-                <CloseIcon />
-              </IconButton>
-            }
-            rightSlot={
-              <IconButton variant="primary" size="small" color="red">
-                <DeleteIcon />
-              </IconButton>
-            }
-          />
-          <main className={styles.main}>
-            {/* <TextInput placeholder="Search" icon={<SearchIcon />} /> */}
-
-            <MiniCardItem onClickMore={onClickMore} checkbox={true}>
-              Я сегодня не работаю (выходной). И еще очень много текста
-              потомучто такая вот карточка. И еще очень много текста потомучто
-            </MiniCardItem>
-          </main>
-        </>
-      )}
-    </Resolver>
+        {mode === 'selecting' && (
+          <div>
+            <div
+              className={clsx(styles.topContent, {
+                [styles.shadow]: shadowIsVisible,
+              })}
+            >
+              <TopBar
+                leftSlot={
+                  <IconButton
+                    variant="primary"
+                    size="small"
+                    onClick={onClickCancel}
+                  >
+                    <CloseIcon />
+                    <p>{selectedCards.length}</p>
+                  </IconButton>
+                }
+                rightSlot={
+                  <IconButton
+                    variant="primary"
+                    size="small"
+                    color="red"
+                    onClick={onClickDeleteFewCards}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                }
+              />
+              {/* <TextInput placeholder="Search" icon={<SearchIcon />} /> */}
+            </div>
+            <main className={styles.main}>
+              <MiniCardList
+                mode="selecting"
+                cardList={cardList}
+                onClickMore={cachedOnClickMore}
+              />
+            </main>
+            {cardsIsLoading && <MiniCardSkeleton count={20} />}
+          </div>
+        )}
+      </Resolver>
+      <div className={styles.lastElement} ref={ref} />
+    </>
   );
 };
 
-export default SettingsPage;
+export default AllDeckSettingsPage;

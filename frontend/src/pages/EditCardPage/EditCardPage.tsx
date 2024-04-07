@@ -24,6 +24,8 @@ const EditCardPage = () => {
 
   const { id } = useParams() as { id: string };
 
+  console.log(id);
+
   const resolverCallbacks = [resetCardForm, () => fetchEditingCard(id)];
 
   function onChangeInput(value: string, side: 'front' | 'back') {

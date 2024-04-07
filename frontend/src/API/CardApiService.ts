@@ -5,121 +5,130 @@ const BASE_URL = 'https://api.example.com/api';
 const allCards = [
   {
     id: '1',
-    frontText: 'frontText card 1',
+    frontText: 'Мы остановились, чтобы он мог передохнуть',
     backText: 'backtext card 1',
     canBeInFocused: false,
   },
   {
     id: '2',
-    frontText: 'frontText card 2',
+    frontText: `Я сегодня не работаю (выходной). 
+      И еще очень много текста потомучто такая вот карточка.
+      И еще очень много текста потомучто такая вот карточка`,
     backText: 'backtext card 2',
     canBeInFocused: true,
   },
   {
     id: '3',
-    frontText: 'frontText card 3',
+    frontText: 'Сомнение',
     backText: 'backtext card 3',
     canBeInFocused: false,
   },
   {
     id: '4',
-    frontText: 'frontText card',
+    frontText: 'Мне понадобилось 5 минут, чтобы открыть дверь',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '5',
-    frontText: 'frontText card',
+    frontText: 'Это справа от вас',
     backText: 'backtext card',
     canBeInFocused: true,
   },
   {
     id: '6',
-    frontText: 'frontText card',
+    frontText:
+      'Все последние (недавние) исследования показывают, что мы получаем пользу во многих аспектах, несмотря на некоторые из них коечто чтобы например',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '7',
-    frontText: 'frontText card',
+    frontText: 'frontText card 7',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '8',
-    frontText: 'frontText card',
+    frontText: 'frontText card 8',
     backText: 'backtext card',
     canBeInFocused: true,
   },
   {
     id: '9',
-    frontText: 'frontText card',
+    frontText: 'frontText card 9',
+    backText: 'backtext card',
+    canBeInFocused: false,
+  },
+  {
+    id: '10',
+    frontText: 'frontText card 10',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '11',
-    frontText: 'frontText card',
+    frontText: 'frontText card 11',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '12',
-    frontText: 'frontText card',
+    frontText: 'frontText card 12',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '13',
-    frontText: 'frontText card',
+    frontText: 'frontText card 13',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '14',
-    frontText: 'frontText card',
+    frontText: 'frontText card 14',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '15',
-    frontText: 'frontText card',
+    frontText: 'frontText card 15',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '16',
-    frontText: 'frontText card',
+    frontText: 'frontText card 16 ',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '17',
-    frontText: 'frontText card',
+    frontText: 'frontText card 17',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '18',
-    frontText: 'frontText card',
+    frontText: 'frontText card 18',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '19',
-    frontText: 'frontText card',
+    frontText: 'frontText card 19',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '20',
-    frontText: 'frontText card',
+    frontText: 'frontText card 20',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '21',
-    frontText: 'frontText card',
+    frontText: 'frontText card 21',
     backText: 'backtext card',
     canBeInFocused: false,
   },
@@ -135,6 +144,84 @@ const allCards = [
     backText: 'backtext card',
     canBeInFocused: false,
   },
+  {
+    id: '24',
+    frontText: 'frontText card 24',
+    backText: 'backtext card',
+    canBeInFocused: false,
+  },
+  {
+    id: '25',
+    frontText: 'frontText card 25',
+    backText: 'backtext card',
+    canBeInFocused: false,
+  },
+  {
+    id: '26',
+    frontText: 'frontText card 26',
+    backText: 'backtext card',
+    canBeInFocused: false,
+  },
+  {
+    id: '27',
+    frontText: 'frontText card 27',
+    backText: 'backtext card',
+    canBeInFocused: false,
+  },
+  {
+    id: '28',
+    frontText: 'frontText card 28',
+    backText: 'backtext card',
+    canBeInFocused: false,
+  },
+  {
+    id: '29',
+    frontText: 'frontText card 29',
+    backText: 'backtext card',
+    canBeInFocused: false,
+  },
+  {
+    id: '30',
+    frontText: 'frontText card 30',
+    backText: 'backtext card',
+    canBeInFocused: false,
+  },
+  {
+    id: '31',
+    frontText: 'frontText card 31',
+    backText: 'backtext card',
+    canBeInFocused: false,
+  },
+  {
+    id: '32',
+    frontText: 'frontText card 32',
+    backText: 'backtext card',
+    canBeInFocused: false,
+  },
+  {
+    id: '33',
+    frontText: 'frontText card 33',
+    backText: 'backtext card',
+    canBeInFocused: false,
+  },
+  {
+    id: '34',
+    frontText: 'frontText card 34',
+    backText: 'backtext card',
+    canBeInFocused: false,
+  },
+  {
+    id: '35',
+    frontText: 'frontText card 35',
+    backText: 'backtext card',
+    canBeInFocused: false,
+  },
+  {
+    id: '36',
+    frontText: 'frontText card 36',
+    backText: 'backtext card',
+    canBeInFocused: false,
+  },
 ];
 
 export default class CardApiService {
@@ -144,22 +231,24 @@ export default class CardApiService {
     this.apiService = apiService;
   }
 
-  public async getCards() {
+  public async getCards(deckId: string, limit: number, page: number) {
     // const response = await this.apiService.get(`${BASE_URL}/cards`);
     // return await response.json();
 
-    await new Promise((resolve) => setTimeout(resolve, 200));
-    return allCards;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const firstIndex = limit * (page - 1);
+    const lastIndex = limit * page - 1;
+    return {
+      data: allCards.slice(firstIndex, lastIndex + 1),
+      headers: {
+        'x-total-count': 36,
+      },
+    };
   }
 
   public async getCard(id: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
-    return {
-      id: '2',
-      frontText: 'frontText card 20',
-      backText: 'backtext card 20',
-      canBeInFocused: true,
-    };
+    return allCards.find((card) => card.id === id);
   }
 
   public async getCardByDeckId(id: string) {

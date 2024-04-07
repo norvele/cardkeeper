@@ -15,3 +15,16 @@ export interface ILearningCardData {
   card: ICard;
   deck: IDeck;
 }
+
+export interface IFetchCardsArguments {
+  deckId: string;
+  limitCards: number;
+  currentPage: number;
+}
+
+export interface ICardListStore {
+  data: ICard[];
+  headers: {
+    'x-total-count': number;
+  };
+}
