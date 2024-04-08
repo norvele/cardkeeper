@@ -27,11 +27,10 @@ import {
   fetchCards,
   fetchCardsFx,
   fetchEditingDeckFx,
-  fetchFilteredCards,
+  resetCardList,
   selectCard,
   setMode,
   setNextPage,
-  setPage,
 } from '@/store/allDeckSettingsStore';
 import { showModal } from '@/store/modalStore';
 import { ICard } from '@/types';
@@ -73,6 +72,19 @@ const AllDeckSettingsPage = () => {
   }, [inView]);
 
   useEffect(() => {
+    debounce(() => {
+      resetCardList();
+      window.scrollTo(0, 0);
+      fetchCards({ deckId, limitCards, currentPage, search: textInputValue });
+    }, 550);
+  }, [textInputValue]);
+
+  useEffect(() => {
+    if (cardList.length >= limitCards)
+      fetchCards({ deckId, limitCards, currentPage, search: textInputValue });
+  }, [currentPage]);
+
+  useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
         setShadowIsVisible(true);
@@ -88,19 +100,6 @@ const AllDeckSettingsPage = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
-  useEffect(() => {
-    if (textInputValue) {
-      fetchFilteredCards({
-        deckId,
-        limitCards,
-        currentPage,
-        search: textInputValue,
-      });
-    } else {
-      fetchCards({ deckId, limitCards, currentPage });
-    }
-  }, [currentPage]);
 
   const debounce = useDebounce();
 
@@ -163,10 +162,6 @@ const AllDeckSettingsPage = () => {
 
   function onChangeTextInput(value: string) {
     changeTextInput({ deckId, search: value, currentPage, limitCards });
-    debounce(() => {
-      setPage(1);
-      fetchFilteredCards({ deckId, search: value, currentPage, limitCards });
-    }, 550);
   }
 
   return (
