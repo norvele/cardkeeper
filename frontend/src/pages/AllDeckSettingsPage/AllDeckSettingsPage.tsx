@@ -7,11 +7,14 @@ import AddIcon from '@/assets/icons/add.svg?react';
 import ArrowBackIcon from '@/assets/icons/arrow_back.svg?react';
 import CloseIcon from '@/assets/icons/close.svg?react';
 import DeleteIcon from '@/assets/icons/delete.svg?react';
+import SearchIcon from '@/assets/icons/search.svg?react';
 import IconButton from '@/components/UI/buttons/iconButton/IconButton';
+import TextInput from '@/components/UI/textInput/TextInput';
 import MiniCardList from '@/components/business/MiniCardList/MiniCardList';
 import MiniCardSkeleton from '@/components/business/MiniCardSkeleton/MiniCardSkeleton';
 import Resolver from '@/components/business/Resolver/Resolver';
 import TopBar from '@/components/business/TopBar/TopBar';
+import { useDebounce } from '@/hooks/useDebounce';
 import styles from '@/pages/AllDeckSettingsPage/allDeckSettingsPage.module.scss';
 import {
   $cardList,
@@ -19,17 +22,19 @@ import {
   $mode,
   $paginationOptions,
   $selectedCards,
+  $textInputValue,
+  changeTextInput,
   fetchCards,
   fetchCardsFx,
   fetchEditingDeckFx,
+  fetchFilteredCards,
   selectCard,
   setMode,
   setNextPage,
+  setPage,
 } from '@/store/allDeckSettingsStore';
 import { showModal } from '@/store/modalStore';
 import { ICard } from '@/types';
-// import SearchIcon from '@/assets/icons/search.svg?react';
-// import TextInput from '@/components/UI/textInput/TextInput';
 
 const AllDeckSettingsPage = () => {
   const { ref, inView, entry } = useInView({ threshold: 0 });
@@ -45,6 +50,7 @@ const AllDeckSettingsPage = () => {
   const [cardList, cardsIsLoading] = useUnit([$cardList, fetchCardsFx.pending]);
   const mode = useUnit($mode);
   const selectedCards = useUnit($selectedCards);
+  const textInputValue = useUnit($textInputValue);
 
   const navigate = useNavigate();
 
@@ -84,8 +90,19 @@ const AllDeckSettingsPage = () => {
   }, []);
 
   useEffect(() => {
-    fetchCards({ deckId, limitCards, currentPage });
+    if (textInputValue) {
+      fetchFilteredCards({
+        deckId,
+        limitCards,
+        currentPage,
+        search: textInputValue,
+      });
+    } else {
+      fetchCards({ deckId, limitCards, currentPage });
+    }
   }, [currentPage]);
+
+  const debounce = useDebounce();
 
   function onClickGoToBack() {
     navigate(-1);
@@ -144,6 +161,14 @@ const AllDeckSettingsPage = () => {
     });
   }
 
+  function onChangeTextInput(value: string) {
+    changeTextInput({ deckId, search: value, currentPage, limitCards });
+    debounce(() => {
+      setPage(1);
+      fetchFilteredCards({ deckId, search: value, currentPage, limitCards });
+    }, 550);
+  }
+
   return (
     <>
       <Resolver callbacks={resolverCallbacks}>
@@ -171,7 +196,12 @@ const AllDeckSettingsPage = () => {
                   </IconButton>
                 }
               />
-              {/* <TextInput placeholder="Search" icon={<SearchIcon />} /> */}
+              <TextInput
+                placeholder="Search"
+                icon={<SearchIcon />}
+                onChange={onChangeTextInput}
+                value={textInputValue}
+              />
             </div>
             <main className={styles.main}>
               <MiniCardList
@@ -213,7 +243,12 @@ const AllDeckSettingsPage = () => {
                   </IconButton>
                 }
               />
-              {/* <TextInput placeholder="Search" icon={<SearchIcon />} /> */}
+              <TextInput
+                placeholder="Search"
+                icon={<SearchIcon />}
+                onChange={onChangeTextInput}
+                value={textInputValue}
+              />
             </div>
             <main className={styles.main}>
               <MiniCardList
