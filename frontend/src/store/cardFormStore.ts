@@ -25,8 +25,6 @@ export const setErrorIsVisible = createEvent<boolean>();
 
 export const setCardSide = createEvent<TCardSide>();
 
-export const setIsLoading = createEvent<boolean>();
-
 export const saveCardFx = createEffect<
   { $cardForm: ICard; $cardError: ICardError; action: TSaveCardAction },
   boolean

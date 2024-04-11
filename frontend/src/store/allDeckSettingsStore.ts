@@ -14,15 +14,8 @@ export const fetchCards = createEvent<{
   currentPage: number;
   search?: string;
 }>();
-export const fetchFilteredCards = createEvent<{
-  deckId: string;
-  limitCards: number;
-  currentPage: number;
-  search: string;
-}>();
 export const resetCardList = createEvent();
 export const setNextPage = createEvent();
-export const setPage = createEvent<number>();
 export const changeTextInput = createEvent<{
   deckId: string;
   limitCards: number;
@@ -47,9 +40,6 @@ export const fetchCardsFx = createEffect(
     search?: string;
   }) => {
     if (search) {
-      console.log('if 1');
-      console.log(currentPage);
-
       return await cardApiService.getFilteredCards(
         deckId,
         limitCards,

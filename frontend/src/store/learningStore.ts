@@ -4,8 +4,6 @@ import { TCardSide } from '@/types/cardForm';
 import { IDeck } from '@/types/deck';
 import { ICard } from '@/types/index';
 
-export const resetCards = createEvent();
-
 export const fetchLearningCard = createEvent<string>();
 
 export const fetchLearningCardFx = createEffect(async (id: string) => {
