@@ -44,25 +44,25 @@ const allCards = [
   },
   {
     id: '7',
-    frontText: 'frontText card 7',
+    frontText: 'frontText очень 7',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '8',
-    frontText: 'frontText card 8',
+    frontText: 'frontText очень 8',
     backText: 'backtext card',
     canBeInFocused: true,
   },
   {
     id: '9',
-    frontText: 'frontText card 9',
+    frontText: 'frontText очень 9',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '10',
-    frontText: 'frontText card 10',
+    frontText: 'frontText очень 10',
     backText: 'backtext card',
     canBeInFocused: false,
   },
@@ -74,7 +74,7 @@ const allCards = [
   },
   {
     id: '12',
-    frontText: 'frontText card 12',
+    frontText: 'очень card 12',
     backText: 'backtext card',
     canBeInFocused: false,
   },
@@ -86,13 +86,13 @@ const allCards = [
   },
   {
     id: '14',
-    frontText: 'frontText card 14',
+    frontText: 'frontText очень 14',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '15',
-    frontText: 'frontText card 15',
+    frontText: 'frontText очень 15',
     backText: 'backtext card',
     canBeInFocused: false,
   },
@@ -104,13 +104,13 @@ const allCards = [
   },
   {
     id: '17',
-    frontText: 'frontText card 17',
+    frontText: 'очень card 17',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '18',
-    frontText: 'frontText card 18',
+    frontText: 'frontText очень 18',
     backText: 'backtext card',
     canBeInFocused: false,
   },
@@ -128,7 +128,7 @@ const allCards = [
   },
   {
     id: '21',
-    frontText: 'frontText card 21',
+    frontText: 'frontText очень 21',
     backText: 'backtext card',
     canBeInFocused: false,
   },
@@ -140,19 +140,19 @@ const allCards = [
   },
   {
     id: '23',
-    frontText: 'frontText card',
+    frontText: 'очень card',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '24',
-    frontText: 'frontText card 24',
+    frontText: 'frontText очень 24',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '25',
-    frontText: 'frontText card 25',
+    frontText: 'очень card 25',
     backText: 'backtext card',
     canBeInFocused: false,
   },
@@ -164,7 +164,7 @@ const allCards = [
   },
   {
     id: '27',
-    frontText: 'frontText card 27',
+    frontText: 'очень card 27',
     backText: 'backtext card',
     canBeInFocused: false,
   },
@@ -182,7 +182,7 @@ const allCards = [
   },
   {
     id: '30',
-    frontText: 'frontText card 30',
+    frontText: 'очень 30',
     backText: 'backtext card',
     canBeInFocused: false,
   },
@@ -194,31 +194,31 @@ const allCards = [
   },
   {
     id: '32',
-    frontText: 'frontText card 32',
+    frontText: 'очень 32',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '33',
-    frontText: 'frontText card 33',
+    frontText: 'ОООЧень card 33',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '34',
-    frontText: 'frontText card 34',
+    frontText: 'frontText оч 34',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '35',
-    frontText: 'frontText card 35',
+    frontText: 'fronоченьext card 35',
     backText: 'backtext card',
     canBeInFocused: false,
   },
   {
     id: '36',
-    frontText: 'frontText card 36',
+    frontText: 'fronоченьxt card 36',
     backText: 'backtext card',
     canBeInFocused: false,
   },
@@ -238,6 +238,7 @@ export default class CardApiService {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const firstIndex = limit * (page - 1);
     const lastIndex = limit * page - 1;
+
     return {
       data: allCards.slice(firstIndex, lastIndex + 1),
       headers: {
@@ -289,4 +290,28 @@ export default class CardApiService {
   public async knowCard(id: string) {}
 
   public async forgotCard(id: string) {}
+
+  public async getFilteredCards(
+    deckId: string,
+    limit: number,
+    page: number,
+    searchString: string,
+  ) {
+    await new Promise((resolve) => setTimeout(resolve, 200));
+
+    const filteredCards = allCards.filter((card) =>
+      card.frontText.toLowerCase().includes(searchString.toLowerCase()),
+    );
+    const firstIndex = limit * (page - 1);
+    const lastIndex = limit * page - 1;
+
+    const result = filteredCards.slice(firstIndex, lastIndex + 1);
+
+    return {
+      data: result,
+      headers: {
+        'x-total-count': filteredCards.length,
+      },
+    };
+  }
 }
