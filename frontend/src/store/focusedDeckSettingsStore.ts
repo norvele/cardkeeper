@@ -1,49 +1,56 @@
 import { createEffect, createEvent, createStore, sample } from 'effector';
-import { cardApiService } from '@/container';
+import { cardApiService, deckApiService } from '@/container';
 import { ICard } from '@/types';
 import { getCountPages } from '@/utils/pages';
 
-export const setMode = createEvent<'normal' | 'selecting'>();
-export const resetSelectedCards = createEvent();
-export const selectCard = createEvent<string>();
-export const unSelectCard = createEvent<string>();
+interface IFetchCardsParams {
+  deckId: string;
+  limitCards: number;
+  currentPage: number;
+  value?: string;
+}
+
+interface ISaveDeckParams {
+  deckId: string;
+  cardList: ICard[];
+}
+
 export const fetchCards = createEvent<{
   deckId: string;
   limitCards: number;
   currentPage: number;
-  search?: string;
+  value?: string;
 }>();
 export const resetCardList = createEvent();
+export const resetInput = createEvent();
 export const setNextPage = createEvent();
-export const changeTextInput = createEvent<{
-  deckId: string;
-  limitCards: number;
-  currentPage: number;
-  search: string;
-}>();
+export const changeTextInput = createEvent<string>();
+export const setInputValueIsValid = createEvent<boolean>();
+export const saveDeck = createEvent<ISaveDeckParams>();
 
 export const fetchCardsFx = createEffect(
-  async ({
-    deckId,
-    limitCards,
-    currentPage,
-    search,
-  }: {
-    deckId: string;
-    limitCards: number;
-    currentPage: number;
-    search?: string;
-  }) => {
-    if (search) {
-      return await cardApiService.getFilteredCards(
+  async ({ deckId, limitCards, currentPage, value }: IFetchCardsParams) => {
+    if (!value) {
+      console.log('if 1');
+      const result = await cardApiService.getCards(
         deckId,
         limitCards,
         currentPage,
-        search,
       );
+      changeTextInput(String(result.headers['x-total-count']));
+      return result;
     }
 
-    return await cardApiService.getCards(deckId, limitCards, currentPage);
+    if (!isNaN(Number(value))) {
+      console.log('if 2');
+      const countOfCard = Number(value);
+      return await cardApiService.getFocusedCards(
+        deckId,
+        limitCards,
+        currentPage,
+        countOfCard,
+      );
+    }
   },
 );
 
@@ -52,9 +59,10 @@ sample({
   target: fetchCardsFx,
 });
 
-export const $mode = createStore<'normal' | 'selecting'>('normal').on(
-  setMode,
-  (_, mode) => mode,
+export const saveDeckFx = createEffect(
+  async ({ deckId, cardList }: ISaveDeckParams) => {
+    return await deckApiService.patchDeck(deckId, cardList);
+  },
 );
 
 export const $paginationOptions = createStore<{
@@ -69,6 +77,8 @@ export const $paginationOptions = createStore<{
   totalPageCount: 0,
 })
   .on(fetchCardsFx.doneData, (options, response) => {
+    if (!response) return options;
+
     const totalPageCount = getCountPages(
       response.headers['x-total-count'],
       options.limitCards,
@@ -87,6 +97,8 @@ export const $paginationOptions = createStore<{
 
 export const $cardList = createStore<ICard[]>([])
   .on(fetchCardsFx.doneData, (cards, response) => {
+    if (!response) return cards;
+
     if (cards.length === 0) return response.data;
     if (!response.headers['x-total-count']) return [];
 
@@ -98,15 +110,10 @@ export const $cardList = createStore<ICard[]>([])
   })
   .reset(resetCardList);
 
-export const $selectedCards = createStore<string[]>([])
-  .on(selectCard, (selectedCards, id) => [...selectedCards, id])
-  .on(unSelectCard, (selectedCards, id) => {
-    return selectedCards.filter((cardId: string) => cardId !== id);
-  })
+export const $textInputValue = createStore<string>('')
+  .on(changeTextInput, (_, value) => value)
+  .reset(resetInput);
 
-  .reset(resetSelectedCards);
-
-export const $textInputValue = createStore<string>('').on(
-  changeTextInput,
-  (_, { search }) => search,
-);
+export const $inputValueIsValid = createStore<boolean>(true)
+  .on(setInputValueIsValid, (_, isValid) => isValid)
+  .reset(resetInput);
