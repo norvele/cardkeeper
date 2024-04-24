@@ -323,7 +323,6 @@ export default class CardApiService {
   ) {
     await new Promise((resolve) => setTimeout(resolve, 500));
     const cards = allCards.slice(0, countOfCard);
-    console.log(cards);
 
     const firstIndex = limit * (page - 1);
     const lastIndex = limit * page - 1;

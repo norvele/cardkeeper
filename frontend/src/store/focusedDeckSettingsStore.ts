@@ -31,7 +31,6 @@ export const saveDeck = createEvent<ISaveDeckParams>();
 export const fetchCardsFx = createEffect(
   async ({ deckId, limitCards, currentPage, value }: IFetchCardsParams) => {
     if (!value) {
-      console.log('if 1');
       const result = await cardApiService.getCards(
         deckId,
         limitCards,
@@ -42,7 +41,6 @@ export const fetchCardsFx = createEffect(
     }
 
     if (!isNaN(Number(value))) {
-      console.log('if 2');
       const countOfCard = Number(value);
       return await cardApiService.getFocusedCards(
         deckId,

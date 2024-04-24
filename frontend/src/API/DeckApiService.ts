@@ -54,13 +54,6 @@ export default class DeckApiService {
     return deck;
   }
 
-  // export interface IOptions {
-  //   headers: {
-  //     'Content-Type': string;
-  //   };
-  //   body: string;
-  // }
-
   public async patchDeck(deckId: string, cardList: ICard[]) {
     const response = await this.apiService.patch(
       `${BASE_URL}/decks/${deckId}`,
