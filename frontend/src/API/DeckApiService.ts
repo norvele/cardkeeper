@@ -8,19 +8,19 @@ const decks: IDeck[] = [
     name: 'All cards',
     numberOfCard: 72,
     color: 'blue',
-    id: '1',
+    id: 'all',
   },
   {
     name: 'Focused',
     numberOfCard: 20,
     color: 'orange',
-    id: '2',
+    id: 'focused',
   },
   {
     name: 'Recently added',
     numberOfCard: 12,
     color: 'pink',
-    id: '3',
+    id: 'recentlyAdded',
   },
 ];
 

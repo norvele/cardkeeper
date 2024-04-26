@@ -93,7 +93,7 @@ const LearningPage = () => {
         }
         title={openedDeck?.name}
         rightSlot={
-          <Link to={`/settings/${openedDeck?.id}`}>
+          <Link to={`/deck-settings/${openedDeck?.id}`}>
             <IconButton variant="primary" size="small">
               <SettingsIcon />
             </IconButton>

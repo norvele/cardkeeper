@@ -13,11 +13,38 @@
   0px -1px 2px 0px #E5E5E9 inset;
 }
 
+.infoForInput {
+  margin: 12px 0px 6px;
+  font-size: 14px;
+  color: var(--font-color-light);
+  font-family: IBM Plex Sans;
+  font-weight: 500;
+}
+
+.invalid {
+  color: var(--font-color-red);
+  font-size: 14px;  
+}
+
+.cardPicker {
+  margin: 18px 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.currentCards {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--font-color-light);
+}
+
 .main {
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: 12px;
 }
 
 .lastElement {
@@ -27,3 +54,6 @@
   position: absolute;
   margin-top: -50px;
 }
+
+
+
