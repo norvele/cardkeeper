@@ -1,24 +1,26 @@
-import { IApiService } from '@/types';
+import { IApiService, ICard } from '@/types';
 import { IDeck, IDecksData } from '@/types/deck';
+
+const BASE_URL = 'https://api.example.com/api';
 
 const decks: IDeck[] = [
   {
     name: 'All cards',
     numberOfCard: 72,
     color: 'blue',
-    id: '1',
+    id: 'all',
   },
   {
     name: 'Focused',
     numberOfCard: 20,
     color: 'orange',
-    id: '2',
+    id: 'focused',
   },
   {
     name: 'Recently added',
     numberOfCard: 12,
     color: 'pink',
-    id: '3',
+    id: 'recentlyAdded',
   },
 ];
 
@@ -50,5 +52,18 @@ export default class DeckApiService {
       return deck.id === id;
     }) as IDeck;
     return deck;
+  }
+
+  public async patchDeck(deckId: string, cardList: ICard[]) {
+    const response = await this.apiService.patch(
+      `${BASE_URL}/decks/${deckId}`,
+      {
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify(cardList),
+      },
+    );
+    return response;
   }
 }

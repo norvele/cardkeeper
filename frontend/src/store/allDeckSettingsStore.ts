@@ -1,7 +1,6 @@
 import { createEffect, createEvent, createStore, sample } from 'effector';
-import { cardApiService, deckApiService } from '@/container';
+import { cardApiService } from '@/container';
 import { ICard } from '@/types';
-import { IDeck } from '@/types/deck';
 import { getCountPages } from '@/utils/pages';
 
 export const setMode = createEvent<'normal' | 'selecting'>();
@@ -22,10 +21,6 @@ export const changeTextInput = createEvent<{
   currentPage: number;
   search: string;
 }>();
-
-export const fetchEditingDeckFx = createEffect(async (id: string) => {
-  return await deckApiService.getDeck(id);
-});
 
 export const fetchCardsFx = createEffect(
   async ({
@@ -56,11 +51,6 @@ sample({
   clock: fetchCards,
   target: fetchCardsFx,
 });
-
-export const $editingDeck = createStore<IDeck | null>(null).on(
-  fetchEditingDeckFx.doneData,
-  (_, data) => data,
-);
 
 export const $mode = createStore<'normal' | 'selecting'>('normal').on(
   setMode,

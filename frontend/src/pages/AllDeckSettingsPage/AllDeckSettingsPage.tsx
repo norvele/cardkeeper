@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useUnit } from 'effector-react';
 import { useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AddIcon from '@/assets/icons/add.svg?react';
 import ArrowBackIcon from '@/assets/icons/arrow_back.svg?react';
 import CloseIcon from '@/assets/icons/close.svg?react';
@@ -18,7 +18,6 @@ import { useDebounce } from '@/hooks/useDebounce';
 import styles from '@/pages/AllDeckSettingsPage/allDeckSettingsPage.module.scss';
 import {
   $cardList,
-  $editingDeck,
   $mode,
   $paginationOptions,
   $selectedCards,
@@ -26,7 +25,6 @@ import {
   changeTextInput,
   fetchCards,
   fetchCardsFx,
-  fetchEditingDeckFx,
   resetCardList,
   selectCard,
   setMode,
@@ -38,14 +36,12 @@ import { ICard } from '@/types';
 const AllDeckSettingsPage = () => {
   const { ref, inView, entry } = useInView({ threshold: 0 });
 
+  const debounce = useDebounce();
+
   const [shadowIsVisible, setShadowIsVisible] = useState(false);
 
   const { currentPage, limitCards, totalPageCount } =
     useUnit($paginationOptions);
-  const [editingDeck, fetchEditingDeck] = useUnit([
-    $editingDeck,
-    fetchEditingDeckFx,
-  ]);
   const [cardList, cardsIsLoading] = useUnit([$cardList, fetchCardsFx.pending]);
   const mode = useUnit($mode);
   const selectedCards = useUnit($selectedCards);
@@ -53,14 +49,30 @@ const AllDeckSettingsPage = () => {
 
   const navigate = useNavigate();
 
-  const { id: deckId } = useParams() as { id: string };
-
   const resolverCallbacks = [
-    () => fetchEditingDeck(deckId),
     () => {
-      fetchCards({ deckId, limitCards, currentPage });
+      fetchCards({ deckId: 'all', limitCards, currentPage });
     },
   ];
+
+  useEffect(() => {
+    resetCardList();
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setShadowIsVisible(true);
+      } else {
+        setShadowIsVisible(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const canLoad = currentPage < totalPageCount;
@@ -75,33 +87,24 @@ const AllDeckSettingsPage = () => {
     debounce(() => {
       resetCardList();
       window.scrollTo(0, 0);
-      fetchCards({ deckId, limitCards, currentPage, search: textInputValue });
+      fetchCards({
+        deckId: 'all',
+        limitCards,
+        currentPage,
+        search: textInputValue,
+      });
     }, 550);
   }, [textInputValue]);
 
   useEffect(() => {
     if (cardList.length >= limitCards)
-      fetchCards({ deckId, limitCards, currentPage, search: textInputValue });
+      fetchCards({
+        deckId: 'all',
+        limitCards,
+        currentPage,
+        search: textInputValue,
+      });
   }, [currentPage]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setShadowIsVisible(true);
-      } else {
-        setShadowIsVisible(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-
-    setMode('normal');
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  const debounce = useDebounce();
 
   function onClickGoToBack() {
     navigate(-1);
@@ -161,7 +164,7 @@ const AllDeckSettingsPage = () => {
   }
 
   function onChangeTextInput(value: string) {
-    changeTextInput({ deckId, search: value, currentPage, limitCards });
+    changeTextInput({ deckId: 'all', search: value, currentPage, limitCards });
   }
 
   return (
@@ -184,7 +187,7 @@ const AllDeckSettingsPage = () => {
                     <ArrowBackIcon />
                   </IconButton>
                 }
-                title={editingDeck?.name}
+                title="All Cards"
                 rightSlot={
                   <IconButton variant="primary" size="small">
                     <AddIcon />
@@ -192,6 +195,7 @@ const AllDeckSettingsPage = () => {
                 }
               />
               <TextInput
+                textSize="normal"
                 placeholder="Search"
                 icon={<SearchIcon />}
                 onChange={onChangeTextInput}
@@ -239,6 +243,7 @@ const AllDeckSettingsPage = () => {
                 }
               />
               <TextInput
+                textSize="normal"
                 placeholder="Search"
                 icon={<SearchIcon />}
                 onChange={onChangeTextInput}

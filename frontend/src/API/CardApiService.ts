@@ -314,4 +314,26 @@ export default class CardApiService {
       },
     };
   }
+
+  public async getFocusedCards(
+    deckId: string,
+    limit: number,
+    page: number,
+    countOfCard: number,
+  ) {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    const cards = allCards.slice(0, countOfCard);
+
+    const firstIndex = limit * (page - 1);
+    const lastIndex = limit * page - 1;
+
+    const result = cards.slice(firstIndex, lastIndex + 1);
+
+    return {
+      data: result,
+      headers: {
+        'x-total-count': cards.length,
+      },
+    };
+  }
 }
