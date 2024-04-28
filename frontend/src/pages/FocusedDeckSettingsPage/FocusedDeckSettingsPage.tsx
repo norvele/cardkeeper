@@ -11,21 +11,16 @@ import IconButton from '@/components/UI/buttons/iconButton/IconButton';
 import TextInput from '@/components/UI/textInput/TextInput';
 import MiniCardList from '@/components/business/MiniCardList/MiniCardList';
 import MiniCardSkeleton from '@/components/business/MiniCardSkeleton/MiniCardSkeleton';
-import Resolver from '@/components/business/Resolver/Resolver';
 import TopBar from '@/components/business/TopBar/TopBar';
 import { useDebounce } from '@/hooks/useDebounce';
 import styles from '@/pages/FocusedDeckSettingsPage/focusedDeckSettingsPage.module.scss';
-import {
-  $inputValueIsValid,
-  saveDeck,
-  setInputValueIsValid,
-} from '@/store/focusedDeckSettingsStore';
+import { $inputValueIsValid, saveDeck } from '@/store/focusedDeckSettingsStore';
 import {
   $cardList,
   $paginationOptions,
   $textInputValue,
   changeTextInput,
-  fetchCards,
+  fetchCardsWithReset,
   fetchCardsFx,
   resetCardList,
   resetInput,
@@ -43,21 +38,21 @@ const FocusedDeckSettingsPage = () => {
 
   const { currentPage, limitCards, totalPageCount } =
     useUnit($paginationOptions);
-  const [cardList, cardsIsLoading] = useUnit([$cardList, fetchCardsFx.pending]);
+  const [cardList, cardsIsLoading, fetchCards] = useUnit([
+    $cardList,
+    fetchCardsFx.pending,
+    fetchCardsFx,
+  ]);
   const textInputValue = useUnit($textInputValue);
   const inputValueIsValid = useUnit($inputValueIsValid);
 
   const navigate = useNavigate();
 
-  const resolverCallbacks = [
-    () => {
-      fetchCards({ deckId: 'focused', limitCards, currentPage });
-    },
-  ];
-
   useEffect(() => {
-    resetCardList();
+    fetchCards({ deckId: 'focused', limitCards, currentPage });
+
     return () => {
+      resetCardList();
       resetInput();
     };
   }, []);
@@ -132,28 +127,25 @@ const FocusedDeckSettingsPage = () => {
   }, []);
 
   function onClickPickNewOnes() {
-    resetCardList();
-    fetchCards({
+    fetchCardsWithReset({
       deckId: 'focused',
       limitCards,
-      currentPage,
+      currentPage: 1,
       value: textInputValue,
     });
   }
 
   function onChangeTextInput(value: string) {
     changeTextInput(value);
-    if (isNaN(Number(value)) || !value) {
-      setInputValueIsValid(false);
-      return;
-    }
-
-    setInputValueIsValid(true);
+    window.scrollTo(0, 0);
 
     debounce(() => {
-      resetCardList();
-      window.scrollTo(0, 0);
-      fetchCards({ deckId: 'focused', limitCards, currentPage, value });
+      fetchCardsWithReset({
+        deckId: 'focused',
+        limitCards,
+        currentPage: 1,
+        value,
+      });
     }, 550);
   }
 
@@ -164,64 +156,60 @@ const FocusedDeckSettingsPage = () => {
 
   return (
     <>
-      <Resolver callbacks={resolverCallbacks}>
-        <div
-          className={clsx(styles.topContent, {
-            [styles.shadow]: shadowIsVisible,
-          })}
-        >
-          <TopBar
-            leftSlot={
-              <IconButton
-                variant="primary"
-                size="small"
-                onClick={onClickGoToBack}
-              >
-                <ArrowBackIcon />
-              </IconButton>
-            }
-            title="Focused"
-            rightSlot={
-              <Button
-                variant="primary"
-                icon={<CheckIcon />}
-                size="small"
-                onClick={onClickSave}
-              >
-                Save
-              </Button>
-            }
-          />
-        </div>
-        <p className={styles.infoForInput}>Number of cards in the deck</p>
-        <TextInput
-          onChange={onChangeTextInput}
-          value={textInputValue}
-          textSize="large"
+      <div
+        className={clsx(styles.topContent, {
+          [styles.shadow]: shadowIsVisible,
+        })}
+      >
+        <TopBar
+          leftSlot={
+            <IconButton
+              variant="primary"
+              size="small"
+              onClick={onClickGoToBack}
+            >
+              <ArrowBackIcon />
+            </IconButton>
+          }
+          title="Focused"
+          rightSlot={
+            <Button
+              variant="primary"
+              icon={<CheckIcon />}
+              size="small"
+              onClick={onClickSave}
+            >
+              Save
+            </Button>
+          }
         />
-        {!inputValueIsValid && (
-          <p className={styles.invalid}>Must be a number</p>
-        )}
-        <div className={styles.cardPicker}>
-          <p className={styles.currentCards}>Current cards</p>
-          <Button
-            onClick={onClickPickNewOnes}
-            size="small"
-            variant="default"
-            icon={<LoopIcon />}
-          >
-            Pick new ones
-          </Button>
-        </div>
-        <main className={styles.main}>
-          <MiniCardList
-            mode="normal"
-            cardList={cardList}
-            onClickMore={cachedOnClickMore}
-          />
-        </main>
-        {cardsIsLoading && <MiniCardSkeleton count={20} />}
-      </Resolver>
+      </div>
+      <p className={styles.infoForInput}>Number of cards in the deck</p>
+      <TextInput
+        onChange={onChangeTextInput}
+        value={textInputValue}
+        textSize="large"
+      />
+      {!inputValueIsValid && <p className={styles.invalid}>Must be a number</p>}
+      <div className={styles.cardPicker}>
+        <p className={styles.currentCards}>Current cards</p>
+        <Button
+          onClick={onClickPickNewOnes}
+          size="small"
+          variant="default"
+          icon={<LoopIcon />}
+        >
+          Pick new ones
+        </Button>
+      </div>
+      <main className={styles.main}>
+        <MiniCardList
+          mode="normal"
+          cardList={cardList}
+          onClickMore={cachedOnClickMore}
+        />
+      </main>
+      {cardsIsLoading && <MiniCardSkeleton count={20} />}
       <div className={styles.lastElement} ref={ref} />
     </>
   );

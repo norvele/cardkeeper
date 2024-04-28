@@ -15,7 +15,7 @@ interface ISaveDeckParams {
   cardList: ICard[];
 }
 
-export const fetchCards = createEvent<{
+export const fetchCardsWithReset = createEvent<{
   deckId: string;
   limitCards: number;
   currentPage: number;
@@ -53,8 +53,15 @@ export const fetchCardsFx = createEffect(
 );
 
 sample({
-  clock: fetchCards,
-  target: fetchCardsFx,
+  clock: fetchCardsWithReset,
+  filter: ({ value }) => {
+    if (isNaN(Number(value)) || !value) {
+      return false;
+    }
+
+    return true;
+  },
+  target: [fetchCardsFx, resetCardList],
 });
 
 export const saveDeckFx = createEffect(
@@ -111,6 +118,15 @@ export const $cardList = createStore<ICard[]>([])
 export const $textInputValue = createStore<string>('')
   .on(changeTextInput, (_, value) => value)
   .reset(resetInput);
+
+$textInputValue.watch((value) => {
+  if (isNaN(Number(value)) || !value) {
+    setInputValueIsValid(false);
+    return;
+  }
+
+  setInputValueIsValid(true);
+});
 
 export const $inputValueIsValid = createStore<boolean>(true)
   .on(setInputValueIsValid, (_, isValid) => isValid)
