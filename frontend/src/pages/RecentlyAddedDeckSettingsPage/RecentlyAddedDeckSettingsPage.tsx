@@ -5,7 +5,6 @@ import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@/assets/icons/arrow_back.svg?react';
 import CheckIcon from '@/assets/icons/check.svg?react';
-import LoopIcon from '@/assets/icons/loop.svg?react';
 import Button from '@/components/UI/buttons/button/Button';
 import IconButton from '@/components/UI/buttons/iconButton/IconButton';
 import TextInput from '@/components/UI/textInput/TextInput';
@@ -13,10 +12,11 @@ import MiniCardList from '@/components/business/MiniCardList/MiniCardList';
 import MiniCardSkeleton from '@/components/business/MiniCardSkeleton/MiniCardSkeleton';
 import TopBar from '@/components/business/TopBar/TopBar';
 import { useDebounce } from '@/hooks/useDebounce';
-import styles from '@/pages/FocusedDeckSettingsPage/focusedDeckSettingsPage.module.scss';
+import styles from '@/pages/RecentlyAddedDeckSettingsPage/recentlyAddedDeckSettingsPage.module.scss';
+import { showModal } from '@/store/modalStore';
 import {
-  $inputValueIsValid,
   saveDeck,
+  $inputValueIsValid,
   $cardList,
   $paginationOptions,
   $textInputValue,
@@ -26,11 +26,10 @@ import {
   resetCardList,
   resetInput,
   setNextPage,
-} from '@/store/focusedDeckSettingsStore';
-import { showModal } from '@/store/modalStore';
+} from '@/store/recentlyAddedDeckSettingsStore';
 import { ICard } from '@/types';
 
-const FocusedDeckSettingsPage = () => {
+const RecentlyAddedDeckSettingsPage = () => {
   const { ref, inView, entry } = useInView({ threshold: 0 });
 
   const debounce = useDebounce();
@@ -50,7 +49,7 @@ const FocusedDeckSettingsPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchCards({ deckId: 'focused', limitCards, currentPage });
+    fetchCards({ deckId: 'recentlyAdded', limitCards, currentPage });
 
     return () => {
       resetCardList();
@@ -85,7 +84,7 @@ const FocusedDeckSettingsPage = () => {
   useEffect(() => {
     if (cardList.length >= limitCards)
       fetchCards({
-        deckId: 'focused',
+        deckId: 'recentlyAdded',
         limitCards,
         currentPage,
         value: textInputValue,
@@ -127,22 +126,13 @@ const FocusedDeckSettingsPage = () => {
     });
   }, []);
 
-  function onClickPickNewOnes() {
-    fetchCardsWithReset({
-      deckId: 'focused',
-      limitCards,
-      currentPage: 1,
-      value: textInputValue,
-    });
-  }
-
   function onChangeTextInput(value: string) {
     changeTextInput(value);
     window.scrollTo(0, 0);
 
     debounce(() => {
       fetchCardsWithReset({
-        deckId: 'focused',
+        deckId: 'resentlyAdded',
         limitCards,
         currentPage: 1,
         value,
@@ -172,7 +162,7 @@ const FocusedDeckSettingsPage = () => {
               <ArrowBackIcon />
             </IconButton>
           }
-          title="Focused"
+          title="Recently added"
           rightSlot={
             <Button
               variant="primary"
@@ -192,17 +182,7 @@ const FocusedDeckSettingsPage = () => {
         textSize="large"
       />
       {!inputValueIsValid && <p className={styles.invalid}>Must be a number</p>}
-      <div className={styles.cardPicker}>
-        <p className={styles.currentCards}>Current cards</p>
-        <Button
-          onClick={onClickPickNewOnes}
-          size="small"
-          variant="default"
-          icon={<LoopIcon />}
-        >
-          Pick new ones
-        </Button>
-      </div>
+      <p className={styles.currentCards}>Current cards</p>
       <main className={styles.main}>
         <MiniCardList
           mode="normal"
@@ -216,4 +196,4 @@ const FocusedDeckSettingsPage = () => {
   );
 };
 
-export default FocusedDeckSettingsPage;
+export default RecentlyAddedDeckSettingsPage;

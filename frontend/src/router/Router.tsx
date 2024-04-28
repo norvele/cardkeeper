@@ -5,6 +5,7 @@ import EditCardPage from '@/pages/EditCardPage/EditCardPage';
 import FocusedDeckSettingsPage from '@/pages/FocusedDeckSettingsPage/FocusedDeckSettingsPage';
 import HomePage from '@/pages/HomePage/HomePage';
 import LearningPage from '@/pages/LearningPage/LearningPage';
+import RecentlyAddedDeckSettingsPage from '@/pages/RecentlyAddedDeckSettingsPage/RecentlyAddedDeckSettingsPage';
 
 const isAuth = true;
 
@@ -36,6 +37,10 @@ const privateRoutes: Array<object> = [
   {
     path: '/deck-settings/focused',
     element: <FocusedDeckSettingsPage />,
+  },
+  {
+    path: '/deck-settings/recentlyAdded',
+    element: <RecentlyAddedDeckSettingsPage />,
   },
 ];
 
