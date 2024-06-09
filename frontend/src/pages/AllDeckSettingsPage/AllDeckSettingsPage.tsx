@@ -25,8 +25,8 @@ import {
   fetchSearchedCardsFx,
   resetCardListEvent,
   resetInputEvent,
-  selectCard,
-  setMode,
+  selectCardEvent,
+  setModeEvent,
   setNextPageEvent,
 } from '@/store/deckSettingsStore';
 import { showModal } from '@/store/modalStore';
@@ -49,12 +49,21 @@ const AllDeckSettingsPage = () => {
   const mode = useUnit($mode);
   const selectedCards = useUnit($selectedCards);
   const textInputValue = useUnit($textInputValue);
-  const [changeTextInput, resetCardList, setNextPage, resetInput] = [
+  const [
+    changeTextInput,
+    resetCardList,
+    setNextPage,
+    resetInput,
+    selectCard,
+    setMode,
+  ] = useUnit([
     changeTextInputEvent,
     resetCardListEvent,
     setNextPageEvent,
     resetInputEvent,
-  ];
+    selectCardEvent,
+    setModeEvent,
+  ]);
 
   const navigate = useNavigate();
 
@@ -100,7 +109,6 @@ const AllDeckSettingsPage = () => {
   useEffect(() => {
     debounce(() => {
       resetCardList();
-      window.scrollTo(0, 0);
       fetchSearchedCards({
         deckId: 'all',
         limitCards,
@@ -179,6 +187,7 @@ const AllDeckSettingsPage = () => {
 
   function onChangeTextInput(value: string) {
     changeTextInput(value);
+    window.scrollTo(0, 0);
   }
 
   return (

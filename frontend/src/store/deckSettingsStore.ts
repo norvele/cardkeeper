@@ -15,10 +15,10 @@ interface ISaveDeckParams {
   cardList: ICard[];
 }
 
-export const setMode = createEvent<'normal' | 'selecting'>();
-export const resetSelectedCards = createEvent();
-export const selectCard = createEvent<string>();
-export const unSelectCard = createEvent<string>();
+export const setModeEvent = createEvent<'normal' | 'selecting'>();
+export const resetSelectedCardsEvent = createEvent();
+export const selectCardEvent = createEvent<string>();
+export const unSelectCardEvent = createEvent<string>();
 
 export const fetchCardsWithResetEvent = createEvent<{
   deckId: string;
@@ -89,16 +89,16 @@ sample({
 });
 
 export const $mode = createStore<'normal' | 'selecting'>('normal').on(
-  setMode,
+  setModeEvent,
   (_, mode) => mode,
 );
 
 export const $selectedCards = createStore<string[]>([])
-  .on(selectCard, (selectedCards, id) => [...selectedCards, id])
-  .on(unSelectCard, (selectedCards, id) => {
+  .on(selectCardEvent, (selectedCards, id) => [...selectedCards, id])
+  .on(unSelectCardEvent, (selectedCards, id) => {
     return selectedCards.filter((cardId: string) => cardId !== id);
   })
-  .reset(resetSelectedCards);
+  .reset(resetSelectedCardsEvent);
 
 export const $paginationOptions = createStore<{
   limitCards: number;
@@ -111,30 +111,22 @@ export const $paginationOptions = createStore<{
   totalCardsCount: null,
   totalPageCount: 0,
 })
-  .on(fetchSearchedCardsFx.doneData, (options, response) => {
-    const totalPageCount = getCountPages(
-      response.headers['x-total-count'],
-      options.limitCards,
-    );
-    return {
-      ...options,
-      totalCardsCount: response.headers['x-total-count'],
-      totalPageCount,
-    };
-  })
-  .on(fetchCardsFx.doneData, (options, response) => {
-    if (!response) return options;
+  .on(
+    [fetchSearchedCardsFx.doneData, fetchCardsFx.doneData],
+    (options, response) => {
+      if (!response) return options;
 
-    const totalPageCount = getCountPages(
-      response.headers['x-total-count'],
-      options.limitCards,
-    );
-    return {
-      ...options,
-      totalCardsCount: response.headers['x-total-count'],
-      totalPageCount,
-    };
-  })
+      const totalPageCount = getCountPages(
+        response.headers['x-total-count'],
+        options.limitCards,
+      );
+      return {
+        ...options,
+        totalCardsCount: response.headers['x-total-count'],
+        totalPageCount,
+      };
+    },
+  )
   .on(setNextPageEvent, (options) => {
     const nextPage = options.currentPage + 1;
     return { ...options, currentPage: nextPage };
@@ -142,34 +134,25 @@ export const $paginationOptions = createStore<{
   .reset(resetCardListEvent);
 
 export const $cardList = createStore<ICard[]>([])
-  .on(fetchCardsFx.doneData, (cards, response) => {
-    if (!response) return cards;
+  .on(
+    [fetchCardsFx.doneData, fetchSearchedCardsFx.doneData],
+    (cards, response) => {
+      if (!response) return cards;
 
-    if (cards.length === 0) return response.data;
-    if (!response.headers['x-total-count']) return [];
+      if (cards.length === 0) return response.data;
+      if (!response.headers['x-total-count']) return [];
 
-    const lastDataElement = response.data[response.data.length - 1];
-    const lastCardElement = cards[cards.length - 1];
+      const lastDataElement = response.data[response.data.length - 1];
+      const lastCardElement = cards[cards.length - 1];
 
-    if (lastDataElement.id === lastCardElement.id) return cards;
-    return [...cards, ...response.data];
-  })
-  .on(fetchSearchedCardsFx.doneData, (cards, response) => {
-    if (cards.length === 0) return response.data;
-    if (!response.headers['x-total-count']) return [];
-
-    const lastDataElement = response.data[response.data.length - 1];
-    const lastCardElement = cards[cards.length - 1];
-
-    if (lastDataElement.id === lastCardElement.id) return cards;
-    return [...cards, ...response.data];
-  })
+      if (lastDataElement.id === lastCardElement.id) return cards;
+      return [...cards, ...response.data];
+    },
+  )
   .reset(resetCardListEvent);
 
 export const $textInputValue = createStore<string>('')
-  .on(changeTextInputEvent, (_, value) => {
-    return value;
-  })
+  .on(changeTextInputEvent, (_, value) => value)
   .reset(resetInputEvent);
 
 $textInputValue.watch((value) => {
@@ -192,6 +175,8 @@ export const allDeckSettingsScope = fork({
     [$paginationOptions, $paginationOptions.getState()],
     [$cardList, $cardList.getState()],
     [$textInputValue, $textInputValue.getState()],
+    [$mode, $mode.getState()],
+    [$selectedCards, $selectedCards.getState()],
   ],
 });
 
@@ -199,7 +184,7 @@ export const focusedDeckSettingsScope = fork({
   values: [
     [$paginationOptions, $paginationOptions.getState()],
     [$cardList, $cardList.getState()],
-    [$textInputValue, ''],
+    [$textInputValue, $textInputValue.getState()],
     [$inputValueIsValid, $inputValueIsValid.getState()],
   ],
 });
@@ -208,7 +193,7 @@ export const recentlyAddedDeckSettingsScope = fork({
   values: [
     [$paginationOptions, $paginationOptions.getState()],
     [$cardList, $cardList.getState()],
-    [$textInputValue, ''],
+    [$textInputValue, $textInputValue.getState()],
     [$inputValueIsValid, $inputValueIsValid.getState()],
   ],
 });

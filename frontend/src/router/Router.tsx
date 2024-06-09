@@ -2,16 +2,14 @@ import { Provider } from 'effector-react';
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 import AllDeckSettingsPage from '@/pages/AllDeckSettingsPage/AllDeckSettingsPage';
 import CreateCardPage from '@/pages/CreateCardPage/CreateCardPage';
-import DeckSettingsPage from '@/pages/DeckSettingsPage/DeckSettingsPage';
 import EditCardPage from '@/pages/EditCardPage/EditCardPage';
 import FocusedDeckSettingsPage from '@/pages/FocusedDeckSettingsPage/FocusedDeckSettingsPage';
 import HomePage from '@/pages/HomePage/HomePage';
 import LearningPage from '@/pages/LearningPage/LearningPage';
 import RecentlyAddedDeckSettingsPage from '@/pages/RecentlyAddedDeckSettingsPage/RecentlyAddedDeckSettingsPage';
-import { focusedDeckSettingsScope } from '@/store/deckSettingsStore';
 import {
-  //   allDeckSettingsScope,
-  //   focusedDeckSettingsScope,
+  allDeckSettingsScope,
+  focusedDeckSettingsScope,
   recentlyAddedDeckSettingsScope,
 } from '@/store/deckSettingsStore';
 
@@ -40,14 +38,13 @@ const privateRoutes: Array<object> = [
   },
   {
     path: '/deck-settings',
-    // element: <DeckSettingsPage />,
     children: [
       {
         path: 'all',
         element: (
-          // <Provider value={allDeckSettingsScope}>
-          <AllDeckSettingsPage />
-          // </Provider>
+          <Provider value={allDeckSettingsScope}>
+            <AllDeckSettingsPage />
+          </Provider>
         ),
       },
       {
