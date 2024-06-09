@@ -1,4 +1,4 @@
-import { createEffect, createEvent, createStore, sample } from 'effector';
+import { createEffect, createEvent, createStore, fork, sample } from 'effector';
 import { cardApiService, deckApiService } from '@/container';
 import { ICard } from '@/types';
 import { getCountPages } from '@/utils/pages';
@@ -15,18 +15,18 @@ interface ISaveDeckParams {
   cardList: ICard[];
 }
 
-export const fetchCardsWithReset = createEvent<{
+export const fetchCardsWithResetEvent = createEvent<{
   deckId: string;
   limitCards: number;
   currentPage: number;
   value?: string;
 }>();
-export const resetCardList = createEvent();
-export const resetInput = createEvent();
-export const setNextPage = createEvent();
-export const changeTextInput = createEvent<string>();
-export const setInputValueIsValid = createEvent<boolean>();
-export const saveDeck = createEvent<ISaveDeckParams>();
+export const resetCardListEvent = createEvent();
+export const resetInputEvent = createEvent();
+export const setNextPageEvent = createEvent();
+export const changeTextInputEvent = createEvent<string>();
+export const setInputValueIsValidEvent = createEvent<boolean>();
+export const saveDeckEvent = createEvent<ISaveDeckParams>();
 
 export const fetchCardsFx = createEffect(
   async ({ deckId, limitCards, currentPage, value }: IFetchCardsParams) => {
@@ -36,13 +36,12 @@ export const fetchCardsFx = createEffect(
         limitCards,
         currentPage,
       );
-      changeTextInput(String(result.headers['x-total-count']));
       return result;
     }
 
     if (!isNaN(Number(value))) {
       const countOfCard = Number(value);
-      return await cardApiService.getFocusedCards(
+      return await cardApiService.getSomeCards(
         deckId,
         limitCards,
         currentPage,
@@ -53,7 +52,7 @@ export const fetchCardsFx = createEffect(
 );
 
 sample({
-  clock: fetchCardsWithReset,
+  clock: fetchCardsWithResetEvent,
   filter: ({ value }) => {
     if (isNaN(Number(value)) || !value) {
       return false;
@@ -61,7 +60,7 @@ sample({
 
     return true;
   },
-  target: [fetchCardsFx, resetCardList],
+  target: [fetchCardsFx, resetCardListEvent],
 });
 
 export const saveDeckFx = createEffect(
@@ -94,11 +93,11 @@ export const $paginationOptions = createStore<{
       totalPageCount,
     };
   })
-  .on(setNextPage, (options) => {
+  .on(setNextPageEvent, (options) => {
     const nextPage = options.currentPage + 1;
     return { ...options, currentPage: nextPage };
   })
-  .reset(resetCardList);
+  .reset(resetCardListEvent);
 
 export const $cardList = createStore<ICard[]>([])
   .on(fetchCardsFx.doneData, (cards, response) => {
@@ -113,24 +112,55 @@ export const $cardList = createStore<ICard[]>([])
     if (lastDataElement.id === lastCardElement.id) return cards;
     return [...cards, ...response.data];
   })
-  .reset(resetCardList);
+  .reset(resetCardListEvent);
 
 export const $textInputValue = createStore<string>('')
-  .on(changeTextInput, (_, value) => value)
-  .reset(resetInput);
+  .on(fetchCardsFx.doneData, (_, response) => {
+    return String(response?.headers['x-total-count']);
+  })
+  .on(changeTextInputEvent, (_, value) => {
+    return value;
+  })
+  .reset(resetInputEvent);
 
 $textInputValue.watch((value) => {
   if (isNaN(Number(value)) || !value) {
-    setInputValueIsValid(false);
+    setInputValueIsValidEvent(false);
     return;
   }
 
-  setInputValueIsValid(true);
+  setInputValueIsValidEvent(true);
 });
 
 export const $inputValueIsValid = createStore<boolean>(true)
-  .on(setInputValueIsValid, (_, isValid) => {
-    console.log(_);
+  .on(setInputValueIsValidEvent, (_, isValid) => {
     return isValid;
   })
-  .reset(resetInput);
+  .reset(resetInputEvent);
+
+export const recentlyAddedDeckSettingsScope = fork({
+  values: [
+    [$paginationOptions, $paginationOptions.getState()],
+    [$cardList, $cardList.getState()],
+    [$textInputValue, ''],
+    [$inputValueIsValid, $inputValueIsValid.getState()],
+  ],
+});
+
+// export const allDeckSettingsScope = fork({
+//   values: [
+//     [$paginationOptions, $paginationOptions.getState()],
+//     [$cardList, $cardList.getState()],
+//     [$textInputValue, $textInputValue.getState()],
+//     [$inputValueIsValid, $inputValueIsValid.getState()],
+//   ],
+// });
+
+// export const focusedDeckSettingsScope = fork({
+//   values: [
+//     [$paginationOptions, $paginationOptions.getState()],
+//     [$cardList, $cardList.getState()],
+//     [$textInputValue, $textInputValue.getState()],
+//     [$inputValueIsValid, $inputValueIsValid.getState()],
+//   ],
+// });

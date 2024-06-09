@@ -1,11 +1,18 @@
+import { Provider } from 'effector-react';
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 import AllDeckSettingsPage from '@/pages/AllDeckSettingsPage/AllDeckSettingsPage';
 import CreateCardPage from '@/pages/CreateCardPage/CreateCardPage';
+import DeckSettingsPage from '@/pages/DeckSettingsPage/DeckSettingsPage';
 import EditCardPage from '@/pages/EditCardPage/EditCardPage';
 import FocusedDeckSettingsPage from '@/pages/FocusedDeckSettingsPage/FocusedDeckSettingsPage';
 import HomePage from '@/pages/HomePage/HomePage';
 import LearningPage from '@/pages/LearningPage/LearningPage';
 import RecentlyAddedDeckSettingsPage from '@/pages/RecentlyAddedDeckSettingsPage/RecentlyAddedDeckSettingsPage';
+import {
+  //   allDeckSettingsScope,
+  //   focusedDeckSettingsScope,
+  recentlyAddedDeckSettingsScope,
+} from '@/store/recentlyAddedDeckSettingsStore';
 
 const isAuth = true;
 
@@ -23,7 +30,7 @@ const privateRoutes: Array<object> = [
     element: <CreateCardPage />,
   },
   {
-    path: 'edit-card/:id',
+    path: '/edit-card/:id',
     element: <EditCardPage />,
   },
   {
@@ -31,16 +38,34 @@ const privateRoutes: Array<object> = [
     element: <LearningPage />,
   },
   {
-    path: '/deck-settings/all',
-    element: <AllDeckSettingsPage />,
-  },
-  {
-    path: '/deck-settings/focused',
-    element: <FocusedDeckSettingsPage />,
-  },
-  {
-    path: '/deck-settings/recentlyAdded',
-    element: <RecentlyAddedDeckSettingsPage />,
+    path: '/deck-settings',
+    // element: <DeckSettingsPage />,
+    children: [
+      {
+        path: 'all',
+        element: (
+          // <Provider value={allDeckSettingsScope}>
+          <AllDeckSettingsPage />
+          // </Provider>
+        ),
+      },
+      {
+        path: 'focused',
+        element: (
+          // <Provider value={focusedDeckSettingsScope}>
+          <FocusedDeckSettingsPage />
+          // </Provider>
+        ),
+      },
+      {
+        path: 'recentlyAdded',
+        element: (
+          <Provider value={recentlyAddedDeckSettingsScope}>
+            <RecentlyAddedDeckSettingsPage />
+          </Provider>
+        ),
+      },
+    ],
   },
 ];
 

@@ -15,17 +15,17 @@ import { useDebounce } from '@/hooks/useDebounce';
 import styles from '@/pages/RecentlyAddedDeckSettingsPage/recentlyAddedDeckSettingsPage.module.scss';
 import { showModal } from '@/store/modalStore';
 import {
-  saveDeck,
+  saveDeckEvent,
   $inputValueIsValid,
   $cardList,
   $paginationOptions,
   $textInputValue,
-  changeTextInput,
-  fetchCardsWithReset,
+  changeTextInputEvent,
+  fetchCardsWithResetEvent,
   fetchCardsFx,
-  resetCardList,
-  resetInput,
-  setNextPage,
+  resetCardListEvent,
+  resetInputEvent,
+  setNextPageEvent,
 } from '@/store/recentlyAddedDeckSettingsStore';
 import { ICard } from '@/types';
 
@@ -45,7 +45,19 @@ const RecentlyAddedDeckSettingsPage = () => {
   ]);
   const textInputValue = useUnit($textInputValue);
   const inputValueIsValid = useUnit($inputValueIsValid);
-
+  const [
+    changeTextInput,
+    fetchCardsWithReset,
+    resetCardList,
+    resetInput,
+    setNextPage,
+  ] = useUnit([
+    changeTextInputEvent,
+    fetchCardsWithResetEvent,
+    resetCardListEvent,
+    resetInputEvent,
+    setNextPageEvent,
+  ]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -82,13 +94,14 @@ const RecentlyAddedDeckSettingsPage = () => {
   }, [inView]);
 
   useEffect(() => {
-    if (cardList.length >= limitCards)
+    if (cardList.length >= limitCards) {
       fetchCards({
         deckId: 'recentlyAdded',
         limitCards,
         currentPage,
         value: textInputValue,
       });
+    }
   }, [currentPage]);
 
   function onClickGoToBack() {
@@ -126,7 +139,7 @@ const RecentlyAddedDeckSettingsPage = () => {
     });
   }, []);
 
-  function onChangeTextInput(value: string) {
+  async function onChangeTextInput(value: string) {
     changeTextInput(value);
     window.scrollTo(0, 0);
 

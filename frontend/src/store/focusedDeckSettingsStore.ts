@@ -42,7 +42,7 @@ export const fetchCardsFx = createEffect(
 
     if (!isNaN(Number(value))) {
       const countOfCard = Number(value);
-      return await cardApiService.getFocusedCards(
+      return await cardApiService.getSomeCards(
         deckId,
         limitCards,
         currentPage,
