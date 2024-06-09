@@ -7,7 +7,7 @@ import {
   resetSelectedCards,
   selectCard,
   unSelectCard,
-} from '@/store/allDeckSettingsStore';
+} from '@/store/deckSettingsStore';
 import { ICard } from '@/types';
 
 interface IMiniCardListProps {

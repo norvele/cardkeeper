@@ -13,7 +13,6 @@ import MiniCardSkeleton from '@/components/business/MiniCardSkeleton/MiniCardSke
 import TopBar from '@/components/business/TopBar/TopBar';
 import { useDebounce } from '@/hooks/useDebounce';
 import styles from '@/pages/RecentlyAddedDeckSettingsPage/recentlyAddedDeckSettingsPage.module.scss';
-import { showModal } from '@/store/modalStore';
 import {
   saveDeckEvent,
   $inputValueIsValid,
@@ -26,7 +25,8 @@ import {
   resetCardListEvent,
   resetInputEvent,
   setNextPageEvent,
-} from '@/store/recentlyAddedDeckSettingsStore';
+} from '@/store/deckSettingsStore';
+import { showModal } from '@/store/modalStore';
 import { ICard } from '@/types';
 
 const RecentlyAddedDeckSettingsPage = () => {
@@ -61,7 +61,14 @@ const RecentlyAddedDeckSettingsPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchCards({ deckId: 'recentlyAdded', limitCards, currentPage });
+    (async () => {
+      const response = await fetchCards({
+        deckId: 'recentlyAdded',
+        limitCards,
+        currentPage,
+      });
+      changeTextInput(String(response?.headers['x-total-count']));
+    })();
 
     return () => {
       resetCardList();

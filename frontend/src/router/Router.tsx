@@ -8,11 +8,12 @@ import FocusedDeckSettingsPage from '@/pages/FocusedDeckSettingsPage/FocusedDeck
 import HomePage from '@/pages/HomePage/HomePage';
 import LearningPage from '@/pages/LearningPage/LearningPage';
 import RecentlyAddedDeckSettingsPage from '@/pages/RecentlyAddedDeckSettingsPage/RecentlyAddedDeckSettingsPage';
+import { focusedDeckSettingsScope } from '@/store/deckSettingsStore';
 import {
   //   allDeckSettingsScope,
   //   focusedDeckSettingsScope,
   recentlyAddedDeckSettingsScope,
-} from '@/store/recentlyAddedDeckSettingsStore';
+} from '@/store/deckSettingsStore';
 
 const isAuth = true;
 
@@ -52,9 +53,9 @@ const privateRoutes: Array<object> = [
       {
         path: 'focused',
         element: (
-          // <Provider value={focusedDeckSettingsScope}>
-          <FocusedDeckSettingsPage />
-          // </Provider>
+          <Provider value={focusedDeckSettingsScope}>
+            <FocusedDeckSettingsPage />
+          </Provider>
         ),
       },
       {
