@@ -1,0 +1,25 @@
+.inputName {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--font-color-light);
+  margin: 6px 0 12px 0;
+}
+
+.includes {
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--font-color-light);
+  margin: 24px 0;
+}
+
+.list {
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  margin-top: 18.5px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+}

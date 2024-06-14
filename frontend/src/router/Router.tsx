@@ -2,6 +2,7 @@ import { Provider } from 'effector-react';
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 import AllDeckSettingsPage from '@/pages/AllDeckSettingsPage/AllDeckSettingsPage';
 import CreateCardPage from '@/pages/CreateCardPage/CreateCardPage';
+import CustomDeckSettingsPage from '@/pages/CustomDeckSettingsPage/CustomDeckSettingsPage';
 import EditCardPage from '@/pages/EditCardPage/EditCardPage';
 import FocusedDeckSettingsPage from '@/pages/FocusedDeckSettingsPage/FocusedDeckSettingsPage';
 import HomePage from '@/pages/HomePage/HomePage';
@@ -64,6 +65,10 @@ const privateRoutes: Array<object> = [
         ),
       },
     ],
+  },
+  {
+    path: '/custom-deck-settings',
+    element: <CustomDeckSettingsPage />,
   },
 ];
 

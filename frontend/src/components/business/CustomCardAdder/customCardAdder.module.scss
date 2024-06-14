@@ -1,0 +1,74 @@
+.card {
+  position: relative;
+  width: 150px;
+  height: 155px;
+}
+
+.sheet {
+  width: 142px;
+  height: 142px;
+  border-radius: 18px;
+  position: absolute;
+}
+
+.icon {
+  rotate: 3deg;
+  height: 24px;
+}
+
+.whiteSheet {
+  background: linear-gradient(
+      320deg,
+      #fafafa 2.67%,
+      rgba(255, 255, 255, 0) 13.36%
+    ),
+    linear-gradient(
+      136deg,
+      rgba(79, 115, 149, 0.04) 1.69%,
+      rgba(0, 0, 0, 0) 50.74%
+    ),
+    #f7f7f7;
+
+  box-shadow:
+    13px 17px 32px 0px #aeaec014,
+    0px 2px 2px 0px #aeaec026,
+    -1px 1px 4px 0px #aeaec017;
+
+  z-index: 3;
+  rotate: -3deg;
+  top: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.text {
+  color: var(--font-color-orange);
+  font-weight: 500;
+  margin: 0;
+  rotate: 3deg;
+  font-size: 16px;
+}
+
+.blueSheet {
+  background-color: #d4eaf1;
+  z-index: 2;
+  top: 6px;
+
+  box-shadow:
+    1px 2px 32px 0px #aeaec038,
+    0px 2px 2px 0px #00000026;
+}
+
+.orangeSheet {
+  background-color: #f5cbb7;
+  z-index: 1;
+  rotate: 3deg;
+  top: 11px;
+
+  box-shadow:
+    1px 6px 32px 0px #aeaec066,
+    0px 2px 2px 0px #00000026;
+}

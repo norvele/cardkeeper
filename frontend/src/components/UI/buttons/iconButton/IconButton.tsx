@@ -2,7 +2,7 @@ import { FC, ReactNode } from 'react';
 import styles from '@/components/UI/buttons/iconButton/iconButton.module.scss';
 
 interface IIconButtonProps {
-  size?: 'smaller' | 'small' | 'medium' | 'large';
+  size: 'smaller' | 'small' | 'medium' | 'large';
   variant: 'primary' | 'secondary' | 'transparent';
   disabled?: boolean;
   onClick?: () => void;
