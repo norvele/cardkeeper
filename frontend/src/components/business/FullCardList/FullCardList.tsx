@@ -13,7 +13,9 @@ const FullCardList: FC<IFullCardListProps> = ({ cards }) => {
     <div className={styles.list}>
       <CustomCardAdder />
       {cards.map((card) => {
-        return <FullCardItem text={card.frontText} key={card.id} />;
+        return (
+          <FullCardItem text={card.frontText} key={card.id} mode={'selected'} />
+        );
       })}
     </div>
   );

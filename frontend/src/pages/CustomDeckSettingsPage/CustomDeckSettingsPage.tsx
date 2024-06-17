@@ -1,11 +1,8 @@
-import { FC } from 'react';
 import ArrowBack from '@/assets/icons/arrow_back.svg?react';
 import CheckIcon from '@/assets/icons/check.svg?react';
 import Button from '@/components/UI/buttons/button/Button';
 import IconButton from '@/components/UI/buttons/iconButton/IconButton';
 import TextInput from '@/components/UI/textInput/TextInput';
-import CustomCardAdder from '@/components/business/CustomCardAdder/CustomCardAdder';
-import FullCardItem from '@/components/business/FullCardItem/FullCardItem';
 import FullCardList from '@/components/business/FullCardList/FullCardList';
 import TopBar from '@/components/business/TopBar/TopBar';
 import styles from '@/pages/CustomDeckSettingsPage/customDeckSettingsPage.module.scss';
@@ -54,7 +51,7 @@ const CustomDeckSettingsPage = () => {
         title="Catchphrases"
       />
       <p className={styles.inputName}>Deck Name</p>
-      <TextInput textSize="normal" onChange={() => {}} value="" />
+      <TextInput textSize="normal" onChange={() => {}} value="Catchphrases" />
       <p className={styles.includes}>Includes {25} cards</p>
       <div className={styles.list}>
         <FullCardList cards={cards} />
