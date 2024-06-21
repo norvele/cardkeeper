@@ -1,5 +1,6 @@
 import { useUnit } from 'effector-react';
 import { FC, useCallback, useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 import MiniCardItem from '@/components/business/MiniCardItem/MiniCardItem';
 import styles from '@/components/business/MiniCardList/miniCardList.module.scss';
 import {
@@ -13,15 +14,34 @@ import { ICard } from '@/types';
 interface IMiniCardListProps {
   cardList: ICard[];
   mode: 'normal' | 'selecting';
+  currentPage: number;
+  totalPageCount: number;
+  cardsIsLoading: boolean;
   onClickMore?: (_card: ICard) => void;
+  onNextPage: () => void;
 }
 
 const MiniCardList: FC<IMiniCardListProps> = ({
   cardList,
-  onClickMore,
   mode,
+  currentPage,
+  totalPageCount,
+  cardsIsLoading,
+  onClickMore,
+  onNextPage,
 }) => {
+  const { ref, inView, entry } = useInView({ threshold: 0 });
+
   const selectedCards = useUnit($selectedCards);
+
+  useEffect(() => {
+    const canLoad = currentPage < totalPageCount;
+    const isLoading = cardsIsLoading || !cardList?.length;
+
+    if (entry?.isIntersecting && canLoad && !isLoading) {
+      onNextPage();
+    }
+  }, [inView]);
 
   useEffect(() => {
     if (mode === 'normal') resetSelectedCards();
@@ -53,6 +73,7 @@ const MiniCardList: FC<IMiniCardListProps> = ({
           {card.frontText}
         </MiniCardItem>
       ))}
+      <div className={styles.lastElement} ref={ref} />
     </div>
   );
 };

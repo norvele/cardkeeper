@@ -1,13 +1,12 @@
-import clsx from 'clsx';
 import { useUnit } from 'effector-react';
-import { useCallback, useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@/assets/icons/arrow_back.svg?react';
 import CheckIcon from '@/assets/icons/check.svg?react';
 import Button from '@/components/UI/buttons/button/Button';
 import IconButton from '@/components/UI/buttons/iconButton/IconButton';
 import TextInput from '@/components/UI/textInput/TextInput';
+import DeckSettingsLayout from '@/components/business/DeckSettingsLayout/DeckSettingsLayout';
 import MiniCardList from '@/components/business/MiniCardList/MiniCardList';
 import MiniCardSkeleton from '@/components/business/MiniCardSkeleton/MiniCardSkeleton';
 import TopBar from '@/components/business/TopBar/TopBar';
@@ -30,11 +29,7 @@ import {
 import { ICard } from '@/types';
 
 const RecentlyAddedDeckSettingsPage = () => {
-  const { ref, inView, entry } = useInView({ threshold: 0 });
-
   const debounce = useDebounce();
-
-  const [shadowIsVisible, setShadowIsVisible] = useState(false);
 
   const { currentPage, limitCards, totalPageCount } =
     useUnit($paginationOptions);
@@ -62,30 +57,6 @@ const RecentlyAddedDeckSettingsPage = () => {
       resetInput();
     };
   }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setShadowIsVisible(true);
-      } else {
-        setShadowIsVisible(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
-    const canLoad = currentPage < totalPageCount;
-    const isLoading = cardsIsLoading || !cardList?.length;
-
-    if (entry?.isIntersecting && canLoad && !isLoading) {
-      setNextPage();
-    }
-  }, [inView]);
 
   useEffect(() => {
     if (cardList.length >= limitCards) {
@@ -152,13 +123,13 @@ const RecentlyAddedDeckSettingsPage = () => {
     navigate(-1);
   }
 
+  function onNextPage() {
+    setNextPage();
+  }
+
   return (
-    <>
-      <div
-        className={clsx(styles.topContent, {
-          [styles.shadow]: shadowIsVisible,
-        })}
-      >
+    <DeckSettingsLayout
+      TopBar={
         <TopBar
           leftSlot={
             <IconButton
@@ -181,7 +152,8 @@ const RecentlyAddedDeckSettingsPage = () => {
             </Button>
           }
         />
-      </div>
+      }
+    >
       <p className={styles.infoForInput}>Number of cards in the deck</p>
       <TextInput
         onChange={onChangeTextInput}
@@ -194,12 +166,15 @@ const RecentlyAddedDeckSettingsPage = () => {
         <MiniCardList
           mode="normal"
           cardList={cardList}
+          cardsIsLoading={cardsIsLoading}
+          currentPage={currentPage}
+          totalPageCount={totalPageCount}
           onClickMore={cachedOnClickMore}
+          onNextPage={onNextPage}
         />
       </main>
       {cardsIsLoading && <MiniCardSkeleton count={20} />}
-      <div className={styles.lastElement} ref={ref} />
-    </>
+    </DeckSettingsLayout>
   );
 };
 

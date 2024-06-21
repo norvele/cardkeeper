@@ -1,7 +1,5 @@
-import clsx from 'clsx';
 import { useUnit } from 'effector-react';
-import { useCallback, useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@/assets/icons/arrow_back.svg?react';
 import CheckIcon from '@/assets/icons/check.svg?react';
@@ -9,6 +7,7 @@ import LoopIcon from '@/assets/icons/loop.svg?react';
 import Button from '@/components/UI/buttons/button/Button';
 import IconButton from '@/components/UI/buttons/iconButton/IconButton';
 import TextInput from '@/components/UI/textInput/TextInput';
+import DeckSettingsLayout from '@/components/business/DeckSettingsLayout/DeckSettingsLayout';
 import MiniCardList from '@/components/business/MiniCardList/MiniCardList';
 import MiniCardSkeleton from '@/components/business/MiniCardSkeleton/MiniCardSkeleton';
 import TopBar from '@/components/business/TopBar/TopBar';
@@ -31,11 +30,7 @@ import { showModal } from '@/store/modalStore';
 import { ICard } from '@/types';
 
 const FocusedDeckSettingsPage = () => {
-  const { ref, inView, entry } = useInView({ threshold: 0 });
-
   const debounce = useDebounce();
-
-  const [shadowIsVisible, setShadowIsVisible] = useState(false);
 
   const { currentPage, limitCards, totalPageCount } =
     useUnit($paginationOptions);
@@ -64,30 +59,6 @@ const FocusedDeckSettingsPage = () => {
       resetInput();
     };
   }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setShadowIsVisible(true);
-      } else {
-        setShadowIsVisible(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
-    const canLoad = currentPage < totalPageCount;
-    const isLoading = cardsIsLoading || !cardList?.length;
-
-    if (entry?.isIntersecting && canLoad && !isLoading) {
-      setNextPage();
-    }
-  }, [inView]);
 
   useEffect(() => {
     if (cardList.length >= limitCards)
@@ -162,13 +133,13 @@ const FocusedDeckSettingsPage = () => {
     navigate(-1);
   }
 
+  function onNextPage() {
+    setNextPage();
+  }
+
   return (
-    <>
-      <div
-        className={clsx(styles.topContent, {
-          [styles.shadow]: shadowIsVisible,
-        })}
-      >
+    <DeckSettingsLayout
+      TopBar={
         <TopBar
           leftSlot={
             <IconButton
@@ -191,7 +162,8 @@ const FocusedDeckSettingsPage = () => {
             </Button>
           }
         />
-      </div>
+      }
+    >
       <p className={styles.infoForInput}>Number of cards in the deck</p>
       <TextInput
         onChange={onChangeTextInput}
@@ -214,12 +186,15 @@ const FocusedDeckSettingsPage = () => {
         <MiniCardList
           mode="normal"
           cardList={cardList}
+          cardsIsLoading={cardsIsLoading}
+          currentPage={currentPage}
+          totalPageCount={totalPageCount}
           onClickMore={cachedOnClickMore}
+          onNextPage={onNextPage}
         />
       </main>
       {cardsIsLoading && <MiniCardSkeleton count={20} />}
-      <div className={styles.lastElement} ref={ref} />
-    </>
+    </DeckSettingsLayout>
   );
 };
 

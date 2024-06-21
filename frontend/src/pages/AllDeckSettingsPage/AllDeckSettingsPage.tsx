@@ -1,7 +1,5 @@
-import clsx from 'clsx';
 import { useUnit } from 'effector-react';
-import { useCallback, useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AddIcon from '@/assets/icons/add.svg?react';
 import ArrowBackIcon from '@/assets/icons/arrow_back.svg?react';
@@ -10,6 +8,7 @@ import DeleteIcon from '@/assets/icons/delete.svg?react';
 import SearchIcon from '@/assets/icons/search.svg?react';
 import IconButton from '@/components/UI/buttons/iconButton/IconButton';
 import TextInput from '@/components/UI/textInput/TextInput';
+import DeckSettingsLayout from '@/components/business/DeckSettingsLayout/DeckSettingsLayout';
 import MiniCardList from '@/components/business/MiniCardList/MiniCardList';
 import MiniCardSkeleton from '@/components/business/MiniCardSkeleton/MiniCardSkeleton';
 import TopBar from '@/components/business/TopBar/TopBar';
@@ -33,11 +32,7 @@ import { showModal } from '@/store/modalStore';
 import { ICard } from '@/types';
 
 const AllDeckSettingsPage = () => {
-  const { ref, inView, entry } = useInView({ threshold: 0 });
-
   const debounce = useDebounce();
-
-  const [shadowIsVisible, setShadowIsVisible] = useState(false);
 
   const { currentPage, limitCards, totalPageCount } =
     useUnit($paginationOptions);
@@ -66,30 +61,6 @@ const AllDeckSettingsPage = () => {
       resetInput();
     };
   }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setShadowIsVisible(true);
-      } else {
-        setShadowIsVisible(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
-    const canLoad = currentPage < totalPageCount;
-    const isLoading = cardsIsLoading || !cardList?.length;
-
-    if (entry?.isIntersecting && canLoad && !isLoading) {
-      setNextPage();
-    }
-  }, [inView]);
 
   useEffect(() => {
     debounce(() => {
@@ -175,15 +146,15 @@ const AllDeckSettingsPage = () => {
     window.scrollTo(0, 0);
   }
 
+  function onNextPage() {
+    setNextPage();
+  }
+
   return (
     <>
       {mode === 'normal' && (
-        <div>
-          <div
-            className={clsx(styles.topContent, {
-              [styles.shadow]: shadowIsVisible,
-            })}
-          >
+        <DeckSettingsLayout
+          TopBar={
             <TopBar
               leftSlot={
                 <IconButton
@@ -201,32 +172,33 @@ const AllDeckSettingsPage = () => {
                 </IconButton>
               }
             />
-            <TextInput
-              textSize="normal"
-              placeholder="Search"
-              icon={<SearchIcon />}
-              onChange={onChangeTextInput}
-              value={textInputValue}
-            />
-          </div>
+          }
+        >
+          <TextInput
+            textSize="normal"
+            placeholder="Search"
+            icon={<SearchIcon />}
+            onChange={onChangeTextInput}
+            value={textInputValue}
+          />
           <main className={styles.main}>
             <MiniCardList
               mode="normal"
               cardList={cardList}
+              cardsIsLoading={cardsIsLoading}
+              currentPage={currentPage}
+              totalPageCount={totalPageCount}
               onClickMore={cachedOnClickMore}
+              onNextPage={onNextPage}
             />
           </main>
           {cardsIsLoading && <MiniCardSkeleton count={20} />}
-        </div>
+        </DeckSettingsLayout>
       )}
 
       {mode === 'selecting' && (
-        <div>
-          <div
-            className={clsx(styles.topContent, {
-              [styles.shadow]: shadowIsVisible,
-            })}
-          >
+        <DeckSettingsLayout
+          TopBar={
             <TopBar
               leftSlot={
                 <IconButton
@@ -249,25 +221,29 @@ const AllDeckSettingsPage = () => {
                 </IconButton>
               }
             />
-            <TextInput
-              textSize="normal"
-              placeholder="Search"
-              icon={<SearchIcon />}
-              onChange={onChangeTextInput}
-              value={textInputValue}
-            />
-          </div>
+          }
+        >
+          <TextInput
+            textSize="normal"
+            placeholder="Search"
+            icon={<SearchIcon />}
+            onChange={onChangeTextInput}
+            value={textInputValue}
+          />
           <main className={styles.main}>
             <MiniCardList
               mode="selecting"
               cardList={cardList}
+              cardsIsLoading={cardsIsLoading}
+              currentPage={currentPage}
+              totalPageCount={totalPageCount}
               onClickMore={cachedOnClickMore}
+              onNextPage={onNextPage}
             />
           </main>
           {cardsIsLoading && <MiniCardSkeleton count={20} />}
-        </div>
+        </DeckSettingsLayout>
       )}
-      <div className={styles.lastElement} ref={ref} />
     </>
   );
 };

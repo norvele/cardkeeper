@@ -34,7 +34,6 @@ $textInputValue.watch((value) => {
 
 export const $inputValueIsValid = createStore<boolean>(true)
   .on(setInputValueIsValid, (_, isValid) => {
-    console.log(_);
     return isValid;
   })
   .reset(resetInput);
