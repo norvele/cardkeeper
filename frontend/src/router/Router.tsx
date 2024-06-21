@@ -1,4 +1,3 @@
-import { Provider } from 'effector-react';
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 import AllDeckSettingsPage from '@/pages/AllDeckSettingsPage/AllDeckSettingsPage';
 import CreateCardPage from '@/pages/CreateCardPage/CreateCardPage';
@@ -7,11 +6,6 @@ import FocusedDeckSettingsPage from '@/pages/FocusedDeckSettingsPage/FocusedDeck
 import HomePage from '@/pages/HomePage/HomePage';
 import LearningPage from '@/pages/LearningPage/LearningPage';
 import RecentlyAddedDeckSettingsPage from '@/pages/RecentlyAddedDeckSettingsPage/RecentlyAddedDeckSettingsPage';
-import {
-  allDeckSettingsScope,
-  focusedDeckSettingsScope,
-  recentlyAddedDeckSettingsScope,
-} from '@/store/deckSettingsStore';
 
 const isAuth = true;
 
@@ -41,27 +35,15 @@ const privateRoutes: Array<object> = [
     children: [
       {
         path: 'all',
-        element: (
-          <Provider value={allDeckSettingsScope}>
-            <AllDeckSettingsPage />
-          </Provider>
-        ),
+        element: <AllDeckSettingsPage />,
       },
       {
         path: 'focused',
-        element: (
-          <Provider value={focusedDeckSettingsScope}>
-            <FocusedDeckSettingsPage />
-          </Provider>
-        ),
+        element: <FocusedDeckSettingsPage />,
       },
       {
         path: 'recentlyAdded',
-        element: (
-          <Provider value={recentlyAddedDeckSettingsScope}>
-            <RecentlyAddedDeckSettingsPage />
-          </Provider>
-        ),
+        element: <RecentlyAddedDeckSettingsPage />,
       },
     ],
   },

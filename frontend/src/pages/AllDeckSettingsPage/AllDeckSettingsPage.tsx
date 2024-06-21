@@ -21,14 +21,14 @@ import {
   $paginationOptions,
   $selectedCards,
   $textInputValue,
-  changeTextInputEvent,
+  changeTextInput,
   fetchSearchedCardsFx,
-  resetCardListEvent,
-  resetInputEvent,
-  selectCardEvent,
-  setModeEvent,
-  setNextPageEvent,
-} from '@/store/deckSettingsStore';
+  resetCardList,
+  resetInput,
+  selectCard,
+  setMode,
+  setNextPage,
+} from '@/store/allDeckSettingsStore';
 import { showModal } from '@/store/modalStore';
 import { ICard } from '@/types';
 
@@ -49,21 +49,6 @@ const AllDeckSettingsPage = () => {
   const mode = useUnit($mode);
   const selectedCards = useUnit($selectedCards);
   const textInputValue = useUnit($textInputValue);
-  const [
-    changeTextInput,
-    resetCardList,
-    setNextPage,
-    resetInput,
-    selectCard,
-    setMode,
-  ] = useUnit([
-    changeTextInputEvent,
-    resetCardListEvent,
-    setNextPageEvent,
-    resetInputEvent,
-    selectCardEvent,
-    setModeEvent,
-  ]);
 
   const navigate = useNavigate();
 
@@ -112,7 +97,7 @@ const AllDeckSettingsPage = () => {
       fetchSearchedCards({
         deckId: 'all',
         limitCards,
-        currentPage,
+        currentPage: 1,
         value: textInputValue,
       });
     }, 550);

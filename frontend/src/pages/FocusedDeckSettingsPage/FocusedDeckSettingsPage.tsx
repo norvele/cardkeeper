@@ -16,17 +16,17 @@ import { useDebounce } from '@/hooks/useDebounce';
 import styles from '@/pages/FocusedDeckSettingsPage/focusedDeckSettingsPage.module.scss';
 import {
   $inputValueIsValid,
-  saveDeckEvent,
+  saveDeck,
   $cardList,
   $paginationOptions,
   $textInputValue,
-  changeTextInputEvent,
-  fetchCardsWithResetEvent,
+  changeTextInput,
+  fetchCardsWithReset,
   fetchCardsFx,
-  resetCardListEvent,
-  resetInputEvent,
-  setNextPageEvent,
-} from '@/store/deckSettingsStore';
+  resetCardList,
+  resetInput,
+  setNextPage,
+} from '@/store/focusedDeckSettingsStore';
 import { showModal } from '@/store/modalStore';
 import { ICard } from '@/types';
 
@@ -46,19 +46,6 @@ const FocusedDeckSettingsPage = () => {
   ]);
   const textInputValue = useUnit($textInputValue);
   const inputValueIsValid = useUnit($inputValueIsValid);
-  const [
-    changeTextInput,
-    fetchCardsWithReset,
-    resetCardList,
-    resetInput,
-    setNextPage,
-  ] = useUnit([
-    changeTextInputEvent,
-    fetchCardsWithResetEvent,
-    resetCardListEvent,
-    resetInputEvent,
-    setNextPageEvent,
-  ]);
 
   const navigate = useNavigate();
 

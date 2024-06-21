@@ -4,10 +4,10 @@ import MiniCardItem from '@/components/business/MiniCardItem/MiniCardItem';
 import styles from '@/components/business/MiniCardList/miniCardList.module.scss';
 import {
   $selectedCards,
-  resetSelectedCardsEvent,
-  selectCardEvent,
-  unSelectCardEvent,
-} from '@/store/deckSettingsStore';
+  resetSelectedCards,
+  selectCard,
+  unSelectCard,
+} from '@/store/allDeckSettingsStore';
 import { ICard } from '@/types';
 
 interface IMiniCardListProps {
@@ -22,11 +22,6 @@ const MiniCardList: FC<IMiniCardListProps> = ({
   mode,
 }) => {
   const selectedCards = useUnit($selectedCards);
-  const [resetSelectedCards, selectCard, unSelectCard] = useUnit([
-    resetSelectedCardsEvent,
-    selectCardEvent,
-    unSelectCardEvent,
-  ]);
 
   useEffect(() => {
     if (mode === 'normal') resetSelectedCards();
