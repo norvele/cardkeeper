@@ -1,38 +1,31 @@
-import { useUnit } from 'effector-react';
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import MiniCardItem from '@/components/business/MiniCardItem/MiniCardItem';
 import styles from '@/components/business/MiniCardList/miniCardList.module.scss';
-import {
-  $selectedCards,
-  resetSelectedCards,
-  selectCard,
-  unSelectCard,
-} from '@/store/allDeckSettingsStore';
 import { ICard } from '@/types';
 
 interface IMiniCardListProps {
   cardList: ICard[];
-  mode: 'normal' | 'selecting';
+  selectedCards?: string[];
   currentPage: number;
   totalPageCount: number;
   cardsIsLoading: boolean;
   onClickMore?: (_card: ICard) => void;
   onNextPage: () => void;
+  onChangeCheckbox?: (_id: string, _isChecked: boolean) => void;
 }
 
 const MiniCardList: FC<IMiniCardListProps> = ({
   cardList,
-  mode,
   currentPage,
   totalPageCount,
   cardsIsLoading,
+  selectedCards,
   onClickMore,
   onNextPage,
+  onChangeCheckbox,
 }) => {
   const { ref, inView, entry } = useInView({ threshold: 0 });
-
-  const selectedCards = useUnit($selectedCards);
 
   useEffect(() => {
     const canLoad = currentPage < totalPageCount;
@@ -43,31 +36,14 @@ const MiniCardList: FC<IMiniCardListProps> = ({
     }
   }, [inView]);
 
-  useEffect(() => {
-    if (mode === 'normal') resetSelectedCards();
-  }, []);
-
-  const cachedOnChangeCheckbox = useCallback(function onChangeCheckbox(
-    id: string,
-    isChecked: boolean,
-  ) {
-    if (isChecked) {
-      selectCard(id);
-    } else {
-      unSelectCard(id);
-    }
-  }, []);
-
   return (
     <div className={styles.cards}>
       {cardList.map((card) => (
         <MiniCardItem
           card={card}
           key={card.id}
-          isChecked={selectedCards.includes(card.id)}
-          onChangeCheckbox={
-            mode === 'normal' ? undefined : cachedOnChangeCheckbox
-          }
+          isChecked={selectedCards ? selectedCards.includes(card.id) : false}
+          onChangeCheckbox={onChangeCheckbox}
           onClickMore={onClickMore}
         >
           {card.frontText}

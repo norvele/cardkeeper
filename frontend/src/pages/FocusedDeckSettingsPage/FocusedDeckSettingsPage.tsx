@@ -50,6 +50,7 @@ const FocusedDeckSettingsPage = () => {
         deckId: 'recentlyAdded',
         limitCards,
         currentPage,
+        value: textInputValue,
       });
       changeTextInput(String(response?.headers['x-total-count']));
     })();
@@ -133,10 +134,6 @@ const FocusedDeckSettingsPage = () => {
     navigate(-1);
   }
 
-  function onNextPage() {
-    setNextPage();
-  }
-
   return (
     <DeckSettingsLayout
       TopBar={
@@ -184,13 +181,12 @@ const FocusedDeckSettingsPage = () => {
       </div>
       <main className={styles.main}>
         <MiniCardList
-          mode="normal"
           cardList={cardList}
           cardsIsLoading={cardsIsLoading}
           currentPage={currentPage}
           totalPageCount={totalPageCount}
           onClickMore={cachedOnClickMore}
-          onNextPage={onNextPage}
+          onNextPage={setNextPage}
         />
       </main>
       {cardsIsLoading && <MiniCardSkeleton count={20} />}

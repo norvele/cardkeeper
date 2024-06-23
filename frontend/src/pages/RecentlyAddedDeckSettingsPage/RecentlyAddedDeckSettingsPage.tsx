@@ -48,6 +48,7 @@ const RecentlyAddedDeckSettingsPage = () => {
         deckId: 'recentlyAdded',
         limitCards,
         currentPage,
+        value: textInputValue,
       });
       changeTextInput(String(response?.headers['x-total-count']));
     })();
@@ -123,10 +124,6 @@ const RecentlyAddedDeckSettingsPage = () => {
     navigate(-1);
   }
 
-  function onNextPage() {
-    setNextPage();
-  }
-
   return (
     <DeckSettingsLayout
       TopBar={
@@ -164,13 +161,12 @@ const RecentlyAddedDeckSettingsPage = () => {
       <p className={styles.currentCards}>Current cards</p>
       <main className={styles.main}>
         <MiniCardList
-          mode="normal"
           cardList={cardList}
           cardsIsLoading={cardsIsLoading}
           currentPage={currentPage}
           totalPageCount={totalPageCount}
           onClickMore={cachedOnClickMore}
-          onNextPage={onNextPage}
+          onNextPage={setNextPage}
         />
       </main>
       {cardsIsLoading && <MiniCardSkeleton count={20} />}

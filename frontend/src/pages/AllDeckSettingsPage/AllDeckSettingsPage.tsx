@@ -24,9 +24,11 @@ import {
   fetchSearchedCardsFx,
   resetCardList,
   resetInput,
+  resetSelectedCards,
   selectCard,
   setMode,
   setNextPage,
+  unSelectCard,
 } from '@/store/allDeckSettingsStore';
 import { showModal } from '@/store/modalStore';
 import { ICard } from '@/types';
@@ -47,14 +49,20 @@ const AllDeckSettingsPage = () => {
 
   const navigate = useNavigate();
 
+  const fetch = (
+    page: number = currentPage,
+    value: string = textInputValue,
+  ) => {
+    fetchSearchedCards({
+      deckId: 'all',
+      limitCards,
+      currentPage: page,
+      value,
+    });
+  };
+
   useEffect(() => {
-    (async () => {
-      fetchSearchedCards({
-        deckId: 'recentlyAdded',
-        limitCards,
-        currentPage,
-      });
-    })();
+    fetch();
 
     return () => {
       resetCardList();
@@ -63,25 +71,13 @@ const AllDeckSettingsPage = () => {
   }, []);
 
   useEffect(() => {
-    debounce(() => {
-      resetCardList();
-      fetchSearchedCards({
-        deckId: 'all',
-        limitCards,
-        currentPage: 1,
-        value: textInputValue,
-      });
-    }, 550);
-  }, [textInputValue]);
+    if (mode === 'normal') {
+      resetSelectedCards();
+    }
+  }, [mode]);
 
   useEffect(() => {
-    if (cardList.length >= limitCards)
-      fetchSearchedCards({
-        deckId: 'all',
-        limitCards,
-        currentPage,
-        value: textInputValue,
-      });
+    if (cardList.length >= limitCards) fetch();
   }, [currentPage]);
 
   function onClickGoToBack() {
@@ -144,73 +140,54 @@ const AllDeckSettingsPage = () => {
   function onChangeTextInput(value: string) {
     changeTextInput(value);
     window.scrollTo(0, 0);
+
+    debounce(() => {
+      resetCardList();
+      fetch(1, value);
+    }, 550);
   }
 
-  function onNextPage() {
-    setNextPage();
-  }
+  const cachedToggleCardSelection = useCallback(function toggleCardSelection(
+    id: string,
+    isChecked: boolean,
+  ) {
+    if (isChecked) {
+      selectCard(id);
+    } else {
+      unSelectCard(id);
+    }
+  }, []);
+
+  const isNormalMode = mode === 'normal';
 
   return (
     <>
-      {mode === 'normal' && (
-        <DeckSettingsLayout
-          TopBar={
-            <TopBar
-              leftSlot={
-                <IconButton
-                  variant="primary"
-                  size="small"
-                  onClick={onClickGoToBack}
-                >
+      <DeckSettingsLayout
+        TopBar={
+          <TopBar
+            leftSlot={
+              <IconButton
+                variant="primary"
+                size="small"
+                onClick={isNormalMode ? onClickGoToBack : onClickCancel}
+              >
+                {isNormalMode ? (
                   <ArrowBackIcon />
-                </IconButton>
-              }
-              title="All Cards"
-              rightSlot={
+                ) : (
+                  <>
+                    <CloseIcon />
+                    <p>{selectedCards.length}</p>
+                  </>
+                )}
+              </IconButton>
+            }
+            title={isNormalMode ? 'All Cards' : ''}
+            rightSlot={
+              isNormalMode ? (
                 <IconButton variant="primary" size="small">
                   <AddIcon />
                 </IconButton>
-              }
-            />
-          }
-        >
-          <TextInput
-            textSize="normal"
-            placeholder="Search"
-            icon={<SearchIcon />}
-            onChange={onChangeTextInput}
-            value={textInputValue}
-          />
-          <main className={styles.main}>
-            <MiniCardList
-              mode="normal"
-              cardList={cardList}
-              cardsIsLoading={cardsIsLoading}
-              currentPage={currentPage}
-              totalPageCount={totalPageCount}
-              onClickMore={cachedOnClickMore}
-              onNextPage={onNextPage}
-            />
-          </main>
-          {cardsIsLoading && <MiniCardSkeleton count={20} />}
-        </DeckSettingsLayout>
-      )}
-
-      {mode === 'selecting' && (
-        <DeckSettingsLayout
-          TopBar={
-            <TopBar
-              leftSlot={
-                <IconButton
-                  variant="primary"
-                  size="small"
-                  onClick={onClickCancel}
-                >
-                  <CloseIcon />
-                  <p>{selectedCards.length}</p>
-                </IconButton>
-              }
-              rightSlot={
+              ) : (
                 <IconButton
                   variant="primary"
                   size="small"
@@ -219,31 +196,34 @@ const AllDeckSettingsPage = () => {
                 >
                   <DeleteIcon />
                 </IconButton>
-              }
-            />
-          }
-        >
-          <TextInput
-            textSize="normal"
-            placeholder="Search"
-            icon={<SearchIcon />}
-            onChange={onChangeTextInput}
-            value={textInputValue}
+              )
+            }
           />
-          <main className={styles.main}>
-            <MiniCardList
-              mode="selecting"
-              cardList={cardList}
-              cardsIsLoading={cardsIsLoading}
-              currentPage={currentPage}
-              totalPageCount={totalPageCount}
-              onClickMore={cachedOnClickMore}
-              onNextPage={onNextPage}
-            />
-          </main>
-          {cardsIsLoading && <MiniCardSkeleton count={20} />}
-        </DeckSettingsLayout>
-      )}
+        }
+      >
+        <TextInput
+          textSize="normal"
+          placeholder="Search"
+          icon={<SearchIcon />}
+          onChange={onChangeTextInput}
+          value={textInputValue}
+        />
+        <main className={styles.main}>
+          <MiniCardList
+            cardList={cardList}
+            cardsIsLoading={cardsIsLoading}
+            currentPage={currentPage}
+            totalPageCount={totalPageCount}
+            onClickMore={cachedOnClickMore}
+            onNextPage={setNextPage}
+            selectedCards={selectedCards}
+            onChangeCheckbox={
+              isNormalMode ? undefined : cachedToggleCardSelection
+            }
+          />
+        </main>
+        {cardsIsLoading && <MiniCardSkeleton count={20} />}
+      </DeckSettingsLayout>
     </>
   );
 };

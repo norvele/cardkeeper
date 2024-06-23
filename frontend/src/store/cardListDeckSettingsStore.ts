@@ -7,7 +7,7 @@ interface IFetchCardsParams {
   deckId: string;
   limitCards: number;
   currentPage: number;
-  value?: string;
+  value: string;
 }
 
 export function createCardListStore() {
@@ -20,17 +20,15 @@ export function createCardListStore() {
 
   const fetchSearchedCardsFx = createEffect(
     async ({ deckId, limitCards, currentPage, value }: IFetchCardsParams) => {
-      if (value) {
-        return await cardApiService.getFilteredCards(
-          deckId,
-          limitCards,
-          currentPage,
-          value,
-        );
-      }
-      return await cardApiService.getCards(deckId, limitCards, currentPage);
+      return await cardApiService.getFilteredCards(
+        deckId,
+        limitCards,
+        currentPage,
+        value,
+      );
     },
   );
+
   const fetchCardsFx = createEffect(
     async ({ deckId, limitCards, currentPage, value }: IFetchCardsParams) => {
       if (!value) {
