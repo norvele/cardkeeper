@@ -23,7 +23,7 @@ const privateRoutes: Array<object> = [
     element: <CreateCardPage />,
   },
   {
-    path: 'edit-card/:id',
+    path: '/edit-card/:id',
     element: <EditCardPage />,
   },
   {
@@ -31,16 +31,21 @@ const privateRoutes: Array<object> = [
     element: <LearningPage />,
   },
   {
-    path: '/deck-settings/all',
-    element: <AllDeckSettingsPage />,
-  },
-  {
-    path: '/deck-settings/focused',
-    element: <FocusedDeckSettingsPage />,
-  },
-  {
-    path: '/deck-settings/recentlyAdded',
-    element: <RecentlyAddedDeckSettingsPage />,
+    path: '/deck-settings',
+    children: [
+      {
+        path: 'all',
+        element: <AllDeckSettingsPage />,
+      },
+      {
+        path: 'focused',
+        element: <FocusedDeckSettingsPage />,
+      },
+      {
+        path: 'recentlyAdded',
+        element: <RecentlyAddedDeckSettingsPage />,
+      },
+    ],
   },
 ];
 

@@ -1,0 +1,14 @@
+.main {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 12px;
+}
+
+.lastElement {
+  height: 1px;
+  width: 1px;
+  background-color: transparent;
+  position: absolute;
+  margin-top: -50px;
+}

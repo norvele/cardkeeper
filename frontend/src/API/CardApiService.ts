@@ -315,7 +315,7 @@ export default class CardApiService {
     };
   }
 
-  public async getFocusedCards(
+  public async getSomeCards(
     deckId: string,
     limit: number,
     page: number,

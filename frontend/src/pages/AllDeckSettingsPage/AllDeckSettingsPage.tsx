@@ -1,7 +1,5 @@
-import clsx from 'clsx';
 import { useUnit } from 'effector-react';
-import { useCallback, useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AddIcon from '@/assets/icons/add.svg?react';
 import ArrowBackIcon from '@/assets/icons/arrow_back.svg?react';
@@ -10,9 +8,9 @@ import DeleteIcon from '@/assets/icons/delete.svg?react';
 import SearchIcon from '@/assets/icons/search.svg?react';
 import IconButton from '@/components/UI/buttons/iconButton/IconButton';
 import TextInput from '@/components/UI/textInput/TextInput';
+import DeckSettingsLayout from '@/components/business/DeckSettingsLayout/DeckSettingsLayout';
 import MiniCardList from '@/components/business/MiniCardList/MiniCardList';
 import MiniCardSkeleton from '@/components/business/MiniCardSkeleton/MiniCardSkeleton';
-import Resolver from '@/components/business/Resolver/Resolver';
 import TopBar from '@/components/business/TopBar/TopBar';
 import { useDebounce } from '@/hooks/useDebounce';
 import styles from '@/pages/AllDeckSettingsPage/allDeckSettingsPage.module.scss';
@@ -23,87 +21,63 @@ import {
   $selectedCards,
   $textInputValue,
   changeTextInput,
-  fetchCards,
-  fetchCardsFx,
+  fetchSearchedCardsFx,
   resetCardList,
+  resetInput,
+  resetSelectedCards,
   selectCard,
   setMode,
   setNextPage,
+  unSelectCard,
 } from '@/store/allDeckSettingsStore';
 import { showModal } from '@/store/modalStore';
 import { ICard } from '@/types';
 
 const AllDeckSettingsPage = () => {
-  const { ref, inView, entry } = useInView({ threshold: 0 });
-
   const debounce = useDebounce();
-
-  const [shadowIsVisible, setShadowIsVisible] = useState(false);
 
   const { currentPage, limitCards, totalPageCount } =
     useUnit($paginationOptions);
-  const [cardList, cardsIsLoading] = useUnit([$cardList, fetchCardsFx.pending]);
+  const [cardList, cardsIsLoading, fetchSearchedCards] = useUnit([
+    $cardList,
+    fetchSearchedCardsFx.pending,
+    fetchSearchedCardsFx,
+  ]);
   const mode = useUnit($mode);
   const selectedCards = useUnit($selectedCards);
   const textInputValue = useUnit($textInputValue);
 
   const navigate = useNavigate();
 
-  const resolverCallbacks = [
-    () => {
-      fetchCards({ deckId: 'all', limitCards, currentPage });
-    },
-  ];
+  const fetch = (
+    page: number = currentPage,
+    value: string = textInputValue,
+  ) => {
+    fetchSearchedCards({
+      deckId: 'all',
+      limitCards,
+      currentPage: page,
+      value,
+    });
+  };
 
   useEffect(() => {
-    resetCardList();
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setShadowIsVisible(true);
-      } else {
-        setShadowIsVisible(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
+    fetch();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      resetCardList();
+      resetInput();
     };
   }, []);
 
   useEffect(() => {
-    const canLoad = currentPage < totalPageCount;
-    const isLoading = cardsIsLoading || !cardList?.length;
-
-    if (entry?.isIntersecting && canLoad && !isLoading) {
-      setNextPage();
+    if (mode === 'normal') {
+      resetSelectedCards();
     }
-  }, [inView]);
+  }, [mode]);
 
   useEffect(() => {
-    debounce(() => {
-      resetCardList();
-      window.scrollTo(0, 0);
-      fetchCards({
-        deckId: 'all',
-        limitCards,
-        currentPage,
-        search: textInputValue,
-      });
-    }, 550);
-  }, [textInputValue]);
-
-  useEffect(() => {
-    if (cardList.length >= limitCards)
-      fetchCards({
-        deckId: 'all',
-        limitCards,
-        currentPage,
-        search: textInputValue,
-      });
+    if (cardList.length >= limitCards) fetch();
   }, [currentPage]);
 
   function onClickGoToBack() {
@@ -164,104 +138,92 @@ const AllDeckSettingsPage = () => {
   }
 
   function onChangeTextInput(value: string) {
-    changeTextInput({ deckId: 'all', search: value, currentPage, limitCards });
+    changeTextInput(value);
+    window.scrollTo(0, 0);
+
+    debounce(() => {
+      resetCardList();
+      fetch(1, value);
+    }, 550);
   }
+
+  const cachedToggleCardSelection = useCallback(function toggleCardSelection(
+    id: string,
+    isChecked: boolean,
+  ) {
+    if (isChecked) {
+      selectCard(id);
+    } else {
+      unSelectCard(id);
+    }
+  }, []);
+
+  const isNormalMode = mode === 'normal';
 
   return (
     <>
-      <Resolver callbacks={resolverCallbacks}>
-        {mode === 'normal' && (
-          <div>
-            <div
-              className={clsx(styles.topContent, {
-                [styles.shadow]: shadowIsVisible,
-              })}
-            >
-              <TopBar
-                leftSlot={
-                  <IconButton
-                    variant="primary"
-                    size="small"
-                    onClick={onClickGoToBack}
-                  >
-                    <ArrowBackIcon />
-                  </IconButton>
-                }
-                title="All Cards"
-                rightSlot={
-                  <IconButton variant="primary" size="small">
-                    <AddIcon />
-                  </IconButton>
-                }
-              />
-              <TextInput
-                textSize="normal"
-                placeholder="Search"
-                icon={<SearchIcon />}
-                onChange={onChangeTextInput}
-                value={textInputValue}
-              />
-            </div>
-            <main className={styles.main}>
-              <MiniCardList
-                mode="normal"
-                cardList={cardList}
-                onClickMore={cachedOnClickMore}
-              />
-            </main>
-            {cardsIsLoading && <MiniCardSkeleton count={20} />}
-          </div>
-        )}
-
-        {mode === 'selecting' && (
-          <div>
-            <div
-              className={clsx(styles.topContent, {
-                [styles.shadow]: shadowIsVisible,
-              })}
-            >
-              <TopBar
-                leftSlot={
-                  <IconButton
-                    variant="primary"
-                    size="small"
-                    onClick={onClickCancel}
-                  >
+      <DeckSettingsLayout
+        TopBar={
+          <TopBar
+            leftSlot={
+              <IconButton
+                variant="primary"
+                size="small"
+                onClick={isNormalMode ? onClickGoToBack : onClickCancel}
+              >
+                {isNormalMode ? (
+                  <ArrowBackIcon />
+                ) : (
+                  <>
                     <CloseIcon />
                     <p>{selectedCards.length}</p>
-                  </IconButton>
-                }
-                rightSlot={
-                  <IconButton
-                    variant="primary"
-                    size="small"
-                    color="red"
-                    onClick={onClickDeleteFewCards}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                }
-              />
-              <TextInput
-                textSize="normal"
-                placeholder="Search"
-                icon={<SearchIcon />}
-                onChange={onChangeTextInput}
-                value={textInputValue}
-              />
-            </div>
-            <main className={styles.main}>
-              <MiniCardList
-                mode="selecting"
-                cardList={cardList}
-                onClickMore={cachedOnClickMore}
-              />
-            </main>
-            {cardsIsLoading && <MiniCardSkeleton count={20} />}
-          </div>
-        )}
-      </Resolver>
-      <div className={styles.lastElement} ref={ref} />
+                  </>
+                )}
+              </IconButton>
+            }
+            title={isNormalMode ? 'All Cards' : ''}
+            rightSlot={
+              isNormalMode ? (
+                <IconButton variant="primary" size="small">
+                  <AddIcon />
+                </IconButton>
+              ) : (
+                <IconButton
+                  variant="primary"
+                  size="small"
+                  color="red"
+                  onClick={onClickDeleteFewCards}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              )
+            }
+          />
+        }
+      >
+        <TextInput
+          textSize="normal"
+          placeholder="Search"
+          icon={<SearchIcon />}
+          onChange={onChangeTextInput}
+          value={textInputValue}
+        />
+        <main className={styles.main}>
+          <MiniCardList
+            cardList={cardList}
+            cardsIsLoading={cardsIsLoading}
+            currentPage={currentPage}
+            totalPageCount={totalPageCount}
+            onClickMore={cachedOnClickMore}
+            onNextPage={setNextPage}
+            selectedCards={selectedCards}
+            onChangeCheckbox={
+              isNormalMode ? undefined : cachedToggleCardSelection
+            }
+          />
+        </main>
+        {cardsIsLoading && <MiniCardSkeleton count={20} />}
+      </DeckSettingsLayout>
     </>
   );
 };

@@ -1,42 +1,40 @@
-import { useUnit } from 'effector-react';
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 import MiniCardItem from '@/components/business/MiniCardItem/MiniCardItem';
 import styles from '@/components/business/MiniCardList/miniCardList.module.scss';
-import {
-  $selectedCards,
-  resetSelectedCards,
-  selectCard,
-  unSelectCard,
-} from '@/store/allDeckSettingsStore';
 import { ICard } from '@/types';
 
 interface IMiniCardListProps {
   cardList: ICard[];
-  mode: 'normal' | 'selecting';
+  selectedCards?: string[];
+  currentPage: number;
+  totalPageCount: number;
+  cardsIsLoading: boolean;
   onClickMore?: (_card: ICard) => void;
+  onNextPage: () => void;
+  onChangeCheckbox?: (_id: string, _isChecked: boolean) => void;
 }
 
 const MiniCardList: FC<IMiniCardListProps> = ({
   cardList,
+  currentPage,
+  totalPageCount,
+  cardsIsLoading,
+  selectedCards,
   onClickMore,
-  mode,
+  onNextPage,
+  onChangeCheckbox,
 }) => {
-  const selectedCards = useUnit($selectedCards);
+  const { ref, inView, entry } = useInView({ threshold: 0 });
 
   useEffect(() => {
-    if (mode === 'normal') resetSelectedCards();
-  }, []);
+    const canLoad = currentPage < totalPageCount;
+    const isLoading = cardsIsLoading || !cardList?.length;
 
-  const cachedOnChangeCheckbox = useCallback(function onChangeCheckbox(
-    id: string,
-    isChecked: boolean,
-  ) {
-    if (isChecked) {
-      selectCard(id);
-    } else {
-      unSelectCard(id);
+    if (entry?.isIntersecting && canLoad && !isLoading) {
+      onNextPage();
     }
-  }, []);
+  }, [inView]);
 
   return (
     <div className={styles.cards}>
@@ -44,15 +42,14 @@ const MiniCardList: FC<IMiniCardListProps> = ({
         <MiniCardItem
           card={card}
           key={card.id}
-          isChecked={selectedCards.includes(card.id)}
-          onChangeCheckbox={
-            mode === 'normal' ? undefined : cachedOnChangeCheckbox
-          }
+          isChecked={selectedCards ? selectedCards.includes(card.id) : false}
+          onChangeCheckbox={onChangeCheckbox}
           onClickMore={onClickMore}
         >
           {card.frontText}
         </MiniCardItem>
       ))}
+      <div className={styles.lastElement} ref={ref} />
     </div>
   );
 };
