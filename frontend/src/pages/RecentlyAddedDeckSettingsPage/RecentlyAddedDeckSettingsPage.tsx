@@ -111,7 +111,7 @@ const RecentlyAddedDeckSettingsPage = () => {
 
     debounce(() => {
       fetchCardsWithReset({
-        deckId: 'resentlyAdded',
+        deckId: 'recentlyAdded',
         limitCards,
         currentPage: 1,
         value,

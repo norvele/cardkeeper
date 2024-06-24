@@ -47,7 +47,7 @@ const FocusedDeckSettingsPage = () => {
   useEffect(() => {
     (async () => {
       const response = await fetchCards({
-        deckId: 'recentlyAdded',
+        deckId: 'focused',
         limitCards,
         currentPage,
         value: textInputValue,
