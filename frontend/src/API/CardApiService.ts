@@ -247,6 +247,15 @@ export default class CardApiService {
     };
   }
 
+  public async getOtherCards(deckId: string, countOfCards: number, from: number) {
+    return {
+      data: allCards.slice(from, from + countOfCards),
+      headers: {
+        'x-total-count': countOfCards,
+      },
+    }
+  }
+
   public async getCard(id: string) {
     await new Promise((resolve) => setTimeout(resolve, 200));
     return allCards.find((card) => card.id === id);

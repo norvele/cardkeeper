@@ -14,7 +14,7 @@ const FullCardList: FC<IFullCardListProps> = ({ cards }) => {
       <CustomCardAdder />
       {cards.map((card) => {
         return (
-          <FullCardItem text={card.frontText} key={card.id} mode={'selected'} />
+          <FullCardItem text={card.frontText} key={card.id} mode='normal' />
         );
       })}
     </div>

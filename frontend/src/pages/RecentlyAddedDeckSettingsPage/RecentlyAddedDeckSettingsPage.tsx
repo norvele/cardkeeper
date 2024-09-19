@@ -14,7 +14,6 @@ import TopBar from '@/components/business/TopBar/TopBar';
 import { useDebounce } from '@/hooks/useDebounce';
 import styles from '@/pages/RecentlyAddedDeckSettingsPage/recentlyAddedDeckSettingsPage.module.scss';
 import {
-  saveDeckEvent,
   $inputValueIsValid,
   $cardList,
   $paginationOptions,
