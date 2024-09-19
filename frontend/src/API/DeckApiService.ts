@@ -22,6 +22,12 @@ const decks: IDeck[] = [
     color: 'pink',
     id: 'recentlyAdded',
   },
+  {
+    name: 'Cardphrases',
+    numberOfCard: 12,
+    color: 'orange',
+    id: '123-456'
+  }
 ];
 
 export default class DeckApiService {

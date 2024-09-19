@@ -10,6 +10,7 @@ import LearningPage from '@/pages/LearningPage/LearningPage';
 import RecentlyAddedDeckSettingsPage from '@/pages/RecentlyAddedDeckSettingsPage/RecentlyAddedDeckSettingsPage';
 import {
   allDeckSettingsScope,
+  customDeckSettingsScope,
   focusedDeckSettingsScope,
   recentlyAddedDeckSettingsScope,
 } from '@/store/deckSettingsStore';
@@ -64,12 +65,17 @@ const privateRoutes: Array<object> = [
           </Provider>
         ),
       },
+      {
+        path: ':id',
+        element: (
+          <Provider value={customDeckSettingsScope}>
+            <CustomDeckSettingsPage />
+          </Provider>
+        ),
+      },
     ],
   },
-  {
-    path: '/custom-deck-settings',
-    element: <CustomDeckSettingsPage />,
-  },
+
 ];
 
 const publicRoutes: Array<object> = [
