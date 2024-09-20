@@ -1,8 +1,8 @@
 import { createEffect, createEvent, createStore, fork, sample } from 'effector';
 import { cardApiService, deckApiService } from '@/container';
 import { ICard } from '@/types';
-import { getCountPages } from '@/utils/pages';
 import { IDeck } from '@/types/deck';
+import { getCountPages } from '@/utils/pages';
 
 interface IFetchCardsParams {
   deckId: string;
@@ -33,7 +33,6 @@ export const setNextPageEvent = createEvent();
 export const changeTextInputEvent = createEvent<string>();
 export const setInputValueIsValidEvent = createEvent<boolean>();
 export const saveDeckEvent = createEvent<ISaveDeckParams>();
-export const showMoreCardsEvent = createEvent()
 
 export const fetchSearchedCardsFx = createEffect(
   async ({ deckId, limitCards, currentPage, value }: IFetchCardsParams) => {
@@ -73,12 +72,6 @@ export const fetchCardsFx = createEffect(
   },
 );
 
-export const fetchMoreCardsFx = createEffect(
-  async ({deckId, countOfCards, from} : {deckId: string, countOfCards: number, from: number}) => {
-    return await cardApiService.getOtherCards(deckId, countOfCards, from)
-  }
-)
-
 export const saveDeckFx = createEffect(
   async ({ deckId, cardList }: ISaveDeckParams) => {
     return await deckApiService.patchDeck(deckId, cardList);
@@ -97,14 +90,14 @@ sample({
   target: [fetchCardsFx, resetCardListEvent],
 });
 
-export const fetchDeckFx = createEffect(
-  async (id: string) => {
-      return await deckApiService.getDeck(id)
-  }
-) 
+export const fetchDeckFx = createEffect(async (id: string) => {
+  return await deckApiService.getDeck(id);
+});
 
-export const $deck = createStore<IDeck | null>(null)
-    .on(fetchDeckFx.doneData, (_, deck) => deck)
+export const $deck = createStore<IDeck | null>(null).on(
+  fetchDeckFx.doneData,
+  (_, deck) => deck,
+);
 
 export const $mode = createStore<'normal' | 'selecting'>('normal').on(
   setModeEvent,
@@ -149,14 +142,6 @@ export const $paginationOptions = createStore<{
     const nextPage = options.currentPage + 1;
     return { ...options, currentPage: nextPage };
   })
-  .on(showMoreCardsEvent, (options) => {
-    if (options.totalCardsCount !== null) {
-      const newLimitCards = options.totalCardsCount - options.limitCards
-      console.log(newLimitCards);
-      return {...options, limitCards: newLimitCards, currentPage: options.currentPage + 1}
-    }
-    return options
-  })
   .reset(resetCardListEvent);
 
 export const $cardList = createStore<ICard[]>([])
@@ -174,11 +159,6 @@ export const $cardList = createStore<ICard[]>([])
       if (lastDataElement.id === lastCardElement.id) return cards;
       return [...cards, ...response.data];
     },
-  )
-  .on(
-    fetchMoreCardsFx.doneData, (cards, response) => {
-      return [...cards, ...response.data]
-    }
   )
   .reset(resetCardListEvent);
 
@@ -201,7 +181,7 @@ export const $inputValueIsValid = createStore<boolean>(true)
   })
   .reset(resetInputEvent);
 
-export const $deckName = createStore<string>('')
+export const $deckName = createStore<string>('');
 
 export const allDeckSettingsScope = fork({
   values: [
@@ -233,9 +213,17 @@ export const recentlyAddedDeckSettingsScope = fork({
 
 export const customDeckSettingsScope = fork({
   values: [
-    [$paginationOptions, {currentPage: 1, limitCards: 3, totalCardsCount: null, totalPageCount: 0}],
+    [
+      $paginationOptions,
+      {
+        currentPage: 1,
+        limitCards: 7,
+        totalCardsCount: null,
+        totalPageCount: 0,
+      },
+    ],
     [$cardList, $cardList.getState()],
     [$deckName, $deckName.getState()],
     [$mode, $mode.getState()],
-  ]
-})
+  ],
+});
