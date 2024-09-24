@@ -7,7 +7,7 @@ import { ICard } from '@/types';
 
 interface MiniCardItemProps {
   children: string;
-  card: ICard;
+  card?: ICard;
   isChecked: boolean;
   onClickMore?: (_card: ICard) => void;
   onChangeCheckbox?: (_id: string, _isChecked: boolean) => void;
@@ -22,7 +22,7 @@ const MiniCardItem: FC<MiniCardItemProps> = ({
 }) => {
   return (
     <div className={styles.container}>
-      {onChangeCheckbox && (
+      {onChangeCheckbox && card && (
         <Checkbox
           size="small"
           isChecked={isChecked}
@@ -32,7 +32,7 @@ const MiniCardItem: FC<MiniCardItemProps> = ({
         />
       )}
       <p className={styles.text}>{children}</p>
-      {onClickMore && (
+      {onClickMore && card && (
         <IconButton
           size="smaller"
           variant="transparent"

@@ -141,6 +141,7 @@ const RecentlyAddedDeckSettingsPage = () => {
             },
           },
         ],
+        format: 'mini'
       },
     });
   }, []);

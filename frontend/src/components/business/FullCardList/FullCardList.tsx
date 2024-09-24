@@ -6,15 +6,28 @@ import { ICard } from '@/types';
 
 interface IFullCardListProps {
   cards: ICard[];
+  selectedCards: string[];
+  onClickCard: (_text: string, _id: string) => void;
 }
 
-const FullCardList: FC<IFullCardListProps> = ({ cards }) => {
+const FullCardList: FC<IFullCardListProps> = ({
+  cards,
+  selectedCards,
+  onClickCard,
+}) => {
   return (
     <div className={styles.list}>
       <CustomCardAdder />
       {cards.map((card) => {
         return (
-          <FullCardItem text={card.frontText} key={card.id} mode='normal' />
+          <FullCardItem
+            key={card.id}
+            isSelected={selectedCards.includes(card.id)}
+            onClick={onClickCard}
+            id={card.id}
+          >
+            {card.frontText}
+          </FullCardItem>
         );
       })}
     </div>

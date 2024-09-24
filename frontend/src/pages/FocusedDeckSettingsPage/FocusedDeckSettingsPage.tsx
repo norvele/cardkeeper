@@ -143,6 +143,7 @@ const FocusedDeckSettingsPage = () => {
             },
           },
         ],
+        format: 'mini',
       },
     });
   }, []);

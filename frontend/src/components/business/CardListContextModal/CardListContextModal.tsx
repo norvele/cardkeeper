@@ -4,6 +4,7 @@ import ModalContent from '@/components/UI/modals/ModalContent/ModalContent';
 import Modal from '@/components/UI/modals/modal/Modal';
 import ButtonGroup from '@/components/business/ButtonGroup/ButtonGroup';
 import styles from '@/components/business/CardListContextModal/cardListContextModal.module.scss';
+import FullCardItem from '@/components/business/FullCardItem/FullCardItem';
 import MiniCardItem from '@/components/business/MiniCardItem/MiniCardItem';
 import { ICardListContextModal } from '@/types';
 
@@ -20,7 +21,12 @@ const CardListContextModal: FC<ICardListContextModalProps> = ({
     <Modal onClickBehind={onClose}>
       <div className={styles.container}>
         <div className={styles.card}>
-          <MiniCardItem>{params.cardText}</MiniCardItem>
+          {params.format === 'full' && (
+            <FullCardItem isSelected={false}>{params.cardText}</FullCardItem>
+          )}
+          {params.format === 'mini' && (
+            <MiniCardItem isChecked={false}>{params.cardText}</MiniCardItem>
+          )}
         </div>
         <ModalContent>
           <div className={styles.buttons}>

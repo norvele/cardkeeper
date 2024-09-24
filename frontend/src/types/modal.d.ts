@@ -13,6 +13,7 @@ export interface ICardListContextModal {
   name: 'cardListContext';
   params: {
     cardText: string;
+    format: 'full' | 'mini'
     buttons: Array<{
       textButton: string;
       callback: null | (() => void);

@@ -3,6 +3,7 @@
   height: 138px;
   border-radius: 12px;
   rotate: -3deg;
+  padding: 7px;
   background: 
   linear-gradient(135.99deg, rgba(79, 115, 149, 0.036) 1.69%, rgba(0, 0, 0, 0) 50.74%),
   linear-gradient(319.56deg, #FAFAFA 2.67%, rgba(255, 255, 255, 0) 13.36%),
@@ -23,6 +24,9 @@
   text-align: center;
   color: var(--font-color-normal);
   max-width: 125px;
+  max-height: 96px;
+  overflow: hidden;
+  margin: 0;
 }
 
 .selected {

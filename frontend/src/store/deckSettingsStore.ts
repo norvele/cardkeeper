@@ -111,6 +111,18 @@ export const $selectedCards = createStore<string[]>([])
   })
   .reset(resetSelectedCardsEvent);
 
+// sample({
+//   clock: $selectedCards,
+//   fn: (state) => {
+//     if (state.length === 0) {
+//       return 'normal';
+//     }
+
+//     return 'selecting';
+//   },
+//   target: $mode,
+// });
+
 export const $paginationOptions = createStore<{
   limitCards: number;
   currentPage: number;
@@ -225,5 +237,6 @@ export const customDeckSettingsScope = fork({
     [$cardList, $cardList.getState()],
     [$deckName, $deckName.getState()],
     [$mode, $mode.getState()],
+    [$selectedCards, $selectedCards.getState()],
   ],
 });
