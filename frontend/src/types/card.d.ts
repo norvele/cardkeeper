@@ -3,6 +3,7 @@ export interface ICard {
   frontText: string;
   backText: string;
   canBeInFocused: boolean;
+  customDecks: IDeck[];
 }
 
 export interface ICardState {

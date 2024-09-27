@@ -26,8 +26,23 @@ const decks: IDeck[] = [
     name: 'Cardphrases',
     numberOfCard: 12,
     color: 'orange',
-    id: '123-456'
-  }
+    id: '123-456',
+  },
+];
+
+const customDecks: IDeck[] = [
+  {
+    name: 'Cardphrases',
+    numberOfCard: 12,
+    color: 'orange',
+    id: '123-456',
+  },
+  {
+    name: 'Difficult things',
+    numberOfCard: 4,
+    color: 'blue',
+    id: '5g2dsry4',
+  },
 ];
 
 export default class DeckApiService {
@@ -44,6 +59,18 @@ export default class DeckApiService {
     await new Promise((resolve) => setTimeout(resolve, 200));
     return {
       items: decks,
+      additional: {
+        numberOfCardsToOpenMoreDecks: 72,
+      },
+      pagination: {},
+    };
+  }
+
+  public async getCustomDecks(): Promise<IDecksData> {
+    await new Promise((resolve) => setTimeout(resolve, 200));
+
+    return {
+      items: customDecks,
       additional: {
         numberOfCardsToOpenMoreDecks: 72,
       },

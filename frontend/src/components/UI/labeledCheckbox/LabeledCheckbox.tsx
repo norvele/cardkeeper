@@ -6,7 +6,7 @@ interface ILabeledCheckboxProps {
   isChecked: boolean;
   children: ReactNode;
   size: 'small' | 'normal';
-  onChange: () => void;
+  onChange: (_isChecked: boolean) => void;
 }
 
 const LabeledCheckbox: FC<ILabeledCheckboxProps> = ({
@@ -17,7 +17,13 @@ const LabeledCheckbox: FC<ILabeledCheckboxProps> = ({
 }) => {
   return (
     <label className={styles.label}>
-      <Checkbox onChange={onChange} isChecked={isChecked} size={size} />
+      <Checkbox
+        onChange={(isChecked) => {
+          onChange(isChecked);
+        }}
+        isChecked={isChecked}
+        size={size}
+      />
       <span>{children}</span>
     </label>
   );

@@ -8,32 +8,43 @@ const allCards = [
     frontText: 'Мы остановились, чтобы он мог передохнуть',
     backText: 'backtext card 1',
     canBeInFocused: false,
+    customDecks: [
+      {
+        name: 'Cardphrases',
+        numberOfCard: 12,
+        color: 'orange',
+        id: '123-456',
+      },
+    ],
   },
   {
     id: '2',
-    frontText: `Я сегодня не работаю (выходной). 
-      И еще очень много текста потомучто такая вот карточка.
-      И еще очень много текста потомучто такая вот карточка`,
+    frontText:
+      'Я сегодня не работаю (выходной). И еще очень много текста потомучто такая вот карточка. И еще очень много текста потомучто такая вот карточка',
     backText: 'backtext card 2',
     canBeInFocused: true,
+    customDecks: [],
   },
   {
     id: '3',
     frontText: 'Сомнение',
     backText: 'backtext card 3',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '4',
     frontText: 'Мне понадобилось 5 минут, чтобы открыть дверь',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '5',
     frontText: 'Это справа от вас',
     backText: 'backtext card',
     canBeInFocused: true,
+    customDecks: [],
   },
   {
     id: '6',
@@ -41,186 +52,217 @@ const allCards = [
       'Все последние (недавние) исследования показывают, что мы получаем пользу во многих аспектах, несмотря на некоторые из них коечто чтобы например',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '7',
     frontText: 'frontText очень 7',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '8',
     frontText: 'frontText очень 8',
     backText: 'backtext card',
     canBeInFocused: true,
+    customDecks: [],
   },
   {
     id: '9',
     frontText: 'frontText очень 9',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '10',
     frontText: 'frontText очень 10',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '11',
     frontText: 'frontText card 11',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '12',
     frontText: 'очень card 12',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '13',
     frontText: 'frontText card 13',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '14',
     frontText: 'frontText очень 14',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '15',
     frontText: 'frontText очень 15',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '16',
-    frontText: 'frontText card 16 ',
+    frontText: 'frontText card 16',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '17',
     frontText: 'очень card 17',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '18',
     frontText: 'frontText очень 18',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '19',
     frontText: 'frontText card 19',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '20',
     frontText: 'frontText card 20',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '21',
     frontText: 'frontText очень 21',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '22',
     frontText: 'frontText card',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '23',
     frontText: 'очень card',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '24',
     frontText: 'frontText очень 24',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '25',
     frontText: 'очень card 25',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '26',
     frontText: 'frontText card 26',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '27',
     frontText: 'очень card 27',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '28',
     frontText: 'frontText card 28',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '29',
     frontText: 'frontText card 29',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '30',
     frontText: 'очень 30',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '31',
     frontText: 'frontText card 31',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '32',
     frontText: 'очень 32',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '33',
     frontText: 'ОООЧень card 33',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '34',
     frontText: 'frontText оч 34',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '35',
     frontText: 'fronоченьext card 35',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
   {
     id: '36',
     frontText: 'fronоченьxt card 36',
     backText: 'backtext card',
     canBeInFocused: false,
+    customDecks: [],
   },
 ];
 
@@ -247,13 +289,17 @@ export default class CardApiService {
     };
   }
 
-  public async getOtherCards(deckId: string, countOfCards: number, from: number) {
+  public async getOtherCards(
+    deckId: string,
+    countOfCards: number,
+    from: number,
+  ) {
     return {
       data: allCards.slice(from, from + countOfCards),
       headers: {
         'x-total-count': countOfCards,
       },
-    }
+    };
   }
 
   public async getCard(id: string) {
@@ -268,6 +314,7 @@ export default class CardApiService {
       frontText: 'frontText card 20',
       backText: 'backtext card 20',
       canBeInFocused: true,
+      customDecks: [],
     };
   }
 

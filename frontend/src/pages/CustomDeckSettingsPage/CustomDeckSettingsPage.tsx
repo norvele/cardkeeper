@@ -111,7 +111,9 @@ const CustomDeckSettingsPage = () => {
             },
             {
               textButton: 'Edit',
-              callback: () => {},
+              callback: () => {
+                navigate(`/edit-card/${id}`);
+              },
             },
             {
               textButton: 'Remove from deck',

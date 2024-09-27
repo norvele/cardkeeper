@@ -1,6 +1,7 @@
 import { createEffect, createEvent, createStore, sample } from 'effector';
 import { cardApiService } from '@/container';
 import { ICardError, TCardSide } from '@/types/cardForm';
+import { IDeck } from '@/types/deck';
 import { ICard } from '@/types/index';
 
 type TSaveCardAction = 'edit' | 'create';
@@ -15,6 +16,8 @@ export const toggleCanBeInFocusedCheckbox = createEvent();
 export const toggleSideSwitch = createEvent();
 export const saveCard = createEvent<TSaveCardAction>();
 export const editCard = createEvent<TCardSide>();
+export const addInCustomDeckEvent = createEvent<IDeck>();
+export const deleteFromCustomDeckEvent = createEvent<IDeck>();
 
 export const fetchEditingCard = createEvent<string>();
 
@@ -102,6 +105,7 @@ export const $cardForm = createStore<ICard>({
   frontText: '',
   backText: '',
   canBeInFocused: false,
+  customDecks: [],
 })
   .on(updateInput, (cardForm, { side, value }) => ({
     ...cardForm,
@@ -112,6 +116,16 @@ export const $cardForm = createStore<ICard>({
     canBeInFocused: !cardForm.canBeInFocused,
   }))
   .on(fetchEditingCardFx.doneData, (_, data) => data)
+  .on(addInCustomDeckEvent, (cardForm, deck) => ({
+    ...cardForm,
+    customDecks: [...cardForm.customDecks, deck],
+  }))
+  .on(deleteFromCustomDeckEvent, (cardForm, deck) => {
+    const newCustomDecks = cardForm.customDecks.filter((item) => {
+      return item.id !== deck.id;
+    });
+    return { ...cardForm, customDecks: newCustomDecks };
+  })
   .reset(resetCardForm);
 
 $cardForm.watch((cardForm) => {

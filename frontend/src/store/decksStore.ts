@@ -8,8 +8,17 @@ export const fetchDecksFx = createEffect(async () => {
   return await deckApiService.getDecks();
 });
 
+export const fetchCustomDecksFx = createEffect(async () => {
+  return await deckApiService.getCustomDecks();
+});
+
 export const $decks = createStore<IDecksData | null>(null).on(
   fetchDecksFx.doneData,
+  (_, data) => data,
+);
+
+export const $customDecks = createStore<IDecksData | null>(null).on(
+  fetchCustomDecksFx.doneData,
   (_, data) => data,
 );
 

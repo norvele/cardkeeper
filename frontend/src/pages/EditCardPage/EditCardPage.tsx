@@ -7,6 +7,8 @@ import {
   $cardError,
   $cardForm,
   $cardSide,
+  addInCustomDeckEvent,
+  deleteFromCustomDeckEvent,
   fetchEditingCardFx,
   resetCardForm,
   saveCard,
@@ -14,17 +16,37 @@ import {
   toggleSideSwitch,
   updateInput,
 } from '@/store/cardFormStore';
+import { $customDecks, fetchCustomDecksFx } from '@/store/decksStore';
+import { IDeck } from '@/types/deck';
 
 const EditCardPage = () => {
   const navigate = useNavigate();
 
-  const [cardForm, fetchEditingCard] = useUnit([$cardForm, fetchEditingCardFx]);
+  const [cardForm, fetchEditingCard, addInCustomDeck, deleteFromCustomDeck] =
+    useUnit([
+      $cardForm,
+      fetchEditingCardFx,
+      addInCustomDeckEvent,
+      deleteFromCustomDeckEvent,
+    ]);
+  const [customDecks, fetchCustomDecks] = useUnit([
+    $customDecks,
+    fetchCustomDecksFx,
+  ]);
   const cardSide = useUnit($cardSide);
   const cardError = useUnit($cardError);
 
   const { id } = useParams() as { id: string };
 
-  const resolverCallbacks = [resetCardForm, () => fetchEditingCard(id)];
+  const resolverCallbacks = [
+    resetCardForm,
+    () => fetchEditingCard(id),
+    () => {
+      if (cardForm.customDecks) {
+        fetchCustomDecks();
+      }
+    },
+  ];
 
   function onChangeInput(value: string, side: 'front' | 'back') {
     updateInput({ value, side });
@@ -32,6 +54,14 @@ const EditCardPage = () => {
 
   function onChangeCanBeInFocusedCheckbox() {
     toggleCanBeInFocusedCheckbox();
+  }
+
+  function onChangeCustomDeckCheckbox(deck: IDeck, isChecked: boolean) {
+    if (isChecked) {
+      addInCustomDeck(deck);
+    } else {
+      deleteFromCustomDeck(deck);
+    }
   }
 
   function onClickGoToBack() {
@@ -52,16 +82,18 @@ const EditCardPage = () => {
         type="Edit"
         onClickGoToBack={onClickGoToBack}
         onClickSaveCard={onClickReplaceCard}
-        saveButtonDisabled={false}
+        saveButtonIsDisabled={false}
       >
         <CardForm
           type="Edit"
           card={cardForm}
           side={cardSide}
+          customDecks={customDecks?.items}
           onChangeSwitchSide={onChangeSwitchSide}
           errorIsVisible={cardError.errorIsVisible}
           onChangeInput={onChangeInput}
           onChangeCanBeInFocusedCheckbox={onChangeCanBeInFocusedCheckbox}
+          onChangeCustomDeckCheckbox={onChangeCustomDeckCheckbox}
           checkboxIsChecked={cardForm.canBeInFocused}
         />
       </CardPageLayout>
