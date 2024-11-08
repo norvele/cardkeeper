@@ -1,22 +1,6 @@
 version: '3.9'
 
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      target: base
-    volumes:
-      - ./frontend/src:/home/node/app/frontend/src
-    container_name: frontend
-    expose:
-      - '5173'
-      - '24678'
-    ports:
-      - '5173:5173'
-      - '24678:24678' # Vite dev server websocket for hot reload
-    command: yarn dev
-
   backend:
     build:
       context: ./backend
@@ -26,9 +10,9 @@ services:
       - ./backend/src:/home/node/app/backend/src
     container_name: backend
     expose:
-      - '3000'
+      - '3001'
     ports:
-      - '3000:3000'
+      - '3001:3001'
     environment:
       # This ENV is used by backend and migrations
       DATABASE_URL: postgres://postgres:brainiac@db:5432/postgres
